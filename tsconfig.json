@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "module": "commonjs",
+    "module": "esnext",
     "lib": ["esnext"],
+    "moduleResolution": "node",
     "jsx": "react-native",
     "baseUrl": "surveyjs/src",
     "inlineSources": true,
