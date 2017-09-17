@@ -2,14 +2,21 @@
   "name": "surveyjs-react-native",
   "version": "1.0.0",
   "private": true,
+  "main": "lib",
   "scripts": {
-    "dev": "tsc -w --inlineSourceMap"
+    "watch": "tsc -w --inlineSourceMap --inlineSources --pretty",
+    "prepublish": "tsc",
+    "ios-example": "react-native run-ios",
+    "android-example": "react-native run-android"
   },
   "dependencies": {
     "react": "16.0.0-alpha.12",
     "react-native": "0.48.3"
   },
   "devDependencies": {
+    "@types/react": "16.0.5",
+    "@types/react-native": "0.48.3",
+    "babel-preset-react-native": "4.0.0",
     "typescript": "2.5.2"
   }
 }

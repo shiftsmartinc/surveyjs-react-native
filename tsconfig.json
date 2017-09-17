@@ -2,19 +2,16 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "esnext",
-    "lib": ["esnext"],
+    "lib": ["esnext", "dom"],
     "moduleResolution": "node",
     "jsx": "react-native",
-    "baseUrl": "surveyjs/src",
-    "inlineSources": true,
     "experimentalDecorators": true,
-    "importHelpers": true,
     "noImplicitAny": false,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true
   },
   "include": [
-    "src/**/*"
+    "lib/**/*"
   ]
 }
