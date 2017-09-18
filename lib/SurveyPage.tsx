@@ -2,7 +2,7 @@ import * as React from 'react';
 import { View } from 'react-native';
 import QuestionText from './QuestionText';
 import QuestionCheckbox from './QuestionCheckbox';
-// import QuestionRadio from './QuestionRadio';
+import QuestionRadiogroup from './QuestionRadiogroup';
 
 
 import styles from './styles/surveyPage';
@@ -20,6 +20,20 @@ export default class SurveyPage extends React.Component {
         <QuestionCheckbox
           name={'checkbox'}
           number={2}
+          choices={[
+            'item1',
+            {
+              text: 'hello world',
+              value: 'item2'
+            },
+            'item3',
+          ]}
+          hasOther
+        />
+
+        <QuestionRadiogroup
+          name={'radiogroup'}
+          number={3}
           choices={[
             'item1',
             {

@@ -2,23 +2,23 @@ import * as React from 'react';
 import { Text, View } from 'react-native';
 import TouchableWithFeedback from './TouchableWithFeedback.ios';
 
-import styles from './styles/questionCheckboxItem';
+import styles from './styles/questionRadioItem';
 
 interface Props {
   text?: string;
   value: string;
   defaultChecked?: boolean;
   checked: boolean;
-  onChange?: (boolean, string) => void;
+  onChange?: (string) => void;
 }
 
 
-export default class CheckBoxItem extends React.Component<Props, any> {
+export default class QuestionRadioItem extends React.Component<Props, any> {
 
   handlePress = () => {
     const checked = !this.props.checked;
-    if (this.props.onChange) {
-      this.props.onChange(checked, this.props.value);
+    if (checked && this.props.onChange) {
+      this.props.onChange(this.props.value);
     }
   }
 
@@ -29,8 +29,8 @@ export default class CheckBoxItem extends React.Component<Props, any> {
         style={styles.container}
         onPress={this.handlePress}
       >
-        <View style={styles.checkbox}>
-          <Text style={{ textAlign: 'center' }}>{this.props.checked ? '✓' : ' '}</Text>
+        <View style={styles.radio}>
+          <Text style={styles.radioText}>{this.props.checked ? '●' : ' '}</Text>
         </View>
         <Text style={styles.label}>{text || value}</Text>
       </TouchableWithFeedback>
