@@ -4,6 +4,7 @@ import QuestionText from './QuestionText';
 import QuestionCheckbox from './QuestionCheckbox';
 import QuestionRadiogroup from './QuestionRadiogroup';
 import QuestionActionsheet from './QuestionActionsheet'
+import QuestionRate from './QuestionRate';
 
 import styles from './styles/surveyPage';
 
@@ -66,6 +67,23 @@ export default class SurveyPage extends React.Component {
           number={5}
           multiline
           row={3}
+        />
+
+        <QuestionRate
+          name={'rate'}
+          number={6}
+          minRateDescription={'First'}
+          maxRateDescription={'Last'}
+          rateValues={[{
+            value: 1,
+            text: 'One',
+          }, {
+            value: 2,
+            text: 'Two',
+          }, {
+            value: 3,
+            text: 'Three',
+          }]}
         />
 
         <View />
