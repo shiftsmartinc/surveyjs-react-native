@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import QuestionText from './QuestionText';
 import QuestionCheckbox from './QuestionCheckbox';
 import QuestionRadiogroup from './QuestionRadiogroup';
-
+import QuestionActionsheet from './QuestionActionsheet'
 
 import styles from './styles/surveyPage';
 
@@ -41,6 +41,22 @@ export default class SurveyPage extends React.Component {
               value: 'item2'
             },
             'item3',
+          ]}
+          hasOther
+        />
+
+        <QuestionActionsheet
+          name={'radiogroup'}
+          number={4}
+          choices={[
+            {
+              text: 'item1',
+              value: 'item1'
+            },
+            {
+              text: 'hello world',
+              value: 'item2'
+            },
           ]}
           hasOther
         />
