@@ -3,7 +3,6 @@
     "target": "esnext",
     "module": "esnext",
     "lib": ["esnext", "dom"],
-    "moduleResolution": "node",
     "jsx": "react-native",
     "experimentalDecorators": true,
     "noImplicitAny": false,
