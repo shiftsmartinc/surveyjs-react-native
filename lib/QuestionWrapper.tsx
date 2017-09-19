@@ -7,6 +7,7 @@ export interface Props {
   number: number;
   title?: string;
   name: string;
+  showTitle?: boolean;
 }
 
 export default class QuestionWrapper extends React.Component<Props, any>  {
@@ -14,10 +15,18 @@ export default class QuestionWrapper extends React.Component<Props, any>  {
     return null;
   }
   render() {
-    const { number, title = null, name } = this.props;
-    return (
+    const {
+      number,
+      title = null,
+      name,
+      showTitle = true,
+    } = this.props;
+    return(
       <View>
-        <Text>{number}. {title || name}</Text>
+        {
+          showTitle &&
+          <Text>{number}. {title || name}</Text>
+        }
         {this.props.children}
       </View>
     );

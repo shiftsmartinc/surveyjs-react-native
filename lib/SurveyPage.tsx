@@ -61,6 +61,13 @@ export default class SurveyPage extends React.Component {
           hasOther
         />
 
+        <QuestionText
+          name={'comment'}
+          number={5}
+          multiline
+          row={3}
+        />
+
         <View />
       </View>
     );

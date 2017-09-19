@@ -15,7 +15,7 @@ export default class QuestionText extends React.Component<Props, any>{
     const { row = 1 } = this.props;
     return (
       <QuestionWrapper
-     {...this.props}
+        {...this.props}
       >
         <TextInput
           // style={{ height: 20 * row, borderColor: 'gray', borderWidth: 1 }}
