@@ -7,6 +7,9 @@ export default StyleSheet.create({
     marginTop: 1,
     marginBottom: 1,
   },
+  radioWrapper: {
+    flexDirection: 'row',
+  },
   radio: {
     width: 20,
     height: 20,

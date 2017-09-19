@@ -7,6 +7,9 @@ export default StyleSheet.create({
     marginTop: 1,
     marginBottom: 1,
   },
+  checkboxWrapper: {
+    flexDirection: 'row',
+  },
   checkbox: {
     width: 20,
     height: 20,

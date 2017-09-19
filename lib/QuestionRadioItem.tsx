@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Text, View } from 'react-native';
-import TouchableWithFeedback from './TouchableWithFeedback.ios';
+import TouchableWithFeedback from './TouchableWithFeedback';
 
 import styles from './styles/questionRadioItem';
 
@@ -29,10 +29,12 @@ export default class QuestionRadioItem extends React.Component<Props, any> {
         style={styles.container}
         onPress={this.handlePress}
       >
-        <View style={styles.radio}>
-          <Text style={styles.radioText}>{this.props.checked ? '●' : ' '}</Text>
+        <View style={styles.radioWrapper}>
+          <View style={styles.radio}>
+            <Text style={styles.radioText}>{this.props.checked ? '●' : ' '}</Text>
+          </View>
+          <Text style={styles.label}>{text || value}</Text>
         </View>
-        <Text style={styles.label}>{text || value}</Text>
       </TouchableWithFeedback>
     );
   }
