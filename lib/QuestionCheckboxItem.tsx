@@ -8,6 +8,7 @@ interface Props {
   text?: string;
   value: string;
   defaultChecked?: boolean;
+  pristine?: boolean;
   checked: boolean;
   onChange?: (boolean, string) => void;
 }
@@ -31,7 +32,9 @@ export default class CheckBoxItem extends React.Component<Props, any> {
       >
         <View style={styles.checkboxWrapper}>
           <View style={styles.checkbox}>
-            <Text style={{ textAlign: 'center' }}>{this.props.checked ? '✓' : ' '}</Text>
+            <Text style={{ textAlign: 'center' }}>
+              {this.props.pristine ? '-' : this.props.checked ? '✓' : ' '}
+            </Text>
           </View>
           <Text style={styles.label}>{text || value}</Text>
         </View>

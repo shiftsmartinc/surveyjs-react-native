@@ -5,6 +5,7 @@ import QuestionCheckbox from './QuestionCheckbox';
 import QuestionRadiogroup from './QuestionRadiogroup';
 import QuestionActionsheet from './QuestionActionsheet'
 import QuestionRate from './QuestionRate';
+import QuestionBoolean from './QuestionBoolean';
 
 import styles from './styles/surveyPage';
 
@@ -14,7 +15,7 @@ export default class SurveyPage extends React.Component {
     return (
       <View style={styles.container}>
         <QuestionText
-          name={'input text'}
+          name={'input tex'}
           number={1}
         />
 
@@ -84,6 +85,13 @@ export default class SurveyPage extends React.Component {
             value: 3,
             text: 'Three',
           }]}
+        />
+
+        <QuestionBoolean
+          name={'boolean'}
+          number={7}
+          showTitle
+          label={'boolean label'}
         />
 
         <View />

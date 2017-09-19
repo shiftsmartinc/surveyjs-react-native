@@ -21,7 +21,7 @@ export default class QuestionWrapper extends React.Component<Props, any>  {
       name,
       showTitle = true,
     } = this.props;
-    return(
+    return (
       <View>
         {
           showTitle &&
