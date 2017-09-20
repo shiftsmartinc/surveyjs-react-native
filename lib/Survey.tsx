@@ -64,6 +64,28 @@ const demoPage = {
         "item3"
       ],
       "name": "question3"
+    },
+    {
+      "type": "multipletext",
+      "commentText": "comment text",
+      "items": [
+        {
+          "name": "text1",
+          "isRequired": true,
+          "inputType": "color",
+          "title": "good"
+        },
+        {
+          "name": "text2",
+          "title": "bad"
+        },
+        {
+          "name": "text3",
+          "title": "kkk"
+        }
+      ],
+      "name": "question313",
+      "title": "Titles"
     }
   ]
 };
