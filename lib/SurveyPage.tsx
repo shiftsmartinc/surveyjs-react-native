@@ -1,98 +1,85 @@
 import * as React from 'react';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import QuestionText from './QuestionText';
 import QuestionCheckbox from './QuestionCheckbox';
 import QuestionRadiogroup from './QuestionRadiogroup';
 import QuestionActionsheet from './QuestionActionsheet'
 import QuestionRate from './QuestionRate';
 import QuestionBoolean from './QuestionBoolean';
+import QuestionMultipleText from './QuestionMultipleText';
 
 import styles from './styles/surveyPage';
 
+const commonBuilderCreator = Component => json => <Component {...json} />;
 
-export default class SurveyPage extends React.Component {
+const choiceBuilderCreator = Component => (json) => {
+  const choices = json.choices.map(v =>
+    typeof v === 'string' ? { value: v, text: v } : v
+  );
+
+  return (
+    <Component
+      {...json}
+      choices={choices}
+    />
+  );
+}
+
+const commentBuilder = json => (
+  <QuestionText
+    {...json}
+    multiline
+  />
+);
+
+const typeBuilderMap = {
+  text: commonBuilderCreator(QuestionText),
+  checkbox: choiceBuilderCreator(QuestionCheckbox),
+  radiogroup: choiceBuilderCreator(QuestionRadiogroup),
+  dropdown: choiceBuilderCreator(QuestionActionsheet),
+  comment: commentBuilder,
+  boolean: commonBuilderCreator(QuestionBoolean),
+  rating: commonBuilderCreator(QuestionRate),
+  multipletext: commonBuilderCreator(QuestionMultipleText),
+};
+
+
+interface Props {
+  json: any;
+}
+
+export default class SurveyPage extends React.Component<Props, any> {
+  renderQuestion = (json, idx) => {
+    const newJson = { ...json, number: idx + 1 };
+    const content = typeBuilderMap[newJson.type](newJson);
+    const {
+      number,
+      title = null,
+      name,
+      showTitle = true,
+    } = newJson;
+    return (
+      <View key={json.name}>
+        {
+          showTitle &&
+          <Text>{number}. {title || name}</Text>
+        }
+        {content}
+      </View>
+    );
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <QuestionText
-          name={'input tex'}
-          number={1}
-        />
-
-        <QuestionCheckbox
-          name={'checkbox'}
-          number={2}
-          choices={[
-            'item1',
-            {
-              text: 'hello world',
-              value: 'item2'
-            },
-            'item3',
-          ]}
-          hasOther
-        />
-
-        <QuestionRadiogroup
-          name={'radiogroup'}
-          number={3}
-          choices={[
-            'item1',
-            {
-              text: 'hello world',
-              value: 'item2'
-            },
-            'item3',
-          ]}
-          hasOther
-        />
-
-        <QuestionActionsheet
-          name={'radiogroup'}
-          number={4}
-          choices={[
-            {
-              text: 'item1',
-              value: 'item1'
-            },
-            {
-              text: 'hello world',
-              value: 'item2'
-            },
-          ]}
-          hasOther
-        />
-
-        <QuestionText
-          name={'comment'}
-          number={5}
-          multiline
-          row={3}
-        />
-
-        <QuestionRate
-          name={'rate'}
-          number={6}
-          minRateDescription={'First'}
-          maxRateDescription={'Last'}
-          rateValues={[{
-            value: 1,
-            text: 'One',
-          }, {
-            value: 2,
-            text: 'Two',
-          }, {
-            value: 3,
-            text: 'Three',
-          }]}
-        />
-
-        <QuestionBoolean
-          name={'boolean'}
-          number={7}
-          showTitle
-          label={'boolean label'}
-        />
+        {this.props.json.elements.map(this.renderQuestion)}
+      </View>
+    );
+  }
+  render2() {
+    return (
+      <View style={styles.container}>
+        <QuestionText />
 
         <View />
       </View>

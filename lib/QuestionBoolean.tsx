@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { View } from 'react-native';
-import QuestionWrapper, { Props as QuestionWrapperProps } from './QuestionWrapper';
 import CheckboxItem from './QuestionCheckboxItem';
 
-interface Props extends QuestionWrapperProps {
+interface Props {
   label?: string;
+  name: string;
 }
 
 export default class QuestionBoolean extends React.Component<Props, any>{
@@ -28,19 +27,13 @@ export default class QuestionBoolean extends React.Component<Props, any>{
   render() {
     const label = this.props.label || this.props.name;
     return (
-      <QuestionWrapper
-        {...this.props}
-      >
-        <View>
-          <CheckboxItem
-            value={''}
-            text={label}
-            checked={this.state.checked}
-            pristine={!this.state.dirty}
-            onChange={this.handleChecked}
-          />
-        </View>
-      </QuestionWrapper>
+      <CheckboxItem
+        value={''}
+        text={label}
+        checked={this.state.checked}
+        pristine={!this.state.dirty}
+        onChange={this.handleChecked}
+      />
     )
   }
 }

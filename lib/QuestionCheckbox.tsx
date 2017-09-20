@@ -1,10 +1,9 @@
 import * as React from 'react';
 import { View, TextInput } from 'react-native';
-import QuestionWrapper, { Props as QuestionWrapperProps } from './QuestionWrapper';
 import CheckboxItem from './QuestionCheckboxItem';
 
 
-interface Props extends QuestionWrapperProps {
+interface Props {
   choices: any;
   hasOther?: boolean;
 }
@@ -36,35 +35,30 @@ export default class QuestionCheckbox extends React.Component<Props, any>{
   }
 
   render() {
-    const expanedChoices = this.props.choices.map(v => typeof v === 'string' ? {value: v, text: v} : v);
     return (
-      <QuestionWrapper
-        {...this.props}
-      >
-        <View>
-          {expanedChoices.map(v =>
+      <View>
+        {this.props.choices.map(v =>
+          <CheckboxItem
+            key={v.value}
+            value={v.value}
+            text={v.text}
+            checked={this.state.selectedChoices[v.value]}
+            onChange={this.handleChoicesChange}
+          />
+        )}
+        {
+          this.props.hasOther &&
+          <View>
             <CheckboxItem
-              key={v.value}
-              value={v.value}
-              text={v.text}
-              checked={this.state.selectedChoices[v.value]}
-              onChange={this.handleChoicesChange}
+              value={'other'}
+              text={'other (describe)'}
+              checked={this.state.otherChecked}
+              onChange={this.handleItemOtherChange}
             />
-          )}
-          {
-            this.props.hasOther &&
-            <View>
-              <CheckboxItem
-                value={'other'}
-                text={'other (describe)'}
-                checked={this.state.otherChecked}
-                onChange={this.handleItemOtherChange}
-              />
-              { this.state.otherChecked && <TextInput style={{ borderWidth: 1 }}/> }
-            </View>
-          }
-        </View>
-      </QuestionWrapper>
+            { this.state.otherChecked && <TextInput style={{ borderWidth: 1 }}/> }
+          </View>
+        }
+      </View>
     )
   }
 }

@@ -1,11 +1,10 @@
 import * as React from 'react';
 import { View, Text, TextInput, Modal } from 'react-native';
 import TouchableWithFeedback from './TouchableWithFeedback';
-import QuestionWrapper, { Props as QuestionWrapperProps } from './QuestionWrapper';
 
 import styles from './styles/questionActionsheet';
 
-interface Props extends QuestionWrapperProps {
+interface Props {
   choices: any;
   hasOther?: boolean;
   optionsCaption?: string;
@@ -90,32 +89,27 @@ export default class QuestionActionsheet extends React.Component<Props, any>{
     ].find(v => v.value === this.state.selectedChoiceValue);
     const caption = selectedChocie ? selectedChocie.text : optionsCaption;
     return (
-      <QuestionWrapper
-        {...this.props}
-      >
-        <View>
-          <TouchableWithFeedback
-            onPress={this.toggleModalVisible}
-          >
-            <View style={styles.caption}>
-              <Text>{caption}</Text>
-            </View>
-          </TouchableWithFeedback>
-          {
-            this.state.selectedChoiceValue === OTHER_VALUE &&
-            <TextInput style={styles.otherTextInput} />
-          }
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={this.state.modalVisible}
-            onRequestClose={this.toggleModalVisible}
-          >
-            {this.renderModalContent()}
-          </Modal>
-        </View>
-
-      </QuestionWrapper>
+      <View>
+        <TouchableWithFeedback
+          onPress={this.toggleModalVisible}
+        >
+          <View style={styles.caption}>
+            <Text>{caption}</Text>
+          </View>
+        </TouchableWithFeedback>
+        {
+          this.state.selectedChoiceValue === OTHER_VALUE &&
+          <TextInput style={styles.otherTextInput} />
+        }
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={this.state.modalVisible}
+          onRequestClose={this.toggleModalVisible}
+        >
+          {this.renderModalContent()}
+        </Modal>
+      </View>
     )
   }
 }
