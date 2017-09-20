@@ -86,7 +86,28 @@ const demoPage = {
       ],
       "name": "question313",
       "title": "Titles"
+    },
+    {
+      "type": "panel",
+      "elements": [
+        {
+          "type": "text",
+          "name": "question1"
+        },
+        {
+          "type": "radiogroup",
+          "choices": [
+            "item1",
+            "item2",
+            "item3"
+          ],
+          "name": "question3"
+        }
+      ],
+      "name": "panel1",
+      "title": "Panel title"
     }
+
   ]
 };
 

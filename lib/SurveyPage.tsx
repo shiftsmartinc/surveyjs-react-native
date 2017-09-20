@@ -32,28 +32,35 @@ const commentBuilder = json => (
   />
 );
 
-const typeBuilderMap = {
-  text: commonBuilderCreator(QuestionText),
-  checkbox: choiceBuilderCreator(QuestionCheckbox),
-  radiogroup: choiceBuilderCreator(QuestionRadiogroup),
-  dropdown: choiceBuilderCreator(QuestionActionsheet),
-  comment: commentBuilder,
-  boolean: commonBuilderCreator(QuestionBoolean),
-  rating: commonBuilderCreator(QuestionRate),
-  multipletext: commonBuilderCreator(QuestionMultipleText),
-};
-
 
 interface Props {
   json: any;
 }
 
 export default class SurveyPage extends React.Component<Props, any> {
+  panelBuilder = json => (
+    <View>
+      {json.elements.map(this.renderQuestion)}
+    </View>
+  )
+
+  private typeBuilderMap = {
+    text: commonBuilderCreator(QuestionText),
+    checkbox: choiceBuilderCreator(QuestionCheckbox),
+    radiogroup: choiceBuilderCreator(QuestionRadiogroup),
+    dropdown: choiceBuilderCreator(QuestionActionsheet),
+    comment: commentBuilder,
+    boolean: commonBuilderCreator(QuestionBoolean),
+    rating: commonBuilderCreator(QuestionRate),
+    multipletext: commonBuilderCreator(QuestionMultipleText),
+    panel: this.panelBuilder,
+  };
+
   renderQuestion = (json, idx) => {
     const newJson = { ...json, number: idx + 1 };
-    const content = typeBuilderMap[newJson.type](newJson);
+    const content = this.typeBuilderMap[newJson.type](newJson);
     const {
-      number,
+      number = null,
       title = null,
       name,
       showTitle = true,
@@ -62,7 +69,7 @@ export default class SurveyPage extends React.Component<Props, any> {
       <View key={json.name}>
         {
           showTitle &&
-          <Text>{number}. {title || name}</Text>
+          <Text>{number ? `${number}.` : ''} {title || name}</Text>
         }
         {content}
       </View>
@@ -73,15 +80,6 @@ export default class SurveyPage extends React.Component<Props, any> {
     return (
       <View style={styles.container}>
         {this.props.json.elements.map(this.renderQuestion)}
-      </View>
-    );
-  }
-  render2() {
-    return (
-      <View style={styles.container}>
-        <QuestionText />
-
-        <View />
       </View>
     );
   }
