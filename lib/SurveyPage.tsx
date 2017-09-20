@@ -7,6 +7,7 @@ import QuestionActionsheet from './QuestionActionsheet'
 import QuestionRate from './QuestionRate';
 import QuestionBoolean from './QuestionBoolean';
 import QuestionMultipleText from './QuestionMultipleText';
+import QuestionPanelDynamic from './QuestionPanelDynamic';
 
 import styles from './styles/surveyPage';
 
@@ -44,6 +45,13 @@ export default class SurveyPage extends React.Component<Props, any> {
     </View>
   )
 
+  panelDynamicBuilder = json => (
+    <QuestionPanelDynamic
+      {...json}
+      buildComponent={this.renderQuestion}
+    />
+  )
+
   private typeBuilderMap = {
     text: commonBuilderCreator(QuestionText),
     checkbox: choiceBuilderCreator(QuestionCheckbox),
@@ -54,6 +62,7 @@ export default class SurveyPage extends React.Component<Props, any> {
     rating: commonBuilderCreator(QuestionRate),
     multipletext: commonBuilderCreator(QuestionMultipleText),
     panel: this.panelBuilder,
+    paneldynamic: this.panelDynamicBuilder
   };
 
   renderQuestion = (json, idx) => {

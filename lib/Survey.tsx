@@ -106,6 +106,25 @@ const demoPage = {
       ],
       "name": "panel1",
       "title": "Panel title"
+    },
+    {
+      "type": "paneldynamic",
+      "maxPanelCount": 5,
+      "minPanelCount": 1,
+      "name": "question131",
+      "title": "Panel Dynamic",
+      "panelCount": 1,
+      "panelRemoveText": "REMOVE",
+      "showQuestionNumbers": "onSurvey",
+      "confirmDelete": true,
+      "confirmDeleteText": "custom sure to remove?",
+      "templateElements": [
+        {
+          "type": "text",
+          "name": "qeustion1a"
+        }
+      ],
+      "templateTitle": "templateTItle"
     }
 
   ]
