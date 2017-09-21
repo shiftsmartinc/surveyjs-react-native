@@ -8,6 +8,7 @@ import QuestionRate from './QuestionRate';
 import QuestionBoolean from './QuestionBoolean';
 import QuestionMultipleText from './QuestionMultipleText';
 import QuestionPanelDynamic from './QuestionPanelDynamic';
+import QuestionHtml from './QuestionHtml';
 
 import styles from './styles/surveyPage';
 
@@ -62,7 +63,8 @@ export default class SurveyPage extends React.Component<Props, any> {
     rating: commonBuilderCreator(QuestionRate),
     multipletext: commonBuilderCreator(QuestionMultipleText),
     panel: this.panelBuilder,
-    paneldynamic: this.panelDynamicBuilder
+    paneldynamic: this.panelDynamicBuilder,
+    html: commonBuilderCreator(QuestionHtml),
   };
 
   renderQuestion = (json, idx) => {

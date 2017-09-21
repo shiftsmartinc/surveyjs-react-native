@@ -125,7 +125,13 @@ const demoPage = {
         }
       ],
       "templateTitle": "templateTItle"
-    }
+    },
+    {
+      "type": "html",
+      "html": "<div>\n<h2>\ngood</h2>\n<p> something else </p><p>auto height fit</p>",
+      "name": "questionhtml",
+      "title": "html",
+    },
 
   ]
 };
