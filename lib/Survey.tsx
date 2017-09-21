@@ -132,7 +132,14 @@ const demoPage = {
       "name": "questionhtml",
       "title": "html",
     },
-
+    {
+      "type": "file",
+      "name": "questionfile",
+      "imageHeight": 100,
+      "imageWidth": 100,
+      "maxSize": 1000000,
+      "showPreview": true
+    },
   ]
 };
 

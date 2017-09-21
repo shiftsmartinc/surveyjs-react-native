@@ -1,10 +1,11 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "module": "esnext",
+    "module": "es2015",
     "lib": ["esnext", "dom"],
     "jsx": "react-native",
     "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "noImplicitAny": false,
     "noUnusedLocals": true,

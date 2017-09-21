@@ -9,6 +9,7 @@ import QuestionBoolean from './QuestionBoolean';
 import QuestionMultipleText from './QuestionMultipleText';
 import QuestionPanelDynamic from './QuestionPanelDynamic';
 import QuestionHtml from './QuestionHtml';
+import QuestionFile from './QuestionFile';
 
 import styles from './styles/surveyPage';
 
@@ -65,6 +66,7 @@ export default class SurveyPage extends React.Component<Props, any> {
     panel: this.panelBuilder,
     paneldynamic: this.panelDynamicBuilder,
     html: commonBuilderCreator(QuestionHtml),
+    file: commonBuilderCreator(QuestionFile),
   };
 
   renderQuestion = (json, idx) => {

@@ -7,11 +7,13 @@
     "watch": "tsc -w --inlineSourceMap --inlineSources --pretty",
     "prepublish": "tsc",
     "ios-example": "react-native run-ios",
-    "android-example": "react-native run-android"
+    "android-example": "react-native run-android",
+    "link": "react-native link"
   },
   "dependencies": {
     "react": "16.0.0-alpha.12",
     "react-native": "0.48.3",
+    "react-native-image-picker": "^0.26.7",
     "react-native-webview-autoheight": "^1.0.4"
   },
   "devDependencies": {
