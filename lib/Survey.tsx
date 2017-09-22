@@ -140,6 +140,21 @@ const demoPage = {
       "maxSize": 1000000,
       "showPreview": true
     },
+    {
+      "type": "text",
+      "inputType": "date",
+      "name": "questiondate"
+    },
+    {
+      "type": "text",
+      "inputType": "datetime",
+      "name": "questiondatetime"
+    },
+    {
+      "type": "text",
+      "inputType": "time",
+      "name": "questiontime"
+    },
   ]
 };
 

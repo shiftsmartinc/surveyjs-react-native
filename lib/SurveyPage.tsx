@@ -10,6 +10,7 @@ import QuestionMultipleText from './QuestionMultipleText';
 import QuestionPanelDynamic from './QuestionPanelDynamic';
 import QuestionHtml from './QuestionHtml';
 import QuestionFile from './QuestionFile';
+import QuestionTextDatetime from './QuestionTextDatetime';
 
 import styles from './styles/surveyPage';
 
@@ -35,6 +36,25 @@ const commentBuilder = json => (
   />
 );
 
+const textBuilder = (json) => {
+  let Component = QuestionText;
+  switch (json.inputType) {
+    case 'date':
+    case 'datetime':
+    case 'datetime-local':
+    case 'time':
+      Component = QuestionTextDatetime;
+      break;
+
+    default:
+  }
+  return (
+    <Component
+      {...json}
+    />
+  );
+}
+
 
 interface Props {
   json: any;
@@ -55,7 +75,7 @@ export default class SurveyPage extends React.Component<Props, any> {
   )
 
   private typeBuilderMap = {
-    text: commonBuilderCreator(QuestionText),
+    text: textBuilder,
     checkbox: choiceBuilderCreator(QuestionCheckbox),
     radiogroup: choiceBuilderCreator(QuestionRadiogroup),
     dropdown: choiceBuilderCreator(QuestionActionsheet),
