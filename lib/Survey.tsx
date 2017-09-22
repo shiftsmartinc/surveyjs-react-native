@@ -1,169 +1,36 @@
 import * as React from 'react';
 import { ScrollView } from 'react-native';
+import { observer } from "mobx-react";
 import SurveyNavigation from './SurveyNavigation';
 import SurveyPage from './SurveyPage';
+import Store from './store';
 
-const demoPage = {
-  "elements": [
-    {
-      "type": "text",
-      "name": "question2"
-    },
-    {
-      "type": "checkbox",
-      "choices": [
-        "item1",
-        "item2",
-        "item3"
-      ],
-      "hasOther": true,
-      "name": "question1",
-      "otherText": "其它的"
-    },
-    {
-      "type": "comment",
-      "name": "question8",
-      "rows": 3
-    },
-    {
-      "type": "dropdown",
-      "choices": [
-        "item1",
-        "item2",
-        "item3"
-      ],
-      "name": "question9"
-    },
-    {
-      "type": "boolean",
-      "name": "question7"
-    },
-    {
-      "type": "rating",
-      "name": "question6",
-      "rateValues": [
-        {
-          "value": "1",
-          "text": "one"
-        },
-        {
-          "value": "2",
-          "text": "two"
-        },
-        {
-          "value": "3",
-          "text": "three"
-        }
-      ]
-    },
-    {
-      "type": "radiogroup",
-      "choices": [
-        "item1",
-        "item2",
-        "item3"
-      ],
-      "name": "question3"
-    },
-    {
-      "type": "multipletext",
-      "commentText": "comment text",
-      "items": [
-        {
-          "name": "text1",
-          "isRequired": true,
-          "inputType": "color",
-          "title": "good"
-        },
-        {
-          "name": "text2",
-          "title": "bad"
-        },
-        {
-          "name": "text3",
-          "title": "kkk"
-        }
-      ],
-      "name": "question313",
-      "title": "Titles"
-    },
-    {
-      "type": "panel",
-      "elements": [
-        {
-          "type": "text",
-          "name": "question1"
-        },
-        {
-          "type": "radiogroup",
-          "choices": [
-            "item1",
-            "item2",
-            "item3"
-          ],
-          "name": "question3"
-        }
-      ],
-      "name": "panel1",
-      "title": "Panel title"
-    },
-    {
-      "type": "paneldynamic",
-      "maxPanelCount": 5,
-      "minPanelCount": 1,
-      "name": "question131",
-      "title": "Panel Dynamic",
-      "panelCount": 1,
-      "panelRemoveText": "REMOVE",
-      "showQuestionNumbers": "onSurvey",
-      "confirmDelete": true,
-      "confirmDeleteText": "custom sure to remove?",
-      "templateElements": [
-        {
-          "type": "text",
-          "name": "qeustion1a"
-        }
-      ],
-      "templateTitle": "templateTItle"
-    },
-    {
-      "type": "html",
-      "html": "<div>\n<h2>\ngood</h2>\n<p> something else </p><p>auto height fit</p>",
-      "name": "questionhtml",
-      "title": "html",
-    },
-    {
-      "type": "file",
-      "name": "questionfile",
-      "imageHeight": 100,
-      "imageWidth": 100,
-      "maxSize": 1000000,
-      "showPreview": true
-    },
-    {
-      "type": "text",
-      "inputType": "date",
-      "name": "questiondate"
-    },
-    {
-      "type": "text",
-      "inputType": "datetime",
-      "name": "questiondatetime"
-    },
-    {
-      "type": "text",
-      "inputType": "time",
-      "name": "questiontime"
-    },
-  ]
-};
 
-export default class Survey extends React.Component {
+interface Props {
+  json: any;
+}
+
+@observer
+export default class Survey extends React.Component<Props, any> {
+  private store;
+
+  constructor(props) {
+    super(props);
+
+    this.store = new Store(this.props.json);
+  }
+
   render() {
     return (
       <ScrollView>
-        <SurveyNavigation />
-        <SurveyPage json={demoPage} />
+
+        <SurveyPage {...this.store.currentPageProps} />
+        <SurveyNavigation
+          onNextPage={this.store.nextPage}
+          onPrevPage={this.store.prevPage}
+          hasNextPage={this.store.hasNextPage}
+          hasPrevPage={this.store.hasPrevPage}
+        />
       </ScrollView>
     );
   }

@@ -1,5 +1,7 @@
 import * as React from 'react';
 import { View, Text } from 'react-native';
+import { observer } from "mobx-react";
+
 import QuestionText from './QuestionText';
 import QuestionCheckbox from './QuestionCheckbox';
 import QuestionRadiogroup from './QuestionRadiogroup';
@@ -57,9 +59,10 @@ const textBuilder = (json) => {
 
 
 interface Props {
-  json: any;
+  questions: any;
 }
 
+@observer
 export default class SurveyPage extends React.Component<Props, any> {
   panelBuilder = json => (
     <View>
@@ -89,9 +92,11 @@ export default class SurveyPage extends React.Component<Props, any> {
     file: commonBuilderCreator(QuestionFile),
   };
 
-  renderQuestion = (json, idx) => {
+  renderQuestion = (question, idx) => {
+    const json = question.json;
     const newJson = { ...json, number: idx + 1 };
-    const content = this.typeBuilderMap[newJson.type](newJson);
+    const build = this.typeBuilderMap[newJson.type];
+    const content = build(newJson);
     const {
       number = null,
       title = null,
@@ -112,7 +117,7 @@ export default class SurveyPage extends React.Component<Props, any> {
   render() {
     return (
       <View style={styles.container}>
-        {this.props.json.elements.map(this.renderQuestion)}
+        {this.props.questions.map(this.renderQuestion)}
       </View>
     );
   }

@@ -1,13 +1,569 @@
 {
   "pages": [
     {
-      "name": "page1",
+      "name": "Before beginning...",
+      "elements": [
+        {
+          "type": "html",
+          "name": "guidelines",
+          "html": "You have been assigned a mystery shop for the Google Home, worth <b>$12</b>! <p>\n\n</p>Before heading to your mystery shop location, please thoroughly review the <a target=\"_blank\" href=\"https://docs.google.com/document/d/1mymzOhfQJUziCcTABtYdxF5MmBFX2ivJfZVwmgxPO1Q/edit?usp=sharing\">shop guidelines</a> and watch the training video provided to learn about the product you are \"shopping\" for and to see the specific questions you will be asking. <p>\n\n</p>If you need any assistance, please do not hesitate to text us at 650-753-5898<p>"
+        }
+      ]
+    },
+    {
+      "name": "Before beginning...",
       "elements": [
         {
           "type": "text",
-          "name": "question1"
+          "name": "email",
+          "title": "Please enter a valid email address",
+          "isRequired": true,
+          "validators": [
+            {
+              "type": "email"
+            }
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "storeopen",
+          "title": "Were you able to shop this location?",
+          "isRequired": true,
+          "choices": [
+            {
+              "value": "1",
+              "text": "Yes"
+            },
+            {
+              "value": "2",
+              "text": "No"
+            }
+          ]
+        },
+        {
+          "type": "file",
+          "name": "storeclosed",
+          "visible": false,
+          "visibleIf": "{storeopen}='2'",
+          "title": "Please take a photo of the storefront, showing that it has permanently closed or has changed locations, and upload below:",
+          "isRequired": true
+        },
+        {
+          "type": "file",
+          "name": "storefront",
+          "visible": false,
+          "visibleIf": "{storeopen}='1'",
+          "title": "Before entering the location, take a selfie of you in front of the store. Make sure you can see the retailer name in the photo.",
+          "isRequired": true
         }
       ]
+    },
+    {
+      "name": "Persona",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "Persona",
+          "visible": false,
+          "title": "Please select the persona you were assigned:",
+          "isRequired": true,
+          "choices": [
+            {
+              "value": "1",
+              "text": "Amazon loyalist"
+            },
+            {
+              "value": "2",
+              "text": "Amazon user, but open-minded"
+            },
+            {
+              "value": "3",
+              "text": "Google loyalist"
+            },
+            {
+              "value": "4",
+              "text": "Google user, but open-minded"
+            },
+            {
+              "value": "5",
+              "text": "Fully open-minded"
+            },
+            {
+              "value": "6",
+              "text": "Price-focused"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Top of Mind Recommendation",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "question1",
+          "title": "What was the first product the retail sales associate recommended?",
+          "isRequired": true,
+          "hasOther": true,
+          "choices": [
+            {
+              "value": "1",
+              "text": "Amazon Echo"
+            },
+            {
+              "value": "2",
+              "text": "Amazon Echo Dot"
+            },
+            {
+              "value": "3",
+              "text": "Amazon Tap"
+            },
+            {
+              "value": "4",
+              "text": "Google Home"
+            },
+            {
+              "value": "5",
+              "text": "Siri  and a connected speaker"
+            }
+          ],
+          "otherText": "Other (Please specify)"
+        }
+      ],
+      "title": "Enter the location and either wait to be greeted by a sales associate, or find and engage one yourself. Start the conversation with your assigned persona opener."
+    },
+    {
+      "name": "Consideration Set",
+      "elements": [
+        {
+          "type": "checkbox",
+          "name": "question3",
+          "title": "What other products did the retail sales associate recommend you consider? [After you ask this question, only record up to the first two smart speakers the associate mentions in response]",
+          "isRequired": true,
+          "validators": [
+            {
+              "type": "answercount",
+              "text": "Please only select two choices",
+              "minCount": 1,
+              "maxCount": 2
+            }
+          ],
+          "hasOther": true,
+          "choices": [
+            {
+              "value": "1",
+              "text": "Amazon Echo"
+            },
+            {
+              "value": "2",
+              "text": "Amazon Echo Dot"
+            },
+            {
+              "value": "3",
+              "text": "Amazon Tap"
+            },
+            {
+              "value": "4",
+              "text": "Google Home"
+            },
+            {
+              "value": "5",
+              "text": "Siri  and a connected speaker"
+            }
+          ],
+          "otherText": "Other (Please specify)"
+        }
+      ],
+      "title": "Ask the associate \"What other options should I consider?\""
+    },
+    {
+      "name": "Personal Ownership",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "question4",
+          "title": "What smart speaker did the retail sales associate say they own?",
+          "isRequired": true,
+          "hasOther": true,
+          "choices": [
+            {
+              "value": "1",
+              "text": "Amazon Echo"
+            },
+            {
+              "value": "2",
+              "text": "Amazon Echo Dot"
+            },
+            {
+              "value": "3",
+              "text": "Amazon Tap"
+            },
+            {
+              "value": "4",
+              "text": "Google Home"
+            },
+            {
+              "value": "5",
+              "text": "Siri and a connected speaker"
+            },
+            {
+              "value": "6",
+              "text": "Does not own a smart speaker"
+            }
+          ],
+          "otherText": "Other (Please specify)"
+        }
+      ],
+      "title": "Ask the associate, \"Do you own a smart speaker yourself? If so, which one?\""
+    },
+    {
+      "name": "Personal Usage of Google Device",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "question5",
+          "title": "When prompted, did the retail sales associate say they had tried out a Google Home?",
+          "isRequired": true,
+          "choices": [
+            {
+              "value": "1",
+              "text": "Yes"
+            },
+            {
+              "value": "2",
+              "text": "No"
+            }
+          ]
+        },
+        {
+          "type": "html",
+          "name": "script5",
+          "visible": false,
+          "visibleIf": "{question5}='1'",
+          "html": "\"Did you like using the Google Home?\""
+        },
+        {
+          "type": "radiogroup",
+          "name": "question6",
+          "visible": false,
+          "visibleIf": "{question5}='1'",
+          "title": "Did the retail sales associate say they liked the Google Home?",
+          "isRequired": true,
+          "choices": [
+            {
+              "value": "1",
+              "text": "Yes"
+            },
+            {
+              "value": "2",
+              "text": "No"
+            }
+          ]
+        },
+        {
+          "type": "radiogroup",
+          "name": "question5a",
+          "visible": false,
+          "visibleIf": "{question5}='2'",
+          "title": "When prompted, did the retail sales associate say they had heard of the Google Home?",
+          "isRequired": true,
+          "choices": [
+            {
+              "value": "1",
+              "text": "Yes"
+            },
+            {
+              "value": "2",
+              "text": "No"
+            }
+          ]
+        }
+      ],
+      "title": "\"My friend mentioned the new Google Home. Have you had a chance to try it yet?\""
+    },
+    {
+      "name": "Advantages of Google Home",
+      "elements": [
+        {
+          "type": "checkbox",
+          "name": "question7",
+          "title": "What did the retail sales associate mention as advantages of the Google Home compared to Amazon Echo? [Select all that apply]",
+          "isRequired": true,
+          "hasOther": true,
+          "choices": [
+            {
+              "value": "1",
+              "text": "Breadth music streaming options"
+            },
+            {
+              "value": "2",
+              "text": "Breadth of smart home devices it can control (i.e streaming devices, smart light bulbs etc)"
+            },
+            {
+              "value": "3",
+              "text": "Diversity of daily tasks it can help with (i.e. setting alarms, making to-do lists, etc)"
+            },
+            {
+              "value": "4",
+              "text": "Power of search/answers function"
+            },
+            {
+              "value": "5",
+              "text": "Speaker sound quality"
+            },
+            {
+              "value": "6",
+              "text": "Customizable appearance"
+            },
+            {
+              "value": "7",
+              "text": "Price"
+            },
+            {
+              "value": "8",
+              "text": "Sales associate was unsure/did not know any of the above features"
+            }
+          ],
+          "otherText": "Other (Please specify)"
+        },
+        {
+          "type": "checkbox",
+          "name": "question7b",
+          "title": "What did the retail sales associate mention as advantages of Amazon Echo compared to the Google Home? [Select all that apply]",
+          "hasOther": true,
+          "choices": [
+            {
+              "value": "1",
+              "text": "Breadth of music streaming options"
+            },
+            {
+              "value": "2",
+              "text": "Breadth of smart home devices it can control (i.e., streaming devices, smart light bulbs etc.)"
+            },
+            {
+              "value": "3",
+              "text": "Diversity of daily tasks it can help with (i.e., setting alarms, making to-do lists, etc.)"
+            },
+            {
+              "value": "4",
+              "text": "Power of search/answers function"
+            },
+            {
+              "value": "5",
+              "text": "Speaker sound quality"
+            },
+            {
+              "value": "6",
+              "text": "Customizable appearance"
+            },
+            {
+              "value": "7",
+              "text": "Price"
+            },
+            {
+              "value": "8",
+              "text": "Sales associate was unsure/did not know any of the above features"
+            }
+          ]
+        }
+      ],
+      "title": "You will now ask the associate about Google Home advantages compared to Amazon Echo and Amazon Echo advantages compared to Google Home. "
+    },
+    {
+      "name": "Knowledge: Getting Started",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "question8",
+          "title": "Did the retail sales associate explain how you get Google Home to listen to you?",
+          "isRequired": true,
+          "choices": [
+            {
+              "value": "1",
+              "text": "Yes - and explained the \"Ok Google\"  or \"Hey Google\" voice command for getting the Google Home's attention"
+            },
+            {
+              "value": "2",
+              "text": "No"
+            },
+            {
+              "value": "3",
+              "text": "The retail sales associate was unsure"
+            }
+          ]
+        }
+      ],
+      "title": "Ask, \"How do I get Google Home to start listening to me?\""
+    },
+    {
+      "name": "Knowledge : Music",
+      "elements": [
+        {
+          "type": "checkbox",
+          "name": "question9",
+          "title": "What example music services did the retail sales associate mention you could control with Google home? [SELECT ALL THAT APPLY]",
+          "isRequired": true,
+          "choices": [
+            {
+              "value": "1",
+              "text": "Spotify"
+            },
+            {
+              "value": "2",
+              "text": "Pandora"
+            },
+            {
+              "value": "3",
+              "text": "YouTube Music"
+            },
+            {
+              "value": "4",
+              "text": "Google Play Music"
+            },
+            {
+              "value": "5",
+              "text": "TuneIn"
+            },
+            {
+              "value": "6",
+              "text": "The retail sales associate was unsure"
+            },
+            {
+              "value": "7",
+              "text": "Not mentioned"
+            }
+          ]
+        }
+      ],
+      "title": "Ask, \"What music services can I control using Google Home?\""
+    },
+    {
+      "name": "Knowledge: Answers from Google",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "question10",
+          "title": "Did the retail sales associate explain that Google Home can tell you the weather?",
+          "isRequired": true,
+          "choices": [
+            {
+              "value": "1",
+              "text": "Yes"
+            },
+            {
+              "value": "2",
+              "text": "No"
+            },
+            {
+              "value": "3",
+              "text": "The retail sales associate was unsure"
+            }
+          ]
+        }
+      ],
+      "title": "Ask, \"Can Google Home tell me the weather?\""
+    },
+    {
+      "name": "Knowledge : Everyday Tasks",
+      "elements": [
+        {
+          "type": "checkbox",
+          "name": "question11",
+          "title": "Did the retail sales associate mention how Google Home can help you manage your day? (Please select all that apply)",
+          "isRequired": true,
+          "choices": [
+            {
+              "value": "1",
+              "text": "Yes - and mentioned it can add calendar entries"
+            },
+            {
+              "value": "2",
+              "text": "Yes - and mentioned it can set an alarm"
+            },
+            {
+              "value": "3",
+              "text": "Yes - and mentioned it can set a timer"
+            },
+            {
+              "value": "4",
+              "text": "Yes - and mentioned it can retrieve flight details"
+            },
+            {
+              "value": "5",
+              "text": "Yes - and mentioned it can get traffic info"
+            },
+            {
+              "value": "6",
+              "text": "Yes - and mentioned it can provide weather reports"
+            },
+            {
+              "value": "7",
+              "text": "Yes - and mentioned it can retrieve nutrition information"
+            },
+            {
+              "value": "8",
+              "text": "No"
+            },
+            {
+              "value": "9",
+              "text": "The retail sales associate was unsure"
+            }
+          ]
+        }
+      ],
+      "title": "Say, \"I've heard Google Home can help manage my day -- how?\""
+    },
+    {
+      "name": "Knowledge: Compatibility",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "question12",
+          "title": "Did the retail sales associate mention that Google home is compatible with Chromecast? ",
+          "isRequired": true,
+          "choices": [
+            {
+              "value": "1",
+              "text": "Yes"
+            },
+            {
+              "value": "2",
+              "text": "No"
+            },
+            {
+              "value": "3",
+              "text": "The retail sales associate was unsure"
+            }
+          ]
+        }
+      ],
+      "title": "Say, \"I have a Chromecast at home -- does Google Home work with that too?\""
+    },
+    {
+      "name": "Comments",
+      "elements": [
+        {
+          "type": "comment",
+          "name": "question13",
+          "title": "Please provide a 3-5 sentence summary of your experience:",
+          "isRequired": true,
+          "rows": 10
+        }
+      ]
+    }
+  ],
+  "triggers": [
+    {
+      "type": "complete",
+      "operator": "equal",
+      "value": "2",
+      "name": "question5a"
+    },
+    {
+      "type": "complete",
+      "operator": "equal",
+      "value": "2",
+      "name": "storeopen"
     }
   ]
 }
