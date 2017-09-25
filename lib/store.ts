@@ -1,23 +1,54 @@
 import { observable, action, computed } from 'mobx';
+import { ConditionRunner } from './condition/conditions';
 
 
-// class Question {
-//   @observable visible;
-//   @observable value = null;
-//   @observable error = null;
-//   @observable comment = null;
-//   @observable number;
-//   originalNumber;
+class Question {
+  @observable visible;
+  @observable value = null;
+  @observable error = null;
+  @observable comment = null;
+  @observable number;
+  originalNumber;
+  json;
+  collection;
+  conditionRunner;
 
-//   constructor(json, originalNumber) {
-//     this.visible = json.visible;
-//     this.originalNumber = originalNumber;
-//   }
+  constructor(json, originalNumber, collection) {
+    this.json = json;
+    this.visible = json.visible != null ? json.visible : true;
+    this.originalNumber = originalNumber;
+    this.collection = collection;
 
-//   @action.bound setValue() {
+    this.conditionRunner = null;
+    if (json.visibleIf) {
+      this.conditionRunner = new ConditionRunner('');
+      this.conditionRunner.expression = json.visibleIf;
+    }
 
-//   }
-// }
+  }
+
+  @action.bound setValue(value, comment = null) {
+    this.value = value;
+    this.comment = comment;
+
+    // 2. check all questions's visibleIf
+    this.collection.resetVisible();
+
+    // 3. re-generate question order number
+    // 4. triggers
+  }
+
+  // @action.bound setVisible(visible) {
+  //   this.visible = visible;
+  // }
+
+  @action.bound resetVisible() {
+    if (this.conditionRunner) {
+      const visible = this.conditionRunner.run(this.collection.conditionValues);
+      this.visible = visible;
+    }
+  }
+}
 
 export default class store {
   @observable questions = {};
@@ -40,19 +71,6 @@ export default class store {
     this.regenerateNumbers();
   }
 
-  @action.bound setValue(name, value, comment = null) {
-    // 1. set value
-    // 2. check all questions's visibleIf
-    // 3. re-generate question order number
-    // 4. triggers
-
-    console.log('name / value / comment: ', name, value, comment);
-    console.log('this.questions: ', this.questions);
-    this.questions[name].value = value;
-    this.questions[name].comment = comment;
-
-  }
-
   @action.bound nextPage() {
     if (this.hasNextPage) {
       this.curPageIndex = this.curPageIndex + 1;
@@ -65,6 +83,10 @@ export default class store {
     if (this.curPageIndex > 0) {
       this.curPageIndex = this.curPageIndex - 1;
     }
+  }
+
+  @action.bound resetVisible() {
+    Object.keys(this.questions).forEach(name => this.questions[name].resetVisible());
   }
 
   @computed get hasPrevPage() {
@@ -83,8 +105,15 @@ export default class store {
       name: page.name,
       questions: page.questionNames.map(name => this.questions[name]),
     };
-    console.log('computed: ', pageProps);
     return pageProps;
+  }
+
+  @computed get conditionValues() {
+    const values = {};
+    Object.keys(this.questions).forEach(name =>
+      values[name] = this.questions[name].value
+    );
+    return values;
   }
 
   parseQuestion = (question, questionNames) => {
@@ -94,15 +123,19 @@ export default class store {
     questionNames.push(question.name);
     this.questionNamesInOrder.push(question.name);
 
-    // this.questions[question.name] = new Question(question, this.originalNumber++);
-    this.questions[question.name] = {
-      json: question,
-      visible: question.visible,
-      value: null,
-      originalNumber: this.originalNumber++,
-      comment: null,
-      error: null,
-    };
+    this.questions[question.name] = new Question(
+      question,
+      this.originalNumber++,
+      this,
+    );
+    // this.questions[question.name] = {
+    //   json: question,
+    //   visible: question.visible,
+    //   value: null,
+    //   originalNumber: this.originalNumber++,
+    //   comment: null,
+    //   error: null,
+    // };
   };
 
   initPages = (pagesJson) => {

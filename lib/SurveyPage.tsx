@@ -16,9 +16,10 @@ import QuestionTextDatetime from './QuestionTextDatetime';
 
 import styles from './styles/surveyPage';
 
-const commonBuilderCreator = Component => json => <Component {...json} />;
+const commonBuilderCreator = Component => question => <Component {...question.json} />;
 
-const choiceBuilderCreator = Component => (json) => {
+const choiceBuilderCreator = Component => (question) => {
+  const json = question.json;
   const choices = json.choices.map(v =>
     typeof v === 'string' ? { value: v, text: v } : v
   );
@@ -27,18 +28,20 @@ const choiceBuilderCreator = Component => (json) => {
     <Component
       {...json}
       choices={choices}
+      onChange={question.setValue}
     />
   );
 }
 
-const commentBuilder = json => (
+const commentBuilder = question => (
   <QuestionText
-    {...json}
+    {...question.json}
     multiline
   />
 );
 
-const textBuilder = (json) => {
+const textBuilder = (question) => {
+  const json = question.json;
   const inputType = json.inputType;
   if (inputType === 'date' ||
       inputType === 'datetime' ||
@@ -47,6 +50,7 @@ const textBuilder = (json) => {
     return (
       <QuestionTextDatetime
         {...json}
+        onChange={question.setValue}
       />
     );
   }
@@ -54,6 +58,8 @@ const textBuilder = (json) => {
   return (
     <QuestionText
       {...json}
+      onChange={question.setValue}
+      value={question.value}
     />
   );
 }
@@ -61,7 +67,7 @@ const textBuilder = (json) => {
 
 interface Props {
   questions: any;
-  onValueChange: (name, value, comment?) => {};
+  // onValueChange: (name, value, comment?) => {};
 }
 
 @observer
@@ -95,23 +101,25 @@ export default class SurveyPage extends React.Component<Props, any> {
   };
 
   renderQuestion = (question) => {
-    console.log('render question: ', question)
     const json = question.json;
-    const onChange = (value, comment) =>
-      this.props.onValueChange(json.name, value, comment);
-    const newJson = {
-      ...json,
-      ...question,
-      onChange,
-    };
-    const build = this.typeBuilderMap[newJson.type];
-    const content = build(newJson);
+    // const onChange = (value, comment) =>
+    //   this.props.onValueChange(json.name, value, comment);
+    // const newJson = {
+    //   ...json,
+    //   ...question,
+    //   onChange,
+    // };
+    const build = this.typeBuilderMap[json.type];
+    const content = build(question);
     const {
       number = null,
       title = null,
       name,
       showTitle = true,
-    } = newJson;
+    } = json;
+    if (!question.visible) {
+      return null;
+    }
     return (
       <View key={json.name}>
         {
@@ -124,8 +132,6 @@ export default class SurveyPage extends React.Component<Props, any> {
   }
 
   render() {
-    console.log('page render');
-    console.log(this.props.questions);
     return (
       <View style={styles.container}>
         {this.props.questions.map(this.renderQuestion)}

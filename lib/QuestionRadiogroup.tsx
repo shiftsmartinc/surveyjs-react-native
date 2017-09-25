@@ -5,6 +5,7 @@ import RadioItem from './QuestionRadioItem';
 interface Props {
   choices: any;
   hasOther?: boolean;
+  onChange: any;
 }
 
 const OTHER_VALUE = 'other';
@@ -25,6 +26,7 @@ export default class QuestionCheckbox extends React.Component<Props, any>{
     this.setState({
       selectedChoice: value,
     })
+    this.props.onChange(value);
   }
 
   render() {
