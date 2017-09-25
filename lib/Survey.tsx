@@ -8,6 +8,7 @@ import Store from './store';
 
 interface Props {
   json: any;
+  apis: any;
 }
 
 @observer
@@ -17,7 +18,7 @@ export default class Survey extends React.Component<Props, any> {
   constructor(props) {
     super(props);
 
-    this.store = new Store(this.props.json);
+    this.store = new Store(this.props.json, this.props.apis);
   }
 
   render() {
@@ -31,8 +32,8 @@ export default class Survey extends React.Component<Props, any> {
         <SurveyNavigation
           onNextPage={this.store.nextPage}
           onPrevPage={this.store.prevPage}
-          hasNextPage={this.store.hasNextPage}
-          hasPrevPage={this.store.hasPrevPage}
+          nextPageIndex={this.store.nextPageIndex}
+          prevPageIndex={this.store.prevPageIndex}
         />
       </ScrollView>
     );

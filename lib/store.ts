@@ -50,6 +50,45 @@ class Question {
   }
 }
 
+class Page {
+  collection;
+  name;
+  @observable visible;
+  json;
+  questionNames;
+  pageIndex;
+
+  conditionRunner;
+
+  constructor(json, collection, pageIndex, questionNames) {
+    this.json = json;
+    this.collection = collection
+    this.pageIndex = pageIndex;
+    this.questionNames = questionNames;
+    this.name = json.name;
+    this.visible = json.visible != null ? json.visible : true;
+
+
+    this.conditionRunner = null;
+    if (json.visibleIf) {
+      this.conditionRunner = new ConditionRunner('');
+      this.conditionRunner.expression = json.visibleIf;
+    }
+  }
+
+  @action.bound resetVisible() {
+    if (this.conditionRunner) {
+      const visible = this.conditionRunner.run(this.collection.conditionValues);
+      this.visible = visible;
+    }
+  }
+
+}
+
+interface Istore {
+  onComplete();
+}
+
 export default class store {
   @observable questions = {};
   @observable curPageIndex = 0;
@@ -58,12 +97,15 @@ export default class store {
 
   triggers = [];
 
+  apis: Istore = null;
+
   originalNumber = 0;
 
   questionNamesInOrder = [];
 
-  constructor(json) {
+  constructor(json, apis) {
     this.initStoreFromJson(json);
+    this.apis = apis;
   }
 
   initStoreFromJson(json) {
@@ -72,34 +114,38 @@ export default class store {
   }
 
   @action.bound nextPage() {
-    if (this.hasNextPage) {
-      this.curPageIndex = this.curPageIndex + 1;
+    if (this.nextPageIndex !== -1) {
+      // this.curPageIndex = this.curPageIndex + 1;
+      this.curPageIndex = this.nextPageIndex;
     } else {
-      console.log('complete');
+      this.apis.onComplete();
     }
   }
 
   @action.bound prevPage() {
-    if (this.curPageIndex > 0) {
-      this.curPageIndex = this.curPageIndex - 1;
+    if (this.prevPageIndex !== -1) {
+      // this.curPageIndex = this.curPageIndex - 1;
+      this.curPageIndex = this.prevPageIndex;
     }
   }
 
   @action.bound resetVisible() {
     Object.keys(this.questions).forEach(name => this.questions[name].resetVisible());
+    this.pages.forEach(page => page.resetVisible());
   }
 
-  @computed get hasPrevPage() {
-    return this.curPageIndex > 0;
+  @computed get prevPageIndex() {
+    const reversedPages = this.pages.slice().reverse();
+    const page = reversedPages.find(v => v.visible && v.pageIndex < this.curPageIndex);
+    return page ? page.pageIndex : -1;
   }
 
-  @computed get hasNextPage() {
-    const totalPage = this.pages.length;
-    return this.curPageIndex < (totalPage - 1);
+  @computed get nextPageIndex() {
+    return this.pages.findIndex(v => v.visible && v.pageIndex > this.curPageIndex);
   }
 
   @computed get currentPageProps() {
-    const page = this.pages[this.curPageIndex];
+    const page = this.pages.find(v => v.pageIndex === this.curPageIndex);
 
     const pageProps = {
       name: page.name,
@@ -142,11 +188,17 @@ export default class store {
     this.pages = pagesJson.map((page, pageIndex) => {
       const questionNames = [];
       page.elements.forEach(question => this.parseQuestion(question, questionNames));
-      return {
+      // return {
+      //   pageIndex,
+      //   questionNames,
+      //   name: page.name,
+      // };
+      return new Page(
+        page,
+        this,
         pageIndex,
         questionNames,
-        name: page.name,
-      };
+      );
     })
   }
 
