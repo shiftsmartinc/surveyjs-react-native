@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { observer } from "mobx-react";
 import { TextInput } from 'react-native';
 
 import styles, { LINE_HEIGHT } from './styles/questionText';
@@ -12,7 +11,6 @@ interface Props {
   onChange: () => {};
 }
 
-@observer
 export default class QuestionText extends React.Component<Props, any>{
   render() {
     const { rows = 1 } = this.props;

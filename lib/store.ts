@@ -1,6 +1,6 @@
 import { observable, action, computed } from 'mobx';
 import { ConditionRunner } from './condition/conditions';
-
+import { getTriggerType, SurveyTrigger } from './trigger';
 
 class Question {
   @observable visible;
@@ -36,11 +36,14 @@ class Question {
 
     // 3. re-generate question order number
     // 4. triggers
+    this.collection.triggers
+      .filter(v => v.name === this.json.name && !v.isOnNextPage)
+      .forEach(trigger => trigger.check(value));
   }
 
-  // @action.bound setVisible(visible) {
-  //   this.visible = visible;
-  // }
+  @action.bound setVisible(visible) {
+    this.visible = visible;
+  }
 
   @action.bound resetVisible() {
     if (this.conditionRunner) {
@@ -76,6 +79,10 @@ class Page {
     }
   }
 
+  @action.bound setVisible(visible) {
+    this.visible = visible;
+  }
+
   @action.bound resetVisible() {
     if (this.conditionRunner) {
       const visible = this.conditionRunner.run(this.collection.conditionValues);
@@ -95,7 +102,7 @@ export default class store {
 
   pages = [];
 
-  triggers = [];
+  triggers: Array<SurveyTrigger> = [];
 
   apis: Istore = null;
 
@@ -104,16 +111,24 @@ export default class store {
   questionNamesInOrder = [];
 
   constructor(json, apis) {
-    this.initStoreFromJson(json);
     this.apis = apis;
+    this.initStoreFromJson(json);
   }
 
   initStoreFromJson(json) {
     this.initPages(json.pages);
+    this.initTriggers(json.triggers);
     this.regenerateNumbers();
   }
 
   @action.bound nextPage() {
+    // checkOnPageTrigger
+    const pageTriggers = this.triggers.filter(v => v.isOnNextPage);
+    const curPageQuestionNames = this.pages[this.curPageIndex].questionNames;
+    const curPageTriggers = pageTriggers.filter(v => curPageQuestionNames.indexOf(v.name) !== -1);
+    curPageTriggers.forEach(trigger => trigger.check(this.questions[trigger.name].value));
+
+    // do next page
     if (this.nextPageIndex !== -1) {
       // this.curPageIndex = this.curPageIndex + 1;
       this.curPageIndex = this.nextPageIndex;
@@ -206,6 +221,38 @@ export default class store {
     this.questionNamesInOrder.forEach((name, idx) => {
       this.questions[name].number = idx;
     });
+  }
+
+  initTriggers = (triggersJson) => {
+    const owner = {
+      doComplete: this.apis.onComplete,
+      getObjects: this.triggerGetObjects,
+      setTriggerValue: this.setTriggerValue,
+    };
+    this.triggers = triggersJson.map(json => {
+      let TriggerType = getTriggerType(json);
+      const trigger = new TriggerType(json);
+      trigger.setOwner(owner);
+      return trigger;
+    });
+  }
+
+  triggerGetObjects = (pageNames, questionNames) => {
+    const pages = this.pages.filter(v => pageNames.indexOf(v.name) !== -1);
+    const questions = questionNames.map(v => this.questions[v]);
+    return [...pages, ...questions];
+  }
+
+  @action.bound setTriggerValue(name: string, value: any, isVariable: boolean) {
+    if (!name) return;
+    if (!isVariable) {
+      this.questions[name].setValue(value);
+    }
+    // if (isVariable) {
+    //   this.setVariable(name, value);
+    // } else {
+    //   this.setValue(name, value);
+    // }
   }
 
 }

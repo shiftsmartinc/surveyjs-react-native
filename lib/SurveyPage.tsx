@@ -28,6 +28,8 @@ const choiceBuilderCreator = Component => (question) => {
     <Component
       {...json}
       choices={choices}
+      value={question.value}
+      comment={question.comment}
       onChange={question.setValue}
     />
   );

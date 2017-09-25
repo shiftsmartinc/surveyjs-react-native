@@ -6,6 +6,8 @@ interface Props {
   choices: any;
   hasOther?: boolean;
   onChange: any;
+  value: string;
+  comment?: string;
 }
 
 const OTHER_VALUE = 'other';
@@ -18,15 +20,15 @@ export default class QuestionCheckbox extends React.Component<Props, any>{
 
     this.state = {
       otherChecked: false,
-      selectedChoice: '',
     };
   }
 
   handleChoicesChange = (value) => {
-    this.setState({
-      selectedChoice: value,
-    })
     this.props.onChange(value);
+  }
+
+  handleTextInputChange = (comment) => {
+    this.props.onChange(this.props.value, comment);
   }
 
   render() {
@@ -38,7 +40,7 @@ export default class QuestionCheckbox extends React.Component<Props, any>{
             key={v.value}
             value={v.value}
             text={v.text}
-            checked={this.state.selectedChoice === v.value}
+            checked={this.props.value === v.value}
             onChange={this.handleChoicesChange}
           />
         )}
@@ -48,10 +50,15 @@ export default class QuestionCheckbox extends React.Component<Props, any>{
             <RadioItem
               value={OTHER_VALUE}
               text={OTHER_TEXT}
-              checked={this.state.selectedChoice === OTHER_VALUE}
+              checked={this.props.value === OTHER_VALUE}
               onChange={this.handleChoicesChange}
             />
-            {this.state.selectedChoice === OTHER_VALUE && <TextInput style={{ borderWidth: 1 }} />}
+            {this.props.value === OTHER_VALUE &&
+              <TextInput
+                onChangeText={this.handleTextInputChange}
+                value={this.props.comment}
+                style={{ borderWidth: 1 }}
+              />}
           </View>
         }
       </View>
