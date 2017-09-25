@@ -39,19 +39,20 @@ const commentBuilder = json => (
 );
 
 const textBuilder = (json) => {
-  let Component = QuestionText;
-  switch (json.inputType) {
-    case 'date':
-    case 'datetime':
-    case 'datetime-local':
-    case 'time':
-      Component = QuestionTextDatetime;
-      break;
-
-    default:
+  const inputType = json.inputType;
+  if (inputType === 'date' ||
+      inputType === 'datetime' ||
+      inputType === 'datetime-local' ||
+      inputType === 'time') {
+    return (
+      <QuestionTextDatetime
+        {...json}
+      />
+    );
   }
+
   return (
-    <Component
+    <QuestionText
       {...json}
     />
   );
@@ -60,6 +61,7 @@ const textBuilder = (json) => {
 
 interface Props {
   questions: any;
+  onValueChange: (name, value, comment?) => {};
 }
 
 @observer
@@ -92,9 +94,16 @@ export default class SurveyPage extends React.Component<Props, any> {
     file: commonBuilderCreator(QuestionFile),
   };
 
-  renderQuestion = (question, idx) => {
+  renderQuestion = (question) => {
+    console.log('render question: ', question)
     const json = question.json;
-    const newJson = { ...json, number: idx + 1 };
+    const onChange = (value, comment) =>
+      this.props.onValueChange(json.name, value, comment);
+    const newJson = {
+      ...json,
+      ...question,
+      onChange,
+    };
     const build = this.typeBuilderMap[newJson.type];
     const content = build(newJson);
     const {
@@ -115,6 +124,8 @@ export default class SurveyPage extends React.Component<Props, any> {
   }
 
   render() {
+    console.log('page render');
+    console.log(this.props.questions);
     return (
       <View style={styles.container}>
         {this.props.questions.map(this.renderQuestion)}

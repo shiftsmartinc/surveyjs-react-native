@@ -24,7 +24,10 @@ export default class Survey extends React.Component<Props, any> {
     return (
       <ScrollView>
 
-        <SurveyPage {...this.store.currentPageProps} />
+        <SurveyPage
+          {...this.store.currentPageProps}
+          onValueChange={this.store.setValue}
+        />
         <SurveyNavigation
           onNextPage={this.store.nextPage}
           onPrevPage={this.store.prevPage}

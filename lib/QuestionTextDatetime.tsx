@@ -8,6 +8,7 @@ import moment from 'moment';
 interface Props {
   placeholder?: string;
   inputType: string;
+  onChange: (...args) => {};
 }
 
 
@@ -41,6 +42,7 @@ export default class QuestionTextDatetime extends React.Component<Props, any> {
     this.setState({
       value: date,
     });
+    this.props.onChange(name, date);
     this.hidePicker();
   }
 

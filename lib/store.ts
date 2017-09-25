@@ -40,12 +40,18 @@ export default class store {
     this.regenerateNumbers();
   }
 
-  // @action.bound setValue(question, value) {
-  //   // 1. set value
-  //   // 2. check all questions's visibleIf
-  //   // 3. re-generate question order number
-  //   // 4. triggers
-  // }
+  @action.bound setValue(name, value, comment = null) {
+    // 1. set value
+    // 2. check all questions's visibleIf
+    // 3. re-generate question order number
+    // 4. triggers
+
+    console.log('name / value / comment: ', name, value, comment);
+    console.log('this.questions: ', this.questions);
+    this.questions[name].value = value;
+    this.questions[name].comment = comment;
+
+  }
 
   @action.bound nextPage() {
     if (this.hasNextPage) {
@@ -61,25 +67,23 @@ export default class store {
     }
   }
 
-  @computed
-  get hasPrevPage() {
+  @computed get hasPrevPage() {
     return this.curPageIndex > 0;
   }
 
-  @computed
-  get hasNextPage() {
+  @computed get hasNextPage() {
     const totalPage = this.pages.length;
     return this.curPageIndex < (totalPage - 1);
   }
 
-
-  @computed
-  get currentPageProps() {
+  @computed get currentPageProps() {
     const page = this.pages[this.curPageIndex];
+
     const pageProps = {
       name: page.name,
       questions: page.questionNames.map(name => this.questions[name]),
     };
+    console.log('computed: ', pageProps);
     return pageProps;
   }
 
