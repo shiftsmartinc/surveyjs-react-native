@@ -5,24 +5,17 @@ import RadioItem from './QuestionRadioItem';
 interface Props {
   choices: any;
   hasOther?: boolean;
-  onChange: any;
+  onChange(value, comment?);
   value: string;
   comment?: string;
+  otherText?: string;
 }
 
 const OTHER_VALUE = 'other';
-const OTHER_TEXT = 'other (describe)';
+const DEFAULT_OTHER_TEXT = 'other (describe)';
 
-export default class QuestionCheckbox extends React.Component<Props, any>{
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      otherChecked: false,
-    };
-  }
-
+export default class QuestionRadiogroup extends React.Component<Props, any> {
   handleChoicesChange = (value) => {
     this.props.onChange(value);
   }
@@ -32,10 +25,13 @@ export default class QuestionCheckbox extends React.Component<Props, any>{
   }
 
   render() {
-    const expanedChoices = this.props.choices.map(v => typeof v === 'string' ? { value: v, text: v } : v);
+    const {
+      otherText = DEFAULT_OTHER_TEXT,
+      choices = [],
+    } = this.props;
     return (
       <View>
-        {expanedChoices.map(v =>
+        {choices.map(v =>
           <RadioItem
             key={v.value}
             value={v.value}
@@ -49,7 +45,7 @@ export default class QuestionCheckbox extends React.Component<Props, any>{
           <View>
             <RadioItem
               value={OTHER_VALUE}
-              text={OTHER_TEXT}
+              text={otherText}
               checked={this.props.value === OTHER_VALUE}
               onChange={this.handleChoicesChange}
             />

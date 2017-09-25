@@ -6,35 +6,39 @@ import CheckboxItem from './QuestionCheckboxItem';
 interface Props {
   choices: any;
   hasOther?: boolean;
+  value: Array<string>;
+  comment?: string;
+  otherText?: string;
+  onChange(value, comment?);
 }
 
+const OTHER_VALUE = 'other';
+const DEFAULT_OTHER_TEXT = 'other (describe)';
 
 export default class QuestionCheckbox extends React.Component<Props, any>{
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      otherChecked: false,
-      selectedChoices: {}
-    };
-  }
-
   handleChoicesChange = (checked, value) => {
-    const newSelected = {
-      ...this.state.selectedChoices,
-      [value]: checked,
-    };
-    this.setState({
-      selectedChoices: newSelected,
-    })
+
+    const valueSet = new Set(this.props.value);
+    if (checked) {
+      valueSet.add(value);
+    } else {
+      valueSet.delete(value);
+    }
+    this.props.onChange([...valueSet]);
   }
 
-  handleItemOtherChange = (otherChecked) => {
-    this.setState({ otherChecked });
+  handleCommentChange = (comment) => {
+    this.props.onChange(this.props.value, comment);
   }
 
   render() {
+    const {
+      comment = '',
+      otherText = DEFAULT_OTHER_TEXT,
+    } = this.props;
+    const value = this.props.value || [];
+    const otherChecked = value.indexOf(OTHER_VALUE) !== -1;
     return (
       <View>
         {this.props.choices.map(v =>
@@ -42,7 +46,8 @@ export default class QuestionCheckbox extends React.Component<Props, any>{
             key={v.value}
             value={v.value}
             text={v.text}
-            checked={this.state.selectedChoices[v.value]}
+            // checked={this.state.selectedChoices[v.value]}
+            checked={value.indexOf(v.value) !== -1}
             onChange={this.handleChoicesChange}
           />
         )}
@@ -50,12 +55,18 @@ export default class QuestionCheckbox extends React.Component<Props, any>{
           this.props.hasOther &&
           <View>
             <CheckboxItem
-              value={'other'}
-              text={'other (describe)'}
-              checked={this.state.otherChecked}
-              onChange={this.handleItemOtherChange}
+              value={OTHER_VALUE}
+              text={otherText}
+              checked={otherChecked}
+              onChange={this.handleChoicesChange}
             />
-            { this.state.otherChecked && <TextInput style={{ borderWidth: 1 }}/> }
+            { otherChecked &&
+              <TextInput
+                value={comment}
+                onChangeText={this.handleCommentChange}
+                style={{ borderWidth: 1 }}
+              />
+            }
           </View>
         }
       </View>

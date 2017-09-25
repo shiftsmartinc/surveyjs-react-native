@@ -8,10 +8,14 @@ interface Props {
   choices: any;
   hasOther?: boolean;
   optionsCaption?: string;
+  value: string;
+  comment?: string;
+  otherText?: string;
+  onChange(value, comment?);
 }
 
 const OTHER_VALUE = 'other';
-const OTHER_TEXT = 'other (describe)';
+const DEFAULT_OTHER_TEXT = 'other (describe)';
 
 const DEFAULT_OPTION_CAPTION = 'select';
 
@@ -24,15 +28,16 @@ export default class QuestionActionsheet extends React.Component<Props, any>{
     this.state = {
       otherChecked: false,
       modalVisible: false,
-      selectedChoiceValue: '',
     };
   }
 
   handleChoicesChange = (value) => {
-    this.setState({
-      selectedChoiceValue: value,
-    })
+    this.props.onChange(value);
     this.toggleModalVisible();
+  }
+
+  handleCommentChange = (comment) => {
+    this.props.onChange(this.props.value, comment);
   }
 
   toggleModalVisible = () => {
@@ -56,12 +61,17 @@ export default class QuestionActionsheet extends React.Component<Props, any>{
   }
 
   renderModalContent = () => {
+    const {
+      otherText = DEFAULT_OTHER_TEXT,
+      choices = [],
+      hasOther = false,
+    } = this.props;
     return (
       <View style={styles.modal}>
         <View style={styles.optionContainer}>
-          {this.props.choices.map(v => this.renderItem(v))}
+          {choices.map(v => this.renderItem(v))}
           {
-            this.props.hasOther && this.renderItem({ value: OTHER_VALUE, text: OTHER_TEXT })
+            hasOther && this.renderItem({ value: OTHER_VALUE, text: otherText })
           }
         </View>
 
@@ -80,13 +90,18 @@ export default class QuestionActionsheet extends React.Component<Props, any>{
 
   render() {
     const { optionsCaption = DEFAULT_OPTION_CAPTION } = this.props;
+    const {
+      otherText = DEFAULT_OTHER_TEXT,
+      value,
+      comment,
+    } = this.props;
     const selectedChocie = [
       ...this.props.choices,
       {
         value: OTHER_VALUE,
-        text: OTHER_TEXT,
+        text: otherText,
       }
-    ].find(v => v.value === this.state.selectedChoiceValue);
+    ].find(v => v.value === value);
     const caption = selectedChocie ? selectedChocie.text : optionsCaption;
     return (
       <View>
@@ -98,8 +113,12 @@ export default class QuestionActionsheet extends React.Component<Props, any>{
           </View>
         </TouchableWithFeedback>
         {
-          this.state.selectedChoiceValue === OTHER_VALUE &&
-          <TextInput style={styles.otherTextInput} />
+          value === OTHER_VALUE &&
+          <TextInput
+            value={comment}
+            onChangeText={this.handleCommentChange}
+            style={styles.otherTextInput}
+          />
         }
         <Modal
           animationType="slide"
