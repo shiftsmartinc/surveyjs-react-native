@@ -15,7 +15,7 @@ export default class QuestionHtml extends React.Component<Props, any> {
           html: this.props.html,
         }}
         scrollEnabled={false}
-        scalesPageToFit={false}
+        scalesPageToFit={true}
       />
     );
   }
