@@ -83,7 +83,7 @@ class Question {
 class Page {
   collection;
   name;
-  @observable visible;
+  @observable _visible;
   json;
   questionNames;
   pageIndex;
@@ -96,7 +96,7 @@ class Page {
     this.pageIndex = pageIndex;
     this.questionNames = questionNames;
     this.name = json.name;
-    this.visible = json.visible != null ? json.visible : true;
+    this._visible = json.visible != null ? json.visible : true;
 
 
     this.conditionRunner = null;
@@ -107,14 +107,21 @@ class Page {
   }
 
   @action.bound setVisible(visible) {
-    this.visible = visible;
+    this._visible = visible;
   }
 
   @action.bound resetVisible() {
     if (this.conditionRunner) {
       const visible = this.conditionRunner.run(this.collection.conditionValues);
-      this.visible = visible;
+      this._visible = visible;
     }
+  }
+
+  @computed get visible() {
+    const questionVisible = this.questionNames.some(name =>
+      this.collection.questions[name].visible
+    );
+    return this._visible && questionVisible;
   }
 
 }
