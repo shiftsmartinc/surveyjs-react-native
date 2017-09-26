@@ -202,6 +202,13 @@ export default class SurveyPage extends React.Component<Props, any> {
           <Text>{question.error}</Text>
         }
         {content}
+        {
+          question.json.hasComment &&
+          <QuestionText
+            value={question.comment}
+            onChange={question.setComment}
+          />
+        }
 
       </View>
     );

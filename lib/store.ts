@@ -39,7 +39,9 @@ class Question {
 
   @action.bound setValue(value, comment = null) {
     this.value = value;
-    this.comment = comment;
+    if (comment != null) {
+      this.comment = comment;
+    }
 
     // 2. check all questions's visibleIf
     this.collection.resetVisible();
@@ -49,6 +51,10 @@ class Question {
     this.collection.triggers
       .filter(v => v.name === this.json.name && !v.isOnNextPage)
       .forEach(trigger => trigger.check(value));
+  }
+
+  @action.bound setComment(comment) {
+    this.comment = comment;
   }
 
   @action.bound setVisible(visible) {
@@ -203,10 +209,16 @@ export default class store {
   @computed get results() {
     const values = {};
     Object.keys(this.questions).forEach(name => {
-      const value = this.questions[name].value;
+      const question = this.questions[name];
+      const value = question.value;
       if (!isValueEmpty(value)) {
         values[name] = value;
       }
+      // handle hasComment , hasOther
+      if (question.comment && (question.json.hasComment || question.json.hasOther)) {
+        values[`${name}-Comment`] = question.comment;
+      }
+
     });
     return values;
   }
