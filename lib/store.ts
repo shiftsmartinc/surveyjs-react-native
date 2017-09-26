@@ -2,6 +2,7 @@ import { observable, action, computed, toJS } from 'mobx';
 import { ConditionRunner } from './condition/conditions';
 import { getTriggerType, SurveyTrigger } from './trigger';
 import QuestionValidator from './validator';
+import { isValueEmpty } from './utils';
 
 class Question {
   @observable visible;
@@ -106,7 +107,7 @@ class Page {
 }
 
 interface Istore {
-  onComplete();
+  onComplete(results);
 }
 
 export default class store {
@@ -155,7 +156,7 @@ export default class store {
       // this.curPageIndex = this.curPageIndex + 1;
       this.curPageIndex = this.nextPageIndex;
     } else {
-      this.apis.onComplete();
+      this.onComplete();
     }
   }
 
@@ -193,10 +194,27 @@ export default class store {
 
   @computed get conditionValues() {
     const values = {};
-    Object.keys(this.questions).forEach(name =>
-      values[name] = this.questions[name].value
-    );
+    Object.keys(this.questions).forEach((name) => {
+      values[name] = this.questions[name].value;
+    });
     return values;
+  }
+
+  @computed get results() {
+    const values = {};
+    Object.keys(this.questions).forEach(name => {
+      const value = this.questions[name].value;
+      if (!isValueEmpty(value)) {
+        values[name] = value;
+      }
+    });
+    return values;
+  }
+
+  onComplete = () => {
+    if (this.apis.onComplete) {
+      this.apis.onComplete(this.results);
+    }
   }
 
   parseQuestion = (question, questionNames) => {
@@ -247,7 +265,7 @@ export default class store {
 
   initTriggers = (triggersJson) => {
     const owner = {
-      doComplete: this.apis.onComplete,
+      doComplete: this.onComplete,
       getObjects: this.triggerGetObjects,
       setTriggerValue: this.setTriggerValue,
     };

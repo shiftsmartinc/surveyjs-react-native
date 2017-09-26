@@ -6,10 +6,10 @@ import styles from './styles';
 import surveyJson from './survey.json';
 
 export default class Example extends React.Component {
-  onComplete = () => {
+  onComplete = (results) => {
     Alert.alert(
       'Complete',
-      '',
+      JSON.stringify(results),
       [
         { text: 'OK', onPress: () => {} },
       ],
