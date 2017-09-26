@@ -1,6 +1,7 @@
-import { observable, action, computed } from 'mobx';
+import { observable, action, computed, toJS } from 'mobx';
 import { ConditionRunner } from './condition/conditions';
 import { getTriggerType, SurveyTrigger } from './trigger';
+import QuestionValidator from './validator';
 
 class Question {
   @observable visible;
@@ -24,7 +25,15 @@ class Question {
       this.conditionRunner = new ConditionRunner('');
       this.conditionRunner.expression = json.visibleIf;
     }
+  }
 
+  validate() {
+    const questionValidator = new QuestionValidator(this);
+    return questionValidator.validate();
+  }
+
+  @computed get plainValue() {
+    return toJS(this.value);
   }
 
   @action.bound setValue(value, comment = null) {
@@ -50,6 +59,10 @@ class Question {
       const visible = this.conditionRunner.run(this.collection.conditionValues);
       this.visible = visible;
     }
+  }
+
+  @action.bound setError(error) {
+    this.error = error;
   }
 }
 
@@ -122,6 +135,15 @@ export default class store {
   }
 
   @action.bound nextPage() {
+
+    // validator
+    const isValidatorFailed = this.currentPageProps.questions.some(
+      question => !question.validate()
+    );
+    if (isValidatorFailed) {
+      return;
+    }
+
     // checkOnPageTrigger
     const pageTriggers = this.triggers.filter(v => v.isOnNextPage);
     const curPageQuestionNames = this.pages[this.curPageIndex].questionNames;

@@ -39,6 +39,9 @@ const commentBuilder = question => (
   <QuestionText
     {...question.json}
     multiline
+    value={question.value}
+    comment={question.comment}
+    onChange={question.setValue}
   />
 );
 
@@ -128,7 +131,12 @@ export default class SurveyPage extends React.Component<Props, any> {
           showTitle &&
           <Text>{number ? `${number}.` : ''} {title || name}</Text>
         }
+        {
+          question.error &&
+          <Text>{question.error}</Text>
+        }
         {content}
+
       </View>
     );
   }
