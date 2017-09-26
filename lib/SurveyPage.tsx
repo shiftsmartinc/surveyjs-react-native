@@ -183,11 +183,13 @@ export default class SurveyPage extends React.Component<Props, any> {
     const build = this.typeBuilderMap[json.type];
     const content = build(question);
     const {
-      number = null,
       title = null,
       name,
       showTitle = true,
     } = json;
+    const {
+      number = null,
+    } = question;
     if (!question.visible) {
       return null;
     }

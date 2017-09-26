@@ -14,6 +14,7 @@ class Question {
   json;
   collection;
   conditionRunner;
+  page;
 
   constructor(json, originalNumber, collection) {
     this.json = json;
@@ -47,6 +48,8 @@ class Question {
     this.collection.resetVisible();
 
     // 3. re-generate question order number
+    this.collection.regenerateNumbers();
+
     // 4. triggers
     this.collection.triggers
       .filter(v => v.name === this.json.name && !v.isOnNextPage)
@@ -70,6 +73,10 @@ class Question {
 
   @action.bound setError(error) {
     this.error = error;
+  }
+
+  @action.bound setPage(page) {
+    this.page = page;
   }
 }
 
@@ -260,18 +267,27 @@ export default class store {
       //   questionNames,
       //   name: page.name,
       // };
-      return new Page(
+      const pageStore = new Page(
         page,
         this,
         pageIndex,
         questionNames,
       );
+
+      questionNames.forEach((name) => {
+        this.questions[name].setPage(pageStore);
+      })
+      return pageStore;
     })
   }
 
   regenerateNumbers = () => {
-    this.questionNamesInOrder.forEach((name, idx) => {
-      this.questions[name].number = idx;
+    let count = 0;
+    this.questionNamesInOrder.forEach((name) => {
+      const question = this.questions[name];
+      if (question.visible && question.page.visible) {
+        question.number = count++;
+      }
     });
   }
 
