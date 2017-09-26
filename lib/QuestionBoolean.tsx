@@ -4,6 +4,8 @@ import CheckboxItem from './QuestionCheckboxItem';
 interface Props {
   label?: string;
   name: string;
+  value?: boolean;
+  onChange(value, comment?);
 }
 
 export default class QuestionBoolean extends React.Component<Props, any>{
@@ -12,16 +14,17 @@ export default class QuestionBoolean extends React.Component<Props, any>{
     super(props);
 
     this.state = {
-      checked: false,
       dirty: false,
     };
   }
 
+
   handleChecked = (checked) => {
     this.setState({
       dirty: true,
-      checked,
-    })
+    });
+
+    this.props.onChange(checked);
   }
 
   render() {
@@ -30,7 +33,7 @@ export default class QuestionBoolean extends React.Component<Props, any>{
       <CheckboxItem
         value={''}
         text={label}
-        checked={this.state.checked}
+        checked={this.props.value}
         pristine={!this.state.dirty}
         onChange={this.handleChecked}
       />

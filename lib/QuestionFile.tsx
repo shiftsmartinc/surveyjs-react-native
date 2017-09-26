@@ -9,6 +9,9 @@ interface Props {
   imageHeight?: number;
   imageWidth?: number;
   maxSize?: number;
+  storeDataAsText?: boolean;
+  value?: string;
+  onChange(value, comment?);
 }
 
 const pickerOptions = {
@@ -41,7 +44,9 @@ export default class QuestionHtml extends React.Component<Props, any> {
         );
         return;
       }
-
+      const value = this.props.storeDataAsText ?
+        `data:image/jpeg;base64,${response.data}` : response.uri;
+      this.props.onChange(value);
       this.setState({
         sourceUri: response.uri,
       })
@@ -50,6 +55,7 @@ export default class QuestionHtml extends React.Component<Props, any> {
   render() {
     const {
       showPreview = false,
+      value,
     } = this.props;
     const questionImageStyle = {
       height: this.props.imageHeight || 50,
@@ -63,10 +69,10 @@ export default class QuestionHtml extends React.Component<Props, any> {
         >
           <Text>Select File</Text>
         </TouchableWithFeedback>
-        {(showPreview && this.state.sourceUri) ?
+        {(showPreview && value) ?
           <Image
             style={questionImageStyle}
-            source={{ uri: this.state.sourceUri }}
+            source={{ uri: value }}
           /> : null
         }
       </View>

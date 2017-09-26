@@ -16,7 +16,13 @@ import QuestionTextDatetime from './QuestionTextDatetime';
 
 import styles from './styles/surveyPage';
 
-const commonBuilderCreator = Component => question => <Component {...question.json} />;
+const commonBuilderCreator = Component => question =>
+  <Component
+    {...question.json}
+    value={question.value}
+    comment={question.comment}
+    onChange={question.setValue}
+  />;
 
 const choiceBuilderCreator = Component => (question) => {
   const json = question.json;
@@ -34,6 +40,66 @@ const choiceBuilderCreator = Component => (question) => {
     />
   );
 }
+
+const booleanBuilder = question => {
+  const {
+    json: {
+      valueTrue = true,
+      valueFalse = false,
+    },
+    value,
+  } = question;
+  const checked = value === valueTrue;
+  const onChange = (checked) => {
+    const value = checked ? valueTrue : valueFalse;
+    question.setValue(value);
+  }
+  return (
+    <QuestionBoolean
+      {...question.json}
+      value={checked}
+      comment={question.comment}
+      onChange={onChange}
+    />
+  );
+};
+
+const generateRateValues = (min, max, step) => {
+  const rateValues = [];
+  for (let i = min; i <= max; i += step) {
+    rateValues.push({
+      value: i,
+      text: i,
+    });
+  }
+  console.log('gene new rate: ', rateValues);
+  return rateValues;
+};
+
+const ratingBuilder = question => {
+  const {
+    json: {
+      rateValues = null,
+      rateMax = 5,
+      rateMin = 1,
+      rateStep = 1,
+    },
+  } = question;
+
+  const newRateValues = rateValues || generateRateValues(rateMin, rateMax, rateStep);
+
+  console.log('rateVlua: ', newRateValues);
+  return (
+    <QuestionRate
+      {...question.json}
+      rateValues={newRateValues}
+      value={question.value}
+      comment={question.comment}
+      onChange={question.setValue}
+    />
+  );
+};
+
 
 const commentBuilder = question => (
   <QuestionText
@@ -96,8 +162,8 @@ export default class SurveyPage extends React.Component<Props, any> {
     radiogroup: choiceBuilderCreator(QuestionRadiogroup),
     dropdown: choiceBuilderCreator(QuestionActionsheet),
     comment: commentBuilder,
-    boolean: commonBuilderCreator(QuestionBoolean),
-    rating: commonBuilderCreator(QuestionRate),
+    boolean: booleanBuilder,
+    rating: ratingBuilder,
     multipletext: commonBuilderCreator(QuestionMultipleText),
     panel: this.panelBuilder,
     paneldynamic: this.panelDynamicBuilder,

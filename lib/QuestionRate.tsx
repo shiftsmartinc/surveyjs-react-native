@@ -8,22 +8,14 @@ interface Props {
   rateValues: Array<any>;
   minRateDescription?: string;
   maxRateDescription?: string;
+  value?: any;
+  onChange(value, comment?);
 }
 
 export default class QuestionRate extends React.Component<Props, any> {
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      selectedValue: null,
-    };
-  }
-
   onItemChecked = (value) => {
-    this.setState({
-      selectedValue: value,
-    });
+    this.props.onChange(value);
   }
 
   render() {
@@ -31,6 +23,7 @@ export default class QuestionRate extends React.Component<Props, any> {
       rateValues = [],
       minRateDescription = '',
       maxRateDescription = '',
+      value
     } = this.props;
     const itemsMaxIdx = rateValues.length - 1;
     return (
@@ -38,7 +31,7 @@ export default class QuestionRate extends React.Component<Props, any> {
         {rateValues.map((v, idx) => {
           const isFirst = idx === 0;
           const isLast = idx === itemsMaxIdx;
-          const checked = v.value === this.state.selectedValue;
+          const checked = v.value === value;
           return (
             <TouchableWithFeedback
               key={v.value}
