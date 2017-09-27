@@ -4,15 +4,12 @@ import colors from './colors';
 export default StyleSheet.create({
   container: {
     flexDirection: 'row',
-    // flex: 0,
-    // alignItems: 'center',
-    borderWidth: 1,
-    borderColor: colors.lightGray,
-    // borderRightWidth: 0,
+    flexGrow: 0,
+    // borderWidth: 1,
+    // borderColor: colors.lightGray,
     alignSelf: 'flex-start',
     borderRadius: 5,
     overflow: 'hidden',
-
   },
   rateItem: {
     flexDirection: 'row',
@@ -23,12 +20,10 @@ export default StyleSheet.create({
     backgroundColor: colors.lightGray,
     borderRightWidth: 1,
     borderRightColor: colors.extraLightGray,
-    overflow: 'hidden',
   },
   rateItemText: {
     marginLeft: 3,
     marginRight: 3,
-
   },
   rateItemTextChecked: {
     color: colors.white,

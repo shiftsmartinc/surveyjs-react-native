@@ -12,9 +12,6 @@ export default StyleSheet.create({
     borderBottomColor: colors.extraLightGray,
     borderBottomWidth: 1,
   },
-  checkboxWrapper: {
-    flexDirection: 'row',
-  },
   checkbox: {
     width: 20,
     height: 20,

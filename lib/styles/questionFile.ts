@@ -16,5 +16,9 @@ export default StyleSheet.create({
   buttonText: {
     color: colors.wechatGreen,
     textAlign: 'center',
-  }
+  },
+  image: {
+    marginTop: 5,
+    alignSelf: 'center',
+  },
 });

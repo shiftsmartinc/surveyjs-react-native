@@ -59,8 +59,8 @@ export default class QuestionHtml extends React.Component<Props, any> {
       value,
     } = this.props;
     const questionImageStyle = {
-      height: this.props.imageHeight || 50,
-      width: this.props.imageWidth || 50,
+      height: this.props.imageHeight || 100,
+      width: this.props.imageWidth || 100,
     };
 
     return (
@@ -74,7 +74,7 @@ export default class QuestionHtml extends React.Component<Props, any> {
         </TouchableWithFeedback>
         {(showPreview && value) ?
           <Image
-            style={questionImageStyle}
+            style={[styles.image, questionImageStyle]}
             source={{ uri: value }}
           /> : null
         }

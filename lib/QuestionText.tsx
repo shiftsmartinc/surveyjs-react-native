@@ -2,6 +2,7 @@ import * as React from 'react';
 import { TextInput, KeyboardType } from 'react-native';
 
 import styles, { LINE_HEIGHT } from './styles/questionText';
+import colors from './styles/colors';
 
 interface Props {
   placeholder?: string;
@@ -43,6 +44,7 @@ export default class QuestionText extends React.Component<Props, any> {
         value={this.props.value}
         onChangeText={this.props.onChange}
         numberOfLines={rows}
+        placeholderTextColor={colors.lightGray}
         underlineColorAndroid={'transparent'}
         blurOnSubmit={!this.props.multiline}
         keyboardType={keyboardType}

@@ -34,10 +34,9 @@ export default class QuestionRadioItem extends React.Component<Props, any> {
     ];
     return (
       <TouchableWithFeedback
-        style={styles.container}
         onPress={this.handlePress}
       >
-        <View style={styles.radioWrapper}>
+        <View style={styles.container}>
           <View style={radioStyle}>
             <Text style={styles.radioText}>{checked ? '✓' : ' '}</Text>
           </View>

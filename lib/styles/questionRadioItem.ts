@@ -12,9 +12,6 @@ export default StyleSheet.create({
     borderBottomColor: colors.extraLightGray,
     borderBottomWidth: 1,
   },
-  radioWrapper: {
-    flexDirection: 'row',
-  },
   radio: {
     width: 20,
     height: 20,

@@ -40,10 +40,9 @@ export default class CheckBoxItem extends React.Component<Props, any> {
     ];
     return (
       <TouchableWithFeedback
-        style={styles.container}
         onPress={this.handlePress}
       >
-        <View style={styles.checkboxWrapper}>
+        <View style={styles.container}>
           <View style={checkboxStyles}>
             <Text style={checkboxTextStyles}>
               {pristine ? '-' : checked ? '✓' : ' '}
