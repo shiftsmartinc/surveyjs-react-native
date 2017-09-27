@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import colors from './colors';
 
 export default StyleSheet.create({
   container: {
@@ -6,26 +7,36 @@ export default StyleSheet.create({
     // flex: 0,
     // alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#000',
+    borderColor: colors.lightGray,
     // borderRightWidth: 0,
     alignSelf: 'flex-start',
-    // justifyContent: 'center',
+    borderRadius: 5,
+    overflow: 'hidden',
+
   },
   rateItem: {
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    minWidth: 30,
     padding: 5,
-    backgroundColor: '#eee',
+    backgroundColor: colors.lightGray,
     borderRightWidth: 1,
-    borderRightColor: '#000',
+    borderRightColor: colors.extraLightGray,
+    overflow: 'hidden',
   },
   rateItemText: {
     marginLeft: 3,
     marginRight: 3,
+
+  },
+  rateItemTextChecked: {
+    color: colors.white,
   },
   lastRateItem: {
     borderRightWidth: 0,
   },
   checkedRateItem: {
-    backgroundColor: '#ccc',
+    backgroundColor: colors.green,
   }
 });

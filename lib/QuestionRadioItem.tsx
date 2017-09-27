@@ -23,15 +23,23 @@ export default class QuestionRadioItem extends React.Component<Props, any> {
   }
 
   render() {
-    const { text = null, value } = this.props;
+    const {
+      text = null,
+      value,
+      checked,
+    } = this.props;
+    const radioStyle = [
+      styles.radio,
+      checked ? styles.radioChecked: null,
+    ];
     return (
       <TouchableWithFeedback
         style={styles.container}
         onPress={this.handlePress}
       >
         <View style={styles.radioWrapper}>
-          <View style={styles.radio}>
-            <Text style={styles.radioText}>{this.props.checked ? '●' : ' '}</Text>
+          <View style={radioStyle}>
+            <Text style={styles.radioText}>{checked ? '✓' : ' '}</Text>
           </View>
           <Text style={styles.label}>{text || value}</Text>
         </View>

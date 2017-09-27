@@ -25,6 +25,7 @@ export default class QuestionRate extends React.Component<Props, any> {
       maxRateDescription = '',
       value
     } = this.props;
+
     const itemsMaxIdx = rateValues.length - 1;
     return (
       <View style={styles.container}>
@@ -32,6 +33,10 @@ export default class QuestionRate extends React.Component<Props, any> {
           const isFirst = idx === 0;
           const isLast = idx === itemsMaxIdx;
           const checked = v.value === value;
+          const textStyles = [
+            styles.rateItemText,
+            checked ? styles.rateItemTextChecked : null,
+          ];
           return (
             <TouchableWithFeedback
               key={v.value}
@@ -44,9 +49,9 @@ export default class QuestionRate extends React.Component<Props, any> {
                   checked && styles.checkedRateItem,
                 ]}
               >
-                {isFirst && <Text>{minRateDescription}</Text>}
-                <Text style={styles.rateItemText}>{v.text}</Text>
-                {isLast && <Text>{maxRateDescription}</Text>}
+                {isFirst && <Text style={textStyles}>{minRateDescription}</Text>}
+                <Text style={textStyles}>{v.text}</Text>
+                {isLast && <Text style={textStyles}>{maxRateDescription}</Text>}
               </View>
             </TouchableWithFeedback>
           );

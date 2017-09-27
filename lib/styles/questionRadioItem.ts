@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import colors from './colors';
 
 export default StyleSheet.create({
   container: {
@@ -6,6 +7,10 @@ export default StyleSheet.create({
     //alignItems: 'center',
     marginTop: 1,
     marginBottom: 1,
+    paddingTop: 5,
+    paddingBottom: 5,
+    borderBottomColor: colors.extraLightGray,
+    borderBottomWidth: 1,
   },
   radioWrapper: {
     flexDirection: 'row',
@@ -18,11 +23,16 @@ export default StyleSheet.create({
     marginRight: 5,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#000',
+    borderColor: colors.gray,
     overflow: 'hidden',
+  },
+  radioChecked: {
+    borderColor: colors.green,
+    backgroundColor: colors.green,
   },
   radioText: {
     //fontSize: 15,
+    color: colors.white,
   },
   label: {
     lineHeight: 20,

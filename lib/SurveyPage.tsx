@@ -72,7 +72,6 @@ const generateRateValues = (min, max, step) => {
       text: i,
     });
   }
-  console.log('gene new rate: ', rateValues);
   return rateValues;
 };
 
@@ -197,13 +196,19 @@ export default class SurveyPage extends React.Component<Props, any> {
       <View key={json.name}>
         {
           showTitle &&
-          <Text>{number ? `${number}.` : ''} {title || name}</Text>
+          <View style={styles.title}>
+            <Text>{number ? `${number}.` : ''} {title || name}</Text>
+          </View>
         }
         {
           question.error &&
-          <Text>{question.error}</Text>
+          <View style={styles.error}>
+            <Text style={styles.errorText}>{question.error}</Text>
+          </View>
         }
-        {content}
+        <View style={styles.questionContent}>
+          {content}
+        </View>
         {
           question.json.hasComment &&
           <QuestionText

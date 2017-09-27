@@ -3,6 +3,7 @@ import { View, Text, Image, Alert } from 'react-native';
 import TouchableWithFeedback from './TouchableWithFeedback';
 import ImagePicker from 'react-native-image-picker';
 
+import styles from './styles/questionFile';
 
 interface Props {
   showPreview?: boolean;
@@ -67,7 +68,9 @@ export default class QuestionHtml extends React.Component<Props, any> {
         <TouchableWithFeedback
           onPress={this.openPicker}
         >
-          <Text>Select File</Text>
+          <View style={styles.button}>
+            <Text style={styles.buttonText}>Select File</Text>
+          </View>
         </TouchableWithFeedback>
         {(showPreview && value) ?
           <Image

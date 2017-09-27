@@ -24,16 +24,29 @@ export default class CheckBoxItem extends React.Component<Props, any> {
   }
 
   render() {
-    const { text = null, value } = this.props;
+    const {
+      text = null,
+      value,
+      checked,
+      pristine = false,
+    } = this.props;
+    const checkboxStyles = [
+      styles.checkbox,
+      checked ? styles.checkboxChecked : null,
+    ];
+    const checkboxTextStyles = [
+      styles.checkboxText,
+      pristine ? styles.checkboxTextPristine : null,
+    ];
     return (
       <TouchableWithFeedback
         style={styles.container}
         onPress={this.handlePress}
       >
         <View style={styles.checkboxWrapper}>
-          <View style={styles.checkbox}>
-            <Text style={{ textAlign: 'center' }}>
-              {this.props.pristine ? '-' : this.props.checked ? '✓' : ' '}
+          <View style={checkboxStyles}>
+            <Text style={checkboxTextStyles}>
+              {pristine ? '-' : checked ? '✓' : ' '}
             </Text>
           </View>
           <Text style={styles.label}>{text || value}</Text>

@@ -19,13 +19,17 @@ export default class SurveyNavigation extends React.Component<Props, any> {
           <TouchableWithFeedback
             onPress={this.props.onPrevPage}
           >
-            <Text>Prev Page </Text>
+            <View style={styles.button}>
+              <Text style={styles.buttonText}>Prev Page </Text>
+            </View>
           </TouchableWithFeedback>
         }
         <TouchableWithFeedback
           onPress={this.props.onNextPage}
         >
-          <Text>{this.props.nextPageIndex !== -1 ? 'Next Page' : 'Complete'}</Text>
+          <View style={styles.button}>
+            <Text style={styles.buttonText}>{this.props.nextPageIndex !== -1 ? 'Next Page' : 'Complete'}</Text>
+          </View>
         </TouchableWithFeedback>
 
       </View>

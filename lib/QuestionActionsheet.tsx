@@ -109,7 +109,7 @@ export default class QuestionActionsheet extends React.Component<Props, any>{
           onPress={this.toggleModalVisible}
         >
           <View style={styles.caption}>
-            <Text>{caption}</Text>
+            <Text style={styles.captionText}>{caption}</Text>
           </View>
         </TouchableWithFeedback>
         {

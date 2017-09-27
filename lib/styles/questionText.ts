@@ -4,8 +4,8 @@ export const LINE_HEIGHT = 20;
 
 export default StyleSheet.create({
   input: {
-    borderColor: 'gray',
-    borderWidth: 1,
+    // borderColor: 'gray',
+    // borderWidth: 1,
     textAlignVertical: 'top',
     paddingVertical: 0,
     marginVertical: 2,

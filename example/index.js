@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert } from 'react-native';
+import { ScrollView, Alert } from 'react-native';
 import Survey from '../lib';
 import styles from './styles';
 
@@ -21,7 +21,9 @@ export default class Example extends React.Component {
       onComplete: this.onComplete,
     };
     return (
-      <Survey json={surveyJson} apis={apis} />
+      <ScrollView style={{ backgroundColor: '#f8f8f8' }}>
+        <Survey json={surveyJson} apis={apis} />
+      </ScrollView>
     );
   }
 }

@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { ScrollView } from 'react-native';
+import { View } from 'react-native';
 import { observer } from "mobx-react";
 import SurveyNavigation from './SurveyNavigation';
 import SurveyPage from './SurveyPage';
 import Store from './store';
 
+import styles from './styles/survey';
 
 interface Props {
   json: any;
@@ -23,7 +24,7 @@ export default class Survey extends React.Component<Props, any> {
 
   render() {
     return (
-      <ScrollView>
+      <View style={styles.container}>
 
         <SurveyPage
           {...this.store.currentPageProps}
@@ -35,7 +36,7 @@ export default class Survey extends React.Component<Props, any> {
           nextPageIndex={this.store.nextPageIndex}
           prevPageIndex={this.store.prevPageIndex}
         />
-      </ScrollView>
+      </View>
     );
   }
 }
