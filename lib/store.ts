@@ -248,7 +248,10 @@ export default class store {
       question.elements.forEach(subQuestion => this.parseQuestion(subQuestion, questionNames));
     }
     questionNames.push(question.name);
-    this.questionNamesInOrder.push(question.name);
+    // question html is designed for display, do not add number to it.
+    if (question.type !== 'html') {
+      this.questionNamesInOrder.push(question.name);
+    }
 
     this.questions[question.name] = new Question(
       question,
@@ -289,7 +292,7 @@ export default class store {
   }
 
   regenerateNumbers = () => {
-    let count = 0;
+    let count = 1;
     this.questionNamesInOrder.forEach((name) => {
       const question = this.questions[name];
       if (question.visible && question.page.visible) {
