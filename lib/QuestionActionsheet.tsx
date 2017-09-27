@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { View, Text, TextInput, Modal } from 'react-native';
+import { View, Text, Modal } from 'react-native';
 import TouchableWithFeedback from './TouchableWithFeedback';
+import QuestionText from './QuestionText';
 
 import styles from './styles/questionActionsheet';
 
@@ -114,10 +115,10 @@ export default class QuestionActionsheet extends React.Component<Props, any>{
         </TouchableWithFeedback>
         {
           value === OTHER_VALUE &&
-          <TextInput
+          <QuestionText
             value={comment}
-            onChangeText={this.handleCommentChange}
-            style={styles.otherTextInput}
+            onChange={this.handleCommentChange}
+            placeholder={otherText}
           />
         }
         <Modal

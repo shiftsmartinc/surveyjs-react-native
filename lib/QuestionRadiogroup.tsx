@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { View, TextInput } from 'react-native';
+import { View } from 'react-native';
 import RadioItem from './QuestionRadioItem';
+import QuestionText from './QuestionText';
 
 interface Props {
   choices: any;
@@ -50,10 +51,10 @@ export default class QuestionRadiogroup extends React.Component<Props, any> {
               onChange={this.handleChoicesChange}
             />
             {this.props.value === OTHER_VALUE &&
-              <TextInput
-                onChangeText={this.handleTextInputChange}
+              <QuestionText
+                onChange={this.handleTextInputChange}
                 value={this.props.comment}
-                style={{ borderWidth: 1 }}
+                placeholder={otherText}
               />}
           </View>
         }

@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { View, TextInput } from 'react-native';
+import { View } from 'react-native';
 import CheckboxItem from './QuestionCheckboxItem';
+import QuestionText from './QuestionText';
 
 
 interface Props {
@@ -60,11 +61,11 @@ export default class QuestionCheckbox extends React.Component<Props, any>{
               checked={otherChecked}
               onChange={this.handleChoicesChange}
             />
-            { otherChecked &&
-              <TextInput
+            {otherChecked &&
+              <QuestionText
                 value={comment}
-                onChangeText={this.handleCommentChange}
-                style={{ borderWidth: 1 }}
+                onChange={this.handleCommentChange}
+                placeholder={otherText}
               />
             }
           </View>

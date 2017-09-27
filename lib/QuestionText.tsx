@@ -9,7 +9,7 @@ interface Props {
   multiline?: boolean;
   rows?: number;
   value: string;
-  onChange: () => {};
+  onChange(value);
 }
 
 export default class QuestionText extends React.Component<Props, any> {
@@ -39,6 +39,7 @@ export default class QuestionText extends React.Component<Props, any> {
           { minHeight: LINE_HEIGHT * rows },
         ]}
         multiline={this.props.multiline}
+        placeholder={this.props.placeholder}
         value={this.props.value}
         onChangeText={this.props.onChange}
         numberOfLines={rows}
