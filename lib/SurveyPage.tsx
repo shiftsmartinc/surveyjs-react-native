@@ -195,7 +195,7 @@ export default class SurveyPage extends React.Component<Props, any> {
     return (
       <View key={json.name}>
         {
-          showTitle &&
+          showTitle && question.json.type !== 'html' &&
           <View style={styles.title}>
             <Text>{number ? `${number}.` : ''} {title || name}</Text>
           </View>
