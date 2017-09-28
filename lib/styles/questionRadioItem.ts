@@ -24,8 +24,8 @@ export default StyleSheet.create({
     overflow: 'hidden',
   },
   radioChecked: {
-    borderColor: colors.green,
-    backgroundColor: colors.green,
+    borderColor: colors.primary,
+    backgroundColor: colors.primary,
   },
   radioText: {
     //fontSize: 15,

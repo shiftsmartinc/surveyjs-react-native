@@ -14,7 +14,7 @@ export default StyleSheet.create({
     borderRadius: 3,
   },
   buttonText: {
-    color: colors.wechatGreen,
+    color: colors.primary,
     textAlign: 'center',
   },
   image: {

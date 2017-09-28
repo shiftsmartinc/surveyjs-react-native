@@ -13,7 +13,7 @@ export default StyleSheet.create({
   button: {
     padding: 5,
     marginLeft: 5,
-    backgroundColor: colors.wechatGreen,
+    backgroundColor: colors.primary,
     borderWidth: 1,
     borderColor: colors.lightGray,
     borderRadius: 3,

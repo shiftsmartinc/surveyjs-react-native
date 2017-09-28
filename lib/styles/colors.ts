@@ -16,6 +16,7 @@ const colors = {
   green: '#7ED321',
   aliBlue: '#0AAAF0',
   wechatGreen: '#59B64C',
+  primary: '#2A6CC4',
 };
 
 export default colors;

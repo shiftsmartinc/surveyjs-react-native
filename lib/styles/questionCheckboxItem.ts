@@ -21,8 +21,8 @@ export default StyleSheet.create({
     borderColor: colors.gray,
   },
   checkboxChecked: {
-    borderColor: colors.green,
-    backgroundColor: colors.green,
+    borderColor: colors.primary,
+    backgroundColor: colors.primary,
   },
   checkboxText: {
     color: colors.white,

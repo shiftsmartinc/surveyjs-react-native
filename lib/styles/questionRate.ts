@@ -32,6 +32,6 @@ export default StyleSheet.create({
     borderRightWidth: 0,
   },
   checkedRateItem: {
-    backgroundColor: colors.green,
+    backgroundColor: colors.primary,
   }
 });
