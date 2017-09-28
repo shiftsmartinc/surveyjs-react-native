@@ -45,6 +45,7 @@
           "name": "storeclosed",
           "visible": false,
           "visibleIf": "{storeopen}='2'",
+          "showPreview": true,
           "title": "Please take a photo of the storefront, showing that it has permanently closed or has changed locations, and upload below:",
           "isRequired": true
         },
@@ -53,6 +54,8 @@
           "name": "storefront",
           "visible": false,
           "visibleIf": "{storeopen}='1'",
+                    "showPreview": true,
+
           "title": "Before entering the location, take a selfie of you in front of the store. Make sure you can see the retailer name in the photo.",
           "isRequired": true
         }

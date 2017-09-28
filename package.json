@@ -16,7 +16,7 @@
     "moment": "^2.18.1",
     "react": "16.0.0-alpha.12",
     "react-native": "0.48.3",
-    "react-native-image-picker": "^0.26.7",
+    "react-native-image-crop-picker": "^0.17.1",
     "react-native-modal-datetime-picker": "^4.11.0",
     "react-native-webview-autoheight": "^1.0.4"
   },
