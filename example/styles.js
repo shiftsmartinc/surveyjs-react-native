@@ -7,4 +7,9 @@ export default StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },
+  results: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
