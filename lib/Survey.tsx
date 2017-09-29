@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import { observer } from "mobx-react";
 import SurveyNavigation from './SurveyNavigation';
 import SurveyPage from './SurveyPage';
@@ -22,10 +22,17 @@ export default class Survey extends React.Component<Props, any> {
     this.store = new Store(this.props.json, this.props.apis);
   }
 
-  render() {
+  renderResults() {
+    return (
+      <View style={styles.results}>
+        <Text>Thank you for completing the survey!</Text>
+      </View>
+    );
+  }
+
+  renderSurvey() {
     return (
       <View style={styles.container}>
-
         <SurveyPage
           {...this.store.currentPageProps}
           onValueChange={this.store.setValue}
@@ -38,5 +45,9 @@ export default class Survey extends React.Component<Props, any> {
         />
       </View>
     );
+  }
+
+  render() {
+    return this.store.isComplete ? this.renderResults() : this.renderSurvey();
   }
 }

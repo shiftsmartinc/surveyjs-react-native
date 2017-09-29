@@ -133,6 +133,7 @@ interface Istore {
 export default class store {
   @observable questions = {};
   @observable curPageIndex = 0;
+  @observable isComplete = false;
 
   pages = [];
 
@@ -213,7 +214,7 @@ export default class store {
   }
 
   @computed get conditionValues() {
-    const values = {};
+    const values = {}
     Object.keys(this.questions).forEach((name) => {
       values[name] = this.questions[name].value;
     });
@@ -238,6 +239,7 @@ export default class store {
   }
 
   onComplete = () => {
+    this.isComplete = true;
     if (this.apis.onComplete) {
       this.apis.onComplete(this.results);
     }
