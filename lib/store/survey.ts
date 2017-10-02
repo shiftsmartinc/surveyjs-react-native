@@ -123,21 +123,32 @@ export default class Survey {
     }
   }
 
-  parseQuestion = (question, questionNames) => {
-    if (question.type === 'panel') {
-      question.elements.forEach(subQuestion => this.parseQuestion(subQuestion, questionNames));
+  parseQuestion = (json, questionNames) => {
+    if (json.type === 'panel') {
+      json.showTitle = false;
+      // question.elements.forEach(subQuestion => this.parseQuestion(subQuestion, questionNames));
     }
-    questionNames.push(question.name);
+    questionNames.push(json.name);
     // question html is designed for display, do not add number to it.
-    if (question.type !== 'html') {
-      this.questionNamesInOrder.push(question.name);
+    if (json.type !== 'html' && json.type !== 'panel') {
+      this.questionNamesInOrder.push(json.name);
     }
 
-    this.questions[question.name] = new Question(
-      question,
+
+    const question = new Question(
+      json,
       this.originalNumber++,
       this,
     );
+    this.questions[json.name] = question;
+
+    if (json.type === 'multipletext') {
+      question.questions = json.items.map(itemjson =>
+        new Question(itemjson)
+      );
+    }
+
+
     // this.questions[question.name] = {
     //   json: question,
     //   visible: question.visible,

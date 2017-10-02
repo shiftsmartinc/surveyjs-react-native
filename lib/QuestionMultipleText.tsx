@@ -6,11 +6,24 @@ import styles from './styles/questionMultipleText';
 
 interface Props {
   items: Array<any>;
+  questions: Array<any>;
+  onChange(value);
 }
 
 export default class QuestionMultipleText extends React.Component<Props, any> {
-  renderItem = (item, idx) => {
+
+
+  renderItem = (question, idx) => {
+    const item = question.json;
     const isFirst = idx === 0;
+    const onSubChange = (value) => {
+      question.setValue(value);
+      const multiValue = {};
+      this.props.questions.forEach(subQuestion =>
+        multiValue[subQuestion.json.name] = subQuestion.value
+      );
+      this.props.onChange(multiValue);
+    };
     return (
       <View
         key={item.name}
@@ -21,7 +34,11 @@ export default class QuestionMultipleText extends React.Component<Props, any> {
           {item.title || item.name}
         </Text>
         <View style={styles.itemInput}>
-          <QuestionText {...item} />
+          <QuestionText
+            {...item}
+            value={question.value}
+            onChange={onSubChange}
+          />
         </View>
       </View>
     );
@@ -30,7 +47,7 @@ export default class QuestionMultipleText extends React.Component<Props, any> {
   render() {
     return (
       <View>
-        {this.props.items.map(this.renderItem)}
+        {this.props.questions.map(this.renderItem)}
       </View>
     );
   }

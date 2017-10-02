@@ -9,13 +9,15 @@ export default class Question {
   @observable error = null;
   @observable comment = null;
   @observable number;
+  @observable questions = [];
+
   originalNumber;
   json;
   collection;
   conditionRunner;
   page;
 
-  constructor(json, originalNumber, collection) {
+  constructor(json, originalNumber?, collection?) {
     this.json = json;
     this.visible = json.visible != null ? json.visible : true;
     this.originalNumber = originalNumber;
@@ -38,21 +40,24 @@ export default class Question {
   }
 
   @action.bound setValue(value, comment = null) {
+    console.log(this.json.name, 'set value : ', value)
     this.value = value;
     if (comment != null) {
       this.comment = comment;
     }
 
-    // 2. check all questions's visibleIf
-    this.collection.resetVisible();
+    if (this.collection) {
+      // 2. check all questions's visibleIf
+      this.collection.resetVisible();
 
-    // 3. re-generate question order number
-    this.collection.regenerateNumbers();
+      // 3. re-generate question order number
+      this.collection.regenerateNumbers();
 
-    // 4. triggers
-    this.collection.triggers
-      .filter(v => v.name === this.json.name && !v.isOnNextPage)
-      .forEach(trigger => trigger.check(value));
+      // 4. triggers
+      this.collection.triggers
+        .filter(v => v.name === this.json.name && !v.isOnNextPage)
+        .forEach(trigger => trigger.check(value));
+    }
   }
 
   @action.bound setComment(comment) {
