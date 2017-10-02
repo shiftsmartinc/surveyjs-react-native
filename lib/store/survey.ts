@@ -202,7 +202,7 @@ export default class Survey {
     });
   }
 
-  initTriggers = (triggersJson) => {
+  initTriggers = (triggersJson = []) => {
     const owner = {
       doComplete: this.onComplete,
       getObjects: this.triggerGetObjects,
