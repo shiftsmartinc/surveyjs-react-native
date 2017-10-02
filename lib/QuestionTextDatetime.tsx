@@ -8,7 +8,8 @@ import moment from 'moment';
 interface Props {
   placeholder?: string;
   inputType: string;
-  onChange: (...args) => {};
+  value?: any;
+  onChange(value);
 }
 
 
@@ -42,7 +43,7 @@ export default class QuestionTextDatetime extends React.Component<Props, any> {
     this.setState({
       value: date,
     });
-    this.props.onChange(name, date);
+    this.props.onChange(date);
     this.hidePicker();
   }
 
@@ -59,7 +60,12 @@ export default class QuestionTextDatetime extends React.Component<Props, any> {
   render() {
     const {
       placeholder = 'show picker',
+      value,
     } = this.props;
+    const dateProps = {};
+    if (value) {
+      dateProps['date'] = new Date(value);
+    }
     return (
       <View>
         <TouchableWithFeedback
@@ -67,8 +73,8 @@ export default class QuestionTextDatetime extends React.Component<Props, any> {
         >
           <Text>
             {
-              this.state.value ?
-              this.getFormatedValue(this.state.value) : placeholder
+              value ?
+                this.getFormatedValue(value) : placeholder
             }
           </Text>
         </TouchableWithFeedback>
@@ -77,6 +83,7 @@ export default class QuestionTextDatetime extends React.Component<Props, any> {
           mode={this.mode}
           onConfirm={this.handleConfirm}
           onCancel={this.hidePicker}
+          {...dateProps}
         />
       </View>
     );

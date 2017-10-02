@@ -2,7 +2,6 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import { observer } from "mobx-react";
 
-
 import QuestionText from './QuestionText';
 import QuestionCheckbox from './QuestionCheckbox';
 import QuestionRadiogroup from './QuestionRadiogroup';
@@ -13,7 +12,7 @@ import QuestionMultipleText from './QuestionMultipleText';
 import QuestionPanelDynamic from './QuestionPanelDynamic';
 import QuestionHtml from './QuestionHtml';
 import QuestionFile from './QuestionFile';
-import QuestionTextDatetime from './QuestionTextDatetime';
+import QuestionTextWrapper from './QuestionTextWrapper';
 
 import styles from './styles/questionWrapper';
 
@@ -112,29 +111,6 @@ const commentBuilder = question => (
   />
 );
 
-const textBuilder = (question) => {
-  const json = question.json;
-  const inputType = json.inputType;
-  if (inputType === 'date' ||
-    inputType === 'datetime' ||
-    inputType === 'datetime-local' ||
-    inputType === 'time') {
-    return (
-      <QuestionTextDatetime
-        {...json}
-        onChange={question.setValue}
-      />
-    );
-  }
-
-  return (
-    <QuestionText
-      {...json}
-      onChange={question.setValue}
-      value={question.value}
-    />
-  );
-}
 
 interface Props {
   question: any;
@@ -170,7 +146,7 @@ export default class QuestionWrapper extends React.Component<Props, any> {
   )
 
   private typeBuilderMap = {
-    text: textBuilder,
+    text: commonBuilderCreator(QuestionTextWrapper),
     checkbox: choiceBuilderCreator(QuestionCheckbox),
     radiogroup: choiceBuilderCreator(QuestionRadiogroup),
     dropdown: choiceBuilderCreator(QuestionActionsheet),

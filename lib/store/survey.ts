@@ -3,6 +3,7 @@ import { getTriggerType, SurveyTrigger } from '../trigger';
 import { isValueEmpty } from '../utils';
 import Question from './question';
 import Page from './page';
+import moment from 'moment';
 
 interface ISurvey {
   onComplete(results);
@@ -106,7 +107,16 @@ export default class Survey {
       const value = question.value;
       if (!isValueEmpty(value)) {
         values[name] = value;
+
+        if (question.json.inputType === 'datetime' || question.json.inputType === 'datetime-local') {
+          values[name] = moment(value).format();
+        } else if (question.json.inputType === 'date') {
+          values[name] = moment(value).format('YYYY-MM-DD');
+        } else if (question.json.inputType === 'time') {
+          values[name] = moment(value).format('HH:mm');
+        }
       }
+
       // handle hasComment , hasOther
       if (question.comment && (question.json.hasComment || question.json.hasOther)) {
         values[`${name}-Comment`] = question.comment;
