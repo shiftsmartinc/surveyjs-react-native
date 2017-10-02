@@ -2,7 +2,7 @@ import React from 'react';
 
 import QuestionText from './QuestionText';
 import QuestionTextDatetime from './QuestionTextDatetime';
-
+import QuestionTextSlider from './QuestionTextSlider';
 
 export default class QuestionTextWrapper extends React.Component<any, any> {
 
@@ -11,6 +11,12 @@ export default class QuestionTextWrapper extends React.Component<any, any> {
       <QuestionTextDatetime
         {...this.props}
       />
+    );
+  }
+
+  renderSlider() {
+    return (
+      <QuestionTextSlider {...this.props} />
     );
   }
 
@@ -30,6 +36,8 @@ export default class QuestionTextWrapper extends React.Component<any, any> {
       inputType === 'time') {
       return this.renderDate();
 
+    } else if (inputType === 'range') {
+      return this.renderSlider();
     }
     return this.renderText();
   }
