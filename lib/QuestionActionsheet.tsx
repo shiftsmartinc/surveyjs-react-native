@@ -1,7 +1,9 @@
 import * as React from 'react';
-import { View, Text, Modal } from 'react-native';
+import { View, Text } from 'react-native';
 import TouchableWithFeedback from './TouchableWithFeedback';
 import QuestionText from './QuestionText';
+import ActionSheet from 'react-native-actionsheet';
+
 
 import styles from './styles/questionActionsheet';
 
@@ -23,70 +25,41 @@ const DEFAULT_OPTION_CAPTION = 'select';
 
 export default class QuestionActionsheet extends React.Component<Props, any>{
 
+  ActionSheet;
+
   constructor(props) {
     super(props);
 
     this.state = {
-      otherChecked: false,
-      modalVisible: false,
+      options: [],
     };
   }
 
-  handleChoicesChange = (value) => {
-    this.props.onChange(value);
-    this.toggleModalVisible();
+  componentWillMount() {
+    const options = [
+      ...this.props.choices,
+    ];
+
+    if (this.props.hasOther) {
+      options.push({
+        value: OTHER_VALUE,
+        text: this.props.otherText || DEFAULT_OTHER_TEXT,
+      })
+    }
+    this.setState({ options });
   }
 
   handleCommentChange = (comment) => {
     this.props.onChange(this.props.value, comment);
   }
 
-  toggleModalVisible = () => {
-    const modalVisible = !this.state.modalVisible;
-    this.setState({
-      modalVisible
-    });
-  }
-
-  renderItem = (choice) => {
-    return (
-      <TouchableWithFeedback
-        key={choice.value}
-        onPress={() => this.handleChoicesChange(choice.value)}
-      >
-        <View style={styles.optionItem} >
-          <Text style={styles.text}>{choice.text}</Text>
-        </View>
-      </TouchableWithFeedback>
-    );
-  }
-
-  renderModalContent = () => {
-    const {
-      otherText = DEFAULT_OTHER_TEXT,
-      choices = [],
-      hasOther = false,
-    } = this.props;
-    return (
-      <View style={styles.modal}>
-        <View style={styles.optionContainer}>
-          {choices.map(v => this.renderItem(v))}
-          {
-            hasOther && this.renderItem({ value: OTHER_VALUE, text: otherText })
-          }
-        </View>
-
-        <View
-          style={[styles.optionContainer, styles.cancelOption]}
-        >
-          <TouchableWithFeedback
-            onPress={this.toggleModalVisible}
-          >
-            <Text style={styles.text}>Cancel</Text>
-          </TouchableWithFeedback>
-        </View>
-      </View>
-    );
+  onSelect = (index) => {
+    const { options } = this.state;
+    if (index !== options.length) {
+      this.props.onChange(options[index].value);
+    } else {
+      this.props.onChange(null);
+    }
   }
 
   render() {
@@ -103,11 +76,13 @@ export default class QuestionActionsheet extends React.Component<Props, any>{
         text: otherText,
       }
     ].find(v => v.value === value);
+    const { options } = this.state;
     const caption = selectedChocie ? selectedChocie.text : optionsCaption;
     return (
       <View>
         <TouchableWithFeedback
-          onPress={this.toggleModalVisible}
+          onPress={() => this.ActionSheet.show()}
+
         >
           <View style={styles.caption}>
             <Text style={styles.captionText}>{caption}</Text>
@@ -121,14 +96,15 @@ export default class QuestionActionsheet extends React.Component<Props, any>{
             placeholder={otherText}
           />
         }
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={this.state.modalVisible}
-          onRequestClose={this.toggleModalVisible}
-        >
-          {this.renderModalContent()}
-        </Modal>
+        <ActionSheet
+          ref={(ref) => { this.ActionSheet = ref; }}
+          title={optionsCaption}
+          options={[...options.map(option => option.text), 'Cancel']}
+          // tintColor={colors.blue}
+          destructiveButtonIndex={options.findIndex(option => option.value === value)}
+          cancelButtonIndex={options.length}
+          onPress={this.onSelect}
+        />
       </View>
     )
   }

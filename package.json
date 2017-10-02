@@ -11,14 +11,15 @@
     "link": "react-native link"
   },
   "dependencies": {
-    "mobx": "^3.3.0",
-    "mobx-react": "^4.3.2",
-    "moment": "^2.18.1",
+    "mobx": "3.3.0",
+    "mobx-react": "4.3.2",
+    "moment": "2.18.1",
     "react": "16.0.0-alpha.12",
     "react-native": "0.48.3",
-    "react-native-image-crop-picker": "^0.17.1",
-    "react-native-modal-datetime-picker": "^4.11.0",
-    "react-native-webview-autoheight": "^1.0.4"
+    "react-native-actionsheet": "2.3.0",
+    "react-native-image-crop-picker": "0.17.1",
+    "react-native-modal-datetime-picker": "4.11.0",
+    "react-native-webview-autoheight": "1.0.4"
   },
   "devDependencies": {
     "@types/react": "16.0.5",
