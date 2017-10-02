@@ -3,7 +3,7 @@ import { View, Text } from 'react-native';
 import { observer } from "mobx-react";
 import SurveyNavigation from './SurveyNavigation';
 import SurveyPage from './SurveyPage';
-import Store from './store';
+import SurveyStore from './store/survey';
 
 import styles from './styles/survey';
 
@@ -19,7 +19,7 @@ export default class Survey extends React.Component<Props, any> {
   constructor(props) {
     super(props);
 
-    this.store = new Store(this.props.json, this.props.apis);
+    this.store = new SurveyStore(this.props.json, this.props.apis);
   }
 
   renderResults() {
