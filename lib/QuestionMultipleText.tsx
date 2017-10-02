@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { View, Text } from 'react-native';
-import QuestionText from './QuestionText';
+import { observer } from "mobx-react";
+
+import QuestionTextWrapper from './QuestionTextWrapper';
 
 import styles from './styles/questionMultipleText';
 
@@ -10,6 +12,7 @@ interface Props {
   onChange(value);
 }
 
+@observer
 export default class QuestionMultipleText extends React.Component<Props, any> {
 
 
@@ -34,7 +37,7 @@ export default class QuestionMultipleText extends React.Component<Props, any> {
           {item.title || item.name}
         </Text>
         <View style={styles.itemInput}>
-          <QuestionText
+          <QuestionTextWrapper
             {...item}
             value={question.value}
             onChange={onSubChange}
