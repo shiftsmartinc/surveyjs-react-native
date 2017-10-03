@@ -1,6 +1,0 @@
-platform :ios, '8.0'
-
-target 'example' do
-    pod 'RSKImageCropper'
-    pod 'QBImagePickerController'
-end
