@@ -1,0 +1,18 @@
+{
+  "name": "example",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "ios": "react-native run-ios",
+    "android": "react-native run-android"
+  },
+  "dependencies": {
+    "react": "16.0.0-alpha.12",
+    "react-native": "0.48.4",
+    "react-native-image-picker": "0.26.7",
+    "surveyjs-react-native": "git+https://bitbucket.org/shiftsmart/surveyjs-react-native.git"
+  },
+  "devDependencies": {
+    "babel-preset-react-native": "4.0.0"
+  }
+}

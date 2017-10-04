@@ -1,6 +1,6 @@
 import React from 'react';
 import { ScrollView, Text, Alert, Button } from 'react-native';
-import Survey from '../lib';
+import Survey from 'surveyjs-react-native';
 import styles from './styles';
 
 import surveyJson from './survey.json';
