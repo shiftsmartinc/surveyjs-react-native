@@ -5,7 +5,8 @@
   "main": "lib/index.js",
   "scripts": {
     "watch": "tsc -w --inlineSourceMap --inlineSources --pretty",
-    "prepublish": "tsc"
+    "prepublish": "tsc",
+    "postinstall": "tsc"
   },
   "dependencies": {
     "mobx": "3.3.0",

@@ -23,4 +23,5 @@
 # Example
 
 1. `cd example`
-2. `npm run ios` or `npm run android`
+2. `npm install`
+3. `npm run ios` or `npm run android`
