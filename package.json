@@ -17,11 +17,9 @@
     "react-native-actionsheet": "2.3.0",
     "react-native-image-picker": "0.26.7",
     "react-native-modal-datetime-picker": "4.11.0",
-    "react-native-webview-autoheight": "1.0.4"
-  },
-  "devDependencies": {
+    "react-native-webview-autoheight": "1.0.4",
     "@types/react": "16.0.5",
-    "@types/react-native": "0.48.3",
+    "@types/react-native": "0.48.4",
     "babel-preset-react-native": "4.0.0",
     "typescript": "2.5.2"
   },
