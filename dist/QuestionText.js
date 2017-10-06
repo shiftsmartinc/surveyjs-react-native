@@ -23,7 +23,6 @@ export default class QuestionText extends React.Component {
     render() {
         const { rows = 1 } = this.props;
         const keyboardType = this.getKeyboardType();
-        // const keyboardType = keyboardTypeEnums[this.props.inputType || 'text'];
         return (<TextInput style={[
             styles.input,
             { minHeight: LINE_HEIGHT * rows },

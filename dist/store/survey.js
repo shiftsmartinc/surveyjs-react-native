@@ -29,10 +29,8 @@ export default class Survey {
         this.parseQuestion = (json, questionNames) => {
             if (json.type === 'panel') {
                 json.showTitle = false;
-                // question.elements.forEach(subQuestion => this.parseQuestion(subQuestion, questionNames));
             }
             questionNames.push(json.name);
-            // question html is designed for display, do not add number to it.
             if (json.type !== 'html' && json.type !== 'panel') {
                 this.questionNamesInOrder.push(json.name);
             }
@@ -41,24 +39,11 @@ export default class Survey {
             if (json.type === 'multipletext') {
                 question.questions = json.items.map(itemjson => new Question(itemjson));
             }
-            // this.questions[question.name] = {
-            //   json: question,
-            //   visible: question.visible,
-            //   value: null,
-            //   originalNumber: this.originalNumber++,
-            //   comment: null,
-            //   error: null,
-            // };
         };
         this.initPages = (pagesJson) => {
             this.pages = pagesJson.map((page, pageIndex) => {
                 const questionNames = [];
                 page.elements.forEach(question => this.parseQuestion(question, questionNames));
-                // return {
-                //   pageIndex,
-                //   questionNames,
-                //   name: page.name,
-                // };
                 const pageStore = new Page(page, this, pageIndex, questionNames);
                 questionNames.forEach((name) => {
                     this.questions[name].setPage(pageStore);
@@ -102,19 +87,15 @@ export default class Survey {
         this.regenerateNumbers();
     }
     nextPage() {
-        // validator
         const isValidatorFailed = this.currentPageProps.questions.some(question => !question.validate());
         if (isValidatorFailed) {
             return;
         }
-        // checkOnPageTrigger
         const pageTriggers = this.triggers.filter(v => v.isOnNextPage);
         const curPageQuestionNames = this.pages[this.curPageIndex].questionNames;
         const curPageTriggers = pageTriggers.filter(v => curPageQuestionNames.indexOf(v.name) !== -1);
         curPageTriggers.forEach(trigger => trigger.check(this.questions[trigger.name].value));
-        // do next page
         if (this.nextPageIndex !== -1) {
-            // this.curPageIndex = this.curPageIndex + 1;
             this.curPageIndex = this.nextPageIndex;
         }
         else {
@@ -123,7 +104,6 @@ export default class Survey {
     }
     prevPage() {
         if (this.prevPageIndex !== -1) {
-            // this.curPageIndex = this.curPageIndex - 1;
             this.curPageIndex = this.prevPageIndex;
         }
     }
@@ -171,7 +151,6 @@ export default class Survey {
                     values[name] = moment(value).format('HH:mm');
                 }
             }
-            // handle hasComment , hasOther
             if (question.comment && (question.json.hasComment || question.json.hasOther)) {
                 values[`${name}-Comment`] = question.comment;
             }
@@ -184,11 +163,6 @@ export default class Survey {
         if (!isVariable) {
             this.questions[name].setValue(value);
         }
-        // if (isVariable) {
-        //   this.setVariable(name, value);
-        // } else {
-        //   this.setValue(name, value);
-        // }
     }
 }
 __decorate([

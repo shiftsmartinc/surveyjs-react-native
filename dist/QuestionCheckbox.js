@@ -26,9 +26,7 @@ export default class QuestionCheckbox extends React.Component {
         const value = this.props.value || [];
         const otherChecked = value.indexOf(OTHER_VALUE) !== -1;
         return (<View>
-        {this.props.choices.map(v => <CheckboxItem key={v.value} value={v.value} text={v.text} 
-        // checked={this.state.selectedChoices[v.value]}
-        checked={value.indexOf(v.value) !== -1} onChange={this.handleChoicesChange}/>)}
+        {this.props.choices.map(v => <CheckboxItem key={v.value} value={v.value} text={v.text} checked={value.indexOf(v.value) !== -1} onChange={this.handleChoicesChange}/>)}
         {this.props.hasOther &&
             <View>
             <CheckboxItem value={OTHER_VALUE} text={otherText} checked={otherChecked} onChange={this.handleChoicesChange}/>

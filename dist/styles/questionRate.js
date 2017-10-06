@@ -4,8 +4,6 @@ export default StyleSheet.create({
     container: {
         flexDirection: 'row',
         flexGrow: 0,
-        // borderWidth: 1,
-        // borderColor: colors.lightGray,
         alignSelf: 'flex-start',
         borderRadius: 5,
         overflow: 'hidden',

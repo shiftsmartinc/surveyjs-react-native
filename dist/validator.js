@@ -76,7 +76,6 @@ export default class QuestionValidator {
         };
     }
     validate() {
-        // invisible question will always pass validators
         if (!this.owner.visible) {
             return true;
         }

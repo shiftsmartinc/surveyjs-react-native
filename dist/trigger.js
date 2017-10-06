@@ -1,8 +1,3 @@
-/**
- * A base class for all triggers.
- * A trigger calls a method when the expression change the result: from false to true or from true to false.
- * Please note, it runs only one changing the expression result.
- */
 export class Trigger {
     constructor() {
         this.opValue = "equal";
@@ -46,13 +41,9 @@ export class Trigger {
     onFailure() { }
 }
 Trigger.operatorsValue = null;
-/**
- * It extends the Trigger base class and add properties required for SurveyJS classes.
- */
 export class SurveyTrigger extends Trigger {
     constructor(json) {
         super();
-        // protected owner: ISurveyTriggerOwner = null;
         this.owner = null;
         this.name = json.name;
         this.operator = json.operator;
@@ -63,10 +54,6 @@ export class SurveyTrigger extends Trigger {
     }
     get isOnNextPage() { return false; }
 }
-/**
- * If expression returns true, it makes questions/pages visible.
- * Ohterwise it makes them invisible.
- */
 export class SurveyTriggerVisible extends SurveyTrigger {
     constructor(json) {
         super(json);
@@ -87,9 +74,6 @@ export class SurveyTriggerVisible extends SurveyTrigger {
     onItemSuccess(item) { item.setVisible(true); }
     onItemFailure(item) { item.setVisible(false); }
 }
-/**
- * If expression returns true, it completes the survey.
- */
 export class SurveyTriggerComplete extends SurveyTrigger {
     constructor(json) {
         super(json);

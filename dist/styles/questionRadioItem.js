@@ -3,7 +3,6 @@ import colors from './colors';
 export default StyleSheet.create({
     container: {
         flexDirection: 'row',
-        //alignItems: 'center',
         marginTop: 1,
         marginBottom: 1,
         paddingTop: 5,
@@ -27,10 +26,10 @@ export default StyleSheet.create({
         backgroundColor: colors.primary,
     },
     radioText: {
-        //fontSize: 15,
         color: colors.white,
     },
     label: {
+        flex: 1,
         lineHeight: 20,
     }
 });

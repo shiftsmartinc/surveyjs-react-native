@@ -37,11 +37,8 @@ export default class Question {
             this.comment = comment;
         }
         if (this.collection) {
-            // 2. check all questions's visibleIf
             this.collection.resetVisible();
-            // 3. re-generate question order number
             this.collection.regenerateNumbers();
-            // 4. triggers
             this.collection.triggers
                 .filter(v => v.name === this.json.name && !v.isOnNextPage)
                 .forEach(trigger => trigger.check(value));

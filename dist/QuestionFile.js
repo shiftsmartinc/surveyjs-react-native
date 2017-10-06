@@ -3,7 +3,7 @@ import { View, Text, Image, Alert } from 'react-native';
 import TouchableWithFeedback from './TouchableWithFeedback';
 import ImagePicker from 'react-native-image-picker';
 import styles from './styles/questionFile';
-export default class QuestionHtml extends React.Component {
+export default class QuestionFile extends React.Component {
     constructor() {
         super(...arguments);
         this.openPicker = () => {

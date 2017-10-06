@@ -5,7 +5,6 @@ export default class QuestionPanelDynamic extends React.Component {
     constructor(props) {
         super(props);
         this.onPanelRemoveButtonClicked = (key) => {
-            // TODO confirmation
             if (!this.props.confirmDelete) {
                 this.onPanelRemove(key);
                 return;

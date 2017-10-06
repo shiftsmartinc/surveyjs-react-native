@@ -36,7 +36,7 @@ function age(params) {
         return -1;
     var birthDay = new Date(params[0]);
     var ageDifMs = Date.now() - birthDay.getTime();
-    var ageDate = new Date(ageDifMs); // miliseconds from epoch
+    var ageDate = new Date(ageDifMs);
     return Math.abs(ageDate.getUTCFullYear() - 1970);
 }
 FunctionFactory.Instance.register("age", age);

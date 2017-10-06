@@ -58,9 +58,7 @@ export default class QuestionActionsheet extends React.Component {
         </TouchableWithFeedback>
         {value === OTHER_VALUE &&
             <QuestionText value={comment} onChange={this.handleCommentChange} placeholder={otherText}/>}
-        <ActionSheet ref={(ref) => { this.ActionSheet = ref; }} title={optionsCaption} options={[...options.map(option => option.text), 'Cancel']} 
-        // tintColor={colors.blue}
-        destructiveButtonIndex={options.findIndex(option => option.value === value)} cancelButtonIndex={options.length} onPress={this.onSelect}/>
+        <ActionSheet ref={(ref) => { this.ActionSheet = ref; }} title={optionsCaption} options={[...options.map(option => option.text), 'Cancel']} destructiveButtonIndex={options.findIndex(option => option.value === value)} cancelButtonIndex={options.length} onPress={this.onSelect}/>
       </View>);
     }
 }

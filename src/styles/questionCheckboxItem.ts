@@ -32,6 +32,7 @@ export default StyleSheet.create({
     color: colors.black,
   },
   label: {
+    flex: 1,
     lineHeight: 20,
   }
 });
