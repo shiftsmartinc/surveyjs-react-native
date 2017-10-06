@@ -43,7 +43,7 @@ export default class Survey {
         this.initPages = (pagesJson) => {
             this.pages = pagesJson.map((page, pageIndex) => {
                 const questionNames = [];
-                page.elements.forEach(question => this.parseQuestion(question, questionNames));
+                (page.elements || page.questions).forEach(question => this.parseQuestion(question, questionNames));
                 const pageStore = new Page(page, this, pageIndex, questionNames);
                 questionNames.forEach((name) => {
                     this.questions[name].setPage(pageStore);
