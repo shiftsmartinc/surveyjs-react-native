@@ -8,11 +8,9 @@
     "build": "tsc"
   },
   "dependencies": {
-    "mobx": "3.3.0",
     "mobx-react": "4.3.3",
     "moment": "2.18.1",
     "react": "16.0.0-alpha.12",
-    "react-native": "0.48.4",
     "react-native-actionsheet": "2.3.0",
     "react-native-image-picker": "0.26.7",
     "react-native-modal-datetime-picker": "4.11.0",
