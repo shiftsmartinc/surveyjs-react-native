@@ -17,7 +17,7 @@ export default class QuestionFile extends React.Component {
                     Alert.alert('FileSize', 'Too Large FileSize', [{ text: 'OK' }]);
                     return;
                 }
-                const value = this.props.storeDataAsText ? response.data : response.uri;
+                const value = this.props.storeDataAsText ? response.data : response;
                 this.props.onChange(value);
             });
         };

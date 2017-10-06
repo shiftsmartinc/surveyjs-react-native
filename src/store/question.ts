@@ -41,7 +41,7 @@ export default class Question {
 
   @action.bound setValue(value, comment = null) {
     console.log(this.json.name, 'set value : ', value)
-    this.value = value;
+    this.value = value.uri || value;
     if (comment != null) {
       this.comment = comment;
     }
@@ -59,7 +59,7 @@ export default class Question {
         .forEach(trigger => trigger.check(value));
 
       if (this.json.type === 'file' && this.collection.apis.onUpload) {
-        this.collection.apis.onUpload(value);
+        this.collection.apis.onUpload(value, this);
       }
     }
   }

@@ -33,7 +33,7 @@ export default class QuestionFile extends React.Component<Props, any> {
         );
         return;
       }
-      const value = this.props.storeDataAsText ? response.data : response.uri;
+      const value = this.props.storeDataAsText ? response.data : response;
       this.props.onChange(value);
     });
   }

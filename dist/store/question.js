@@ -32,7 +32,7 @@ export default class Question {
     }
     setValue(value, comment = null) {
         console.log(this.json.name, 'set value : ', value);
-        this.value = value;
+        this.value = value.uri || value;
         if (comment != null) {
             this.comment = comment;
         }
@@ -43,7 +43,7 @@ export default class Question {
                 .filter(v => v.name === this.json.name && !v.isOnNextPage)
                 .forEach(trigger => trigger.check(value));
             if (this.json.type === 'file' && this.collection.apis.onUpload) {
-                this.collection.apis.onUpload(value);
+                this.collection.apis.onUpload(value, this);
             }
         }
     }
