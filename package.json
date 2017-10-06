@@ -2,11 +2,10 @@
   "name": "surveyjs-react-native",
   "version": "1.0.0",
   "private": true,
-  "main": "lib/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "watch": "tsc -w --inlineSourceMap --inlineSources --pretty",
-    "prepublish": "tsc",
-    "postinstall": "tsc"
+    "build": "tsc"
   },
   "dependencies": {
     "mobx": "3.3.0",
@@ -17,11 +16,12 @@
     "react-native-actionsheet": "2.3.0",
     "react-native-image-picker": "0.26.7",
     "react-native-modal-datetime-picker": "4.11.0",
-    "react-native-webview-autoheight": "1.0.4",
+    "react-native-webview-autoheight": "1.0.4"
+  },
+  "devDependencies": {
     "@types/react": "16.0.5",
     "@types/react-native": "0.48.4",
-    "babel-preset-react-native": "4.0.0",
-    "typescript": "2.5.2"
+    "typescript": "2.5.3"
   },
   "peerDependencies": {
     "react-native-image-picker": ">=0.26.7"

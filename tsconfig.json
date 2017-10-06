@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "outDir": "dist/",
     "target": "esnext",
     "module": "es2015",
     "lib": ["esnext", "dom"],
@@ -13,6 +14,6 @@
     "noImplicitReturns": true
   },
   "include": [
-    "lib/**/*"
+    "src/**/*"
   ]
 }
