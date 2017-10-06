@@ -6,6 +6,7 @@
     "lib": ["esnext", "dom"],
     "jsx": "react-native",
     "moduleResolution": "node",
+    "removeComments": true,
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "noImplicitAny": false,
