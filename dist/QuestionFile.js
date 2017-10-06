@@ -7,7 +7,7 @@ export default class QuestionFile extends React.Component {
     constructor() {
         super(...arguments);
         this.openPicker = () => {
-            ImagePicker.showImagePicker({ title: 'Select File' }, (response) => {
+            ImagePicker.showImagePicker({ title: 'Select File', noData: !this.props.storeDataAsText }, (response) => {
                 console.log(response);
                 if (response.error) {
                     Alert.alert('Error', response.error, [{ text: 'OK' }]);
