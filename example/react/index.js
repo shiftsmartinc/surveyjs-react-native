@@ -44,6 +44,7 @@ export default class Example extends React.Component {
   renderSurvey() {
     const apis = {
       onComplete: this.onComplete,
+      onUpload: value => console.log(value),
     };
     return (
       <ScrollView style={{ backgroundColor: '#f8f8f8' }}>
