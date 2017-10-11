@@ -8,9 +8,11 @@ export default class QuestionFile extends React.Component {
         super(...arguments);
         this.openPicker = () => {
             ImagePicker.showImagePicker({ title: 'Select File', noData: !this.props.storeDataAsText }, (response) => {
-                console.log(response);
                 if (response.error) {
                     Alert.alert('Error', response.error, [{ text: 'OK' }]);
+                    return;
+                }
+                if (response.didCancel) {
                     return;
                 }
                 if (this.props.maxSize && response.fileSize > this.props.maxSize) {
