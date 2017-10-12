@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import { observer } from "mobx-react";
+import { observer } from 'mobx-react/native';
 
 import QuestionText from './QuestionText';
 import QuestionCheckbox from './QuestionCheckbox';

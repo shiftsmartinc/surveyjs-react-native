@@ -6,7 +6,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 import * as React from 'react';
 import { View, Text } from 'react-native';
-import { observer } from "mobx-react";
+import { observer } from 'mobx-react/native';
 import QuestionTextWrapper from './QuestionTextWrapper';
 import styles from './styles/questionMultipleText';
 let QuestionMultipleText = class QuestionMultipleText extends React.Component {
