@@ -5,27 +5,24 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 import * as React from 'react';
-import { View, Text } from 'react-native';
+import { ScrollView, View, Text } from 'react-native';
 import { inject, observer } from 'mobx-react/native';
 import SurveyNavigation from './SurveyNavigation';
 import SurveyPage from './SurveyPage';
 import styles from './styles/survey';
 let Survey = class Survey extends React.Component {
-    renderResults() {
-        return (<View style={styles.results}>
-        <Text>Thank you for completing the survey!</Text>
-      </View>);
-    }
-    renderSurvey() {
-        const { store } = this.props;
-        return (<View style={styles.container}>
-        <SurveyPage {...store.currentPageProps} onValueChange={store.setValue}/>
-        <SurveyNavigation onNextPage={store.nextPage} onPrevPage={store.prevPage} nextPageIndex={store.nextPageIndex} prevPageIndex={store.prevPageIndex}/>
-      </View>);
-    }
     render() {
         const { store } = this.props;
-        return store.isComplete ? this.renderResults() : this.renderSurvey();
+        return (<ScrollView contentContainerStyle={styles.container}>
+        {store.isComplete
+            ? <View style={styles.results}>
+            <Text>Thank you for completing the survey!</Text>
+          </View>
+            : <View style={styles.survey}>
+            <SurveyPage {...store.currentPageProps} onValueChange={store.setValue}/>
+            <SurveyNavigation onNextPage={store.nextPage} onPrevPage={store.prevPage} nextPageIndex={store.nextPageIndex} prevPageIndex={store.prevPageIndex}/>
+          </View>}
+      </ScrollView>);
     }
 };
 Survey = __decorate([
