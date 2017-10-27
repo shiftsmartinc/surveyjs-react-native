@@ -2,14 +2,26 @@
 
 ## Installation
 
-1. `npm install https://bitbucket.org/shiftsmart/surveyjs-react-native`
-2. `npm install react-native-image-picker --save`
-3. `react-native link`
+1. npm install `https://bitbucket.org/shiftsmart/surveyjs-react-native`
+
+2. install peerDependencies:
+  * `mobx`
+  * `mobx-react`
+  * `moment`
+  * `react`
+  * `react-native`
+  * `react-native-actionsheet`
+  * `react-native-image-picker`
+  * `react-native-modal-datetime-picker`
+
+3. `react-native link react-native-image-picker`
+
 4. Add the required permissions in AndroidManifest.xml:
 ```xml
 <uses-permission android:name="android.permission.CAMERA" />
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 ```
+
 5. Add the required permissions in Info.plist:
 ```xml
 <key>NSPhotoLibraryUsageDescription</key>
