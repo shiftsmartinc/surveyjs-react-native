@@ -7,24 +7,27 @@
     "watch": "tsc -w --inlineSourceMap --inlineSources --pretty",
     "build": "tsc"
   },
-  "dependencies": {
-    "mobx-react": "4.3.3",
-    "moment": "2.19.1",
-    "react": "16.0.0-alpha.12",
-    "react-native-actionsheet": "2.3.0",
-    "react-native-image-picker": "0.26.7",
-    "react-native-modal-datetime-picker": "4.11.0",
-    "react-native-webview-autoheight": "1.0.4"
-  },
   "devDependencies": {
     "@types/react": "16.0.5",
     "@types/react-native": "0.48.4",
+    "mobx": "3.3.1",
+    "mobx-react": "4.3.3",
+    "moment": "2.19.1",
+    "react": "16.0.0-alpha.12",
+    "react-native": "0.48.4",
+    "react-native-actionsheet": "2.3.0",
+    "react-native-image-picker": "0.26.7",
+    "react-native-modal-datetime-picker": "4.11.0",
     "typescript": "2.5.3"
   },
   "peerDependencies": {
-    "mobx": "^3.3.0",
-    "mobx-react": "^4.3.3",
-    "react-native": "^0.48.4",
-    "react-native-image-picker": ">=0.26.7"
+    "mobx": "*",
+    "mobx-react": "*",
+    "moment": "*",
+    "react": "*",
+    "react-native": "*",
+    "react-native-actionsheet": "*",
+    "react-native-image-picker": "*",
+    "react-native-modal-datetime-picker": "*"
   }
 }
