@@ -16,7 +16,6 @@ import QuestionTextWrapper from './QuestionTextWrapper';
 
 import styles from './styles/questionWrapper';
 
-
 const commonBuilderCreator = Component => question =>
   <Component
     {...question.json}
@@ -112,7 +111,7 @@ const commentBuilder = question => (
 );
 
 
-interface Props {
+export interface Props {
   question: any;
   // onValueChange: (name, value, comment?) => {};
 }

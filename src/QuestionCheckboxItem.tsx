@@ -4,7 +4,7 @@ import TouchableWithFeedback from './TouchableWithFeedback';
 
 import styles from './styles/questionCheckboxItem';
 
-interface Props {
+export interface Props {
   text?: string;
   value: string;
   defaultChecked?: boolean;
@@ -12,7 +12,6 @@ interface Props {
   checked: boolean;
   onChange?: (boolean, string) => void;
 }
-
 
 export default class CheckBoxItem extends React.Component<Props, any> {
 

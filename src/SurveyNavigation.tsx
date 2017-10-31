@@ -4,7 +4,7 @@ import { View, Text } from 'react-native';
 import styles from './styles/surveyNavigation';
 import TouchableWithFeedback from './TouchableWithFeedback';
 
-interface Props {
+export interface Props {
   onNextPage: () => {};
   onPrevPage: () => {};
   nextPageIndex: number;

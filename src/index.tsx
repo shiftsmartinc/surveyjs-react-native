@@ -3,7 +3,7 @@ import { Provider } from 'mobx-react/native';
 import Survey from './Survey';
 import SurveyStore from './store/survey';
 
-interface Props {
+export interface Props {
   json: any;
   apis: any;
 }

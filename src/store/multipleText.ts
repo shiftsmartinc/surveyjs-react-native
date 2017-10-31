@@ -1,6 +1,5 @@
 import { observable, action, computed, toJS } from 'mobx';
 
-
 export default class Question {
   @observable value = null;
   json;

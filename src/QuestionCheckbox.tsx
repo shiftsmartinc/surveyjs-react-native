@@ -3,8 +3,7 @@ import { View } from 'react-native';
 import CheckboxItem from './QuestionCheckboxItem';
 import QuestionText from './QuestionText';
 
-
-interface Props {
+export interface Props {
   choices: any;
   hasOther?: boolean;
   value: Array<string>;

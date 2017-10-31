@@ -4,7 +4,7 @@ import QuestionWrapper from './QuestionWrapper';
 
 import styles from './styles/surveyPage';
 
-interface Props {
+export interface Props {
   questions: any;
   // onValueChange: (name, value, comment?) => {};
 }

@@ -5,7 +5,7 @@ import SurveyNavigation from './SurveyNavigation';
 import SurveyPage from './SurveyPage';
 import styles from './styles/survey';
 
-interface Props {
+export interface Props {
   store: any;
 }
 

@@ -3,7 +3,7 @@ import { View, Text, Alert } from 'react-native';
 import TouchableWithFeedback from './TouchableWithFeedback';
 
 
-interface Props {
+export interface Props {
   choices: any;
   hasOther?: boolean;
   minPanelCount?: number;

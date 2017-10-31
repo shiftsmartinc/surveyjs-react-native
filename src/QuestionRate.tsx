@@ -4,7 +4,7 @@ import TouchableWithFeedback from './TouchableWithFeedback';
 
 import styles from './styles/questionRate';
 
-interface Props {
+export interface Props {
   rateValues: Array<any>;
   minRateDescription?: string;
   maxRateDescription?: string;

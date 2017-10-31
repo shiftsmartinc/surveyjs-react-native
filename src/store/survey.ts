@@ -5,7 +5,7 @@ import Question from './question';
 import Page from './page';
 import moment from 'moment';
 
-interface ISurvey {
+export interface ISurvey {
   onComplete(results);
 }
 

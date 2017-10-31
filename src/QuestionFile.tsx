@@ -3,10 +3,9 @@ import { View, Text, Image, Alert } from 'react-native';
 import TouchableWithFeedback from './TouchableWithFeedback';
 import ImagePicker from 'react-native-image-picker';
 
-
 import styles from './styles/questionFile';
 
-interface Props {
+export interface Props {
   showPreview?: boolean;
   imageHeight?: number;
   imageWidth?: number;

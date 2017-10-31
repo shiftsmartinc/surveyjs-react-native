@@ -4,7 +4,7 @@ import { TextInput, KeyboardType } from 'react-native';
 import styles, { LINE_HEIGHT } from './styles/questionText';
 import colors from './styles/colors';
 
-interface Props {
+export interface Props {
   placeholder?: string;
   inputType?: string;
   multiline?: boolean;

@@ -5,7 +5,7 @@ import {
   WebView,
 } from 'react-native';
 
-interface Props {
+export interface Props {
   html: string;
 }
 

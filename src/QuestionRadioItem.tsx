@@ -4,7 +4,7 @@ import TouchableWithFeedback from './TouchableWithFeedback';
 
 import styles from './styles/questionRadioItem';
 
-interface Props {
+export interface Props {
   text?: string;
   value: string;
   defaultChecked?: boolean;

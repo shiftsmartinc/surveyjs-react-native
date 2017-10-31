@@ -6,7 +6,7 @@ import QuestionTextWrapper from './QuestionTextWrapper';
 
 import styles from './styles/questionMultipleText';
 
-interface Props {
+export interface Props {
   items: Array<any>;
   questions: Array<any>;
   onChange(value);

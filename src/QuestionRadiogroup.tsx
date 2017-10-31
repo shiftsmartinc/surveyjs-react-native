@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import RadioItem from './QuestionRadioItem';
 import QuestionText from './QuestionText';
 
-interface Props {
+export interface Props {
   choices: any;
   hasOther?: boolean;
   onChange(value, comment?);

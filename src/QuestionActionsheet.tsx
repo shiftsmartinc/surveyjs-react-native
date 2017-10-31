@@ -4,10 +4,9 @@ import TouchableWithFeedback from './TouchableWithFeedback';
 import QuestionText from './QuestionText';
 import ActionSheet from 'react-native-actionsheet';
 
-
 import styles from './styles/questionActionsheet';
 
-interface Props {
+export interface Props {
   choices: any;
   hasOther?: boolean;
   optionsCaption?: string;

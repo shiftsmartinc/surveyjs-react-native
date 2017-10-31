@@ -4,14 +4,12 @@ import TouchableWithFeedback from './TouchableWithFeedback';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import moment from 'moment';
 
-
-interface Props {
+export interface Props {
   placeholder?: string;
   inputType: string;
   value?: any;
   onChange(value);
 }
-
 
 export default class QuestionTextDatetime extends React.Component<Props, any> {
   private mode;

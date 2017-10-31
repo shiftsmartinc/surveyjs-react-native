@@ -2,7 +2,6 @@ import { observable, action, computed, toJS } from 'mobx';
 import { ConditionRunner } from '../condition/conditions';
 import QuestionValidator from '../validator';
 
-
 export default class Question {
   @observable visible;
   @observable value = null;

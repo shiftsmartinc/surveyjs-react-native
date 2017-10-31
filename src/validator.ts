@@ -1,4 +1,3 @@
-
 const errorTemplates = {
   requiredError: "Please answer the question.",
   numericError: "The value should be numeric.",
