@@ -43,7 +43,6 @@ class MyWebView extends React.Component {
         this._onMessage = this._onMessage.bind(this);
     }
     _onMessage(e) {
-        console.log('onMessage: ', e.nativeEvent.data);
         this.setState({
             webViewHeight: parseInt(e.nativeEvent.data)
         });

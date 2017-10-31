@@ -43,7 +43,6 @@ export default class QuestionFile extends React.Component<Props, any> {
         return;
       }
       if (response.didCancel) {
-        // console.log('User cancelled image picker');
         return;
       }
       if (this.props.maxSize && response.fileSize > this.props.maxSize) {

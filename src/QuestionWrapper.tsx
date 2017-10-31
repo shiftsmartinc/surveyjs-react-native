@@ -113,7 +113,6 @@ const ratingBuilder = question => {
 
   const newRateValues = rateValues || generateRateValues(rateMin, rateMax, rateStep);
 
-  console.log('rateVlua: ', newRateValues);
   return (
     <QuestionRate
       {...question.json}

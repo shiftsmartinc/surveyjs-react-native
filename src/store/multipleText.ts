@@ -13,7 +13,6 @@ export default class Question {
   }
 
   @action.bound setValue(value) {
-    console.log(this.json.name, 'set value : ', value)
     this.value = value;
   }
 }

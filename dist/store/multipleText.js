@@ -14,7 +14,6 @@ export default class Question {
         return toJS(this.value);
     }
     setValue(value) {
-        console.log(this.json.name, 'set value : ', value);
         this.value = value;
     }
 }

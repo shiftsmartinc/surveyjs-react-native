@@ -39,7 +39,6 @@ export default class Question {
   }
 
   @action.bound setValue(value, comment = null) {
-    console.log(this.json.name, 'set value : ', value)
     this.value = value.uri || value;
     if (comment != null) {
       this.comment = comment;

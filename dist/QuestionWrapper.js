@@ -72,7 +72,6 @@ const generateRateValues = (min, max, step) => {
 const ratingBuilder = question => {
     const { json: { rateValues = null, rateMax = 5, rateMin = 1, rateStep = 1, }, } = question;
     const newRateValues = rateValues || generateRateValues(rateMin, rateMax, rateStep);
-    console.log('rateVlua: ', newRateValues);
     return (<QuestionRate {...question.json} rateValues={newRateValues} value={question.value} comment={question.comment} onChange={question.setValue}/>);
 };
 const commentBuilder = question => (<QuestionText {...question.json} multiline value={question.value} comment={question.comment} onChange={question.setValue}/>);
