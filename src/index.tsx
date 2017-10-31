@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { Provider } from 'mobx-react/native';
 import Survey from './Survey';
 import SurveyStore from './store/survey';
@@ -8,8 +8,9 @@ export interface Props {
   apis: any;
 }
 
-class Factory extends React.PureComponent<Props, any> {
+export default class Factory extends React.PureComponent<Props, any> {
   private store = new SurveyStore(this.props.json, this.props.apis);
+
   render() {
     return (
       <Provider>
@@ -18,5 +19,3 @@ class Factory extends React.PureComponent<Props, any> {
     )
   }
 }
-
-export default Factory;

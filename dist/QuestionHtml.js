@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { Dimensions, WebView, } from 'react-native';
 const injectedStyles = `
   <style>

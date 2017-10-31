@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import CheckboxItem from './QuestionCheckboxItem';
 import QuestionText from './QuestionText';
@@ -16,7 +16,6 @@ const OTHER_VALUE = 'other';
 const DEFAULT_OTHER_TEXT = 'other (describe)';
 
 export default class QuestionCheckbox extends React.Component<Props, any>{
-
   handleChoicesChange = (checked, value) => {
 
     const valueSet = new Set(this.props.value);

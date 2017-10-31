@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { View, Text } from 'react-native';
 import TouchableWithFeedback from './TouchableWithFeedback';
 import DateTimePicker from 'react-native-modal-datetime-picker';

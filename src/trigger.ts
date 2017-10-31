@@ -1,5 +1,4 @@
-
-interface HashTable<T> {
+export interface HashTable<T> {
   [key: string]: T;
 }
 

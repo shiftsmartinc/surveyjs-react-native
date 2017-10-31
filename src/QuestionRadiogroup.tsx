@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { View } from 'react-native';
 import RadioItem from './QuestionRadioItem';
 import QuestionText from './QuestionText';
@@ -14,7 +14,6 @@ export interface Props {
 
 const OTHER_VALUE = 'other';
 const DEFAULT_OTHER_TEXT = 'other (describe)';
-
 
 export default class QuestionRadiogroup extends React.Component<Props, any> {
   handleChoicesChange = (value) => {

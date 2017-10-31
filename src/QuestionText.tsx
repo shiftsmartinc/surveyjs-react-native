@@ -1,8 +1,16 @@
-import * as React from 'react';
-import { TextInput, KeyboardType } from 'react-native';
+import React from 'react';
+import { StyleSheet, TextInput, KeyboardType } from 'react-native';
+import colors from './colors';
 
-import styles, { LINE_HEIGHT } from './styles/questionText';
-import colors from './styles/colors';
+const styles = StyleSheet.create({
+  input: {
+    textAlignVertical: 'top',
+    paddingVertical: 0,
+    marginVertical: 2,
+    fontSize: 16,
+    lineHeight: 20,
+  }
+});
 
 export interface Props {
   placeholder?: string;
@@ -35,10 +43,7 @@ export default class QuestionText extends React.Component<Props, any> {
     // const keyboardType = keyboardTypeEnums[this.props.inputType || 'text'];
     return (
       <TextInput
-        style={[
-          styles.input,
-          { minHeight: LINE_HEIGHT * rows },
-        ]}
+        style={[styles.input, { minHeight: 20 * rows }]}
         multiline={this.props.multiline}
         placeholder={this.props.placeholder}
         value={this.props.value}

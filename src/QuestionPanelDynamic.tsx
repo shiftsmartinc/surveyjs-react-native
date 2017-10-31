@@ -1,7 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 import { View, Text, Alert } from 'react-native';
 import TouchableWithFeedback from './TouchableWithFeedback';
-
 
 export interface Props {
   choices: any;
@@ -14,14 +13,11 @@ export interface Props {
   templateTitle?: string;
   confirmDelete?: boolean;
   confirmDeleteText?: string;
-
   templateElements: Array<any>;
-
   buildComponent: (json) => {};
 }
 
 export default class QuestionPanelDynamic extends React.Component<Props, any>{
-
   constructor(props) {
     super(props);
 

@@ -1,7 +1,39 @@
-import * as React from 'react';
-import { View, Text } from 'react-native';
+import React from 'react';
+import { StyleSheet, View, Text } from 'react-native';
+import colors from './colors';
 import TouchableWithFeedback from './TouchableWithFeedback';
-import styles from './styles/questionRate';
+const styles = StyleSheet.create({
+    container: {
+        flexDirection: 'row',
+        flexGrow: 0,
+        alignSelf: 'flex-start',
+        borderRadius: 5,
+        overflow: 'hidden',
+    },
+    rateItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minWidth: 30,
+        padding: 5,
+        backgroundColor: colors.lightGray,
+        borderRightWidth: 1,
+        borderRightColor: colors.extraLightGray,
+    },
+    rateItemText: {
+        marginLeft: 3,
+        marginRight: 3,
+    },
+    rateItemTextChecked: {
+        color: colors.white,
+    },
+    lastRateItem: {
+        borderRightWidth: 0,
+    },
+    checkedRateItem: {
+        backgroundColor: colors.primary,
+    }
+});
 export default class QuestionRate extends React.Component {
     constructor() {
         super(...arguments);

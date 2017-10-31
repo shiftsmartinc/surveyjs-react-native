@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { TouchableNativeFeedback, TouchableOpacity, Platform } from 'react-native';
 
 const TouchableWithFeedback = Platform.select({

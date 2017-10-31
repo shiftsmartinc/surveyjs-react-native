@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import CheckboxItem from './QuestionCheckboxItem';
 
 export interface Props {
@@ -9,7 +9,6 @@ export interface Props {
 }
 
 export default class QuestionBoolean extends React.Component<Props, any>{
-
   constructor(props) {
     super(props);
 
@@ -17,7 +16,6 @@ export default class QuestionBoolean extends React.Component<Props, any>{
       dirty: false,
     };
   }
-
 
   handleChecked = (checked) => {
     this.setState({

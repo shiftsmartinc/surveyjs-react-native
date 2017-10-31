@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import CheckboxItem from './QuestionCheckboxItem';
 export default class QuestionBoolean extends React.Component {
     constructor(props) {

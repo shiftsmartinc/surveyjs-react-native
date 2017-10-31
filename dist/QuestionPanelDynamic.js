@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { View, Text, Alert } from 'react-native';
 import TouchableWithFeedback from './TouchableWithFeedback';
 export default class QuestionPanelDynamic extends React.Component {

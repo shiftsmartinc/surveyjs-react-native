@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { observer } from 'mobx-react/native';
-
+import colors from './colors';
 import QuestionText from './QuestionText';
 import QuestionCheckbox from './QuestionCheckbox';
 import QuestionRadiogroup from './QuestionRadiogroup';
@@ -14,7 +14,33 @@ import QuestionHtml from './QuestionHtml';
 import QuestionFile from './QuestionFile';
 import QuestionTextWrapper from './QuestionTextWrapper';
 
-import styles from './styles/questionWrapper';
+const styles = StyleSheet.create({
+  container: {
+
+  },
+  title: {
+    paddingTop: 10,
+    paddingBottom: 5,
+    paddingLeft: 10,
+  },
+  error: {
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingTop: 3,
+    paddingBottom: 3,
+    backgroundColor: colors.red,
+  },
+  errorText: {
+    color: colors.white,
+  },
+  questionContent: {
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingTop: 5,
+    paddingBottom: 5,
+    backgroundColor: colors.white,
+  },
+});
 
 const commonBuilderCreator = Component => question =>
   <Component

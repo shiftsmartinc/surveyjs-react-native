@@ -1,9 +1,28 @@
-import * as React from 'react';
-import { View, Text } from 'react-native';
+import React from 'react';
+import { StyleSheet, View, Text } from 'react-native';
+import colors from './colors';
 import TouchableWithFeedback from './TouchableWithFeedback';
 import QuestionText from './QuestionText';
 import ActionSheet from 'react-native-actionsheet';
-import styles from './styles/questionActionsheet';
+const styles = StyleSheet.create({
+    caption: {
+        padding: 5,
+        marginLeft: 5,
+        backgroundColor: colors.white,
+        borderWidth: 1,
+        borderColor: colors.lightGray,
+        borderRadius: 3,
+    },
+    captionText: {
+        color: colors.primary,
+        textAlign: 'center',
+    },
+    otherTextInput: {
+        borderWidth: 1,
+        borderColor: '#000',
+        marginTop: 5,
+    },
+});
 const OTHER_VALUE = 'other';
 const DEFAULT_OTHER_TEXT = 'other (describe)';
 const DEFAULT_OPTION_CAPTION = 'select';

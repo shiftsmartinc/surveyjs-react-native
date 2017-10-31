@@ -1,11 +1,23 @@
 import React from 'react';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import moment from 'moment';
-
 import QuestionActionsheet from './QuestionActionsheet';
 import QuestionText from './QuestionText';
 
-import styles from './styles/questionTextMonth';
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  year: {
+    flex: 1,
+  },
+  month: {
+    flex: 1,
+  },
+});
 
 const MONTH_CHOICES = [
   { value: '01', text: 'January' },
@@ -65,8 +77,6 @@ export default class QuestionTextMonth extends React.Component<any, any> {
   }
 
   render() {
-
-
     return (
       <View style={styles.container}>
         <View style={styles.month}>

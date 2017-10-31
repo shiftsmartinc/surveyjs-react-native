@@ -1,7 +1,15 @@
-import * as React from 'react';
-import { TextInput } from 'react-native';
-import styles, { LINE_HEIGHT } from './styles/questionText';
-import colors from './styles/colors';
+import React from 'react';
+import { StyleSheet, TextInput } from 'react-native';
+import colors from './colors';
+const styles = StyleSheet.create({
+    input: {
+        textAlignVertical: 'top',
+        paddingVertical: 0,
+        marginVertical: 2,
+        fontSize: 16,
+        lineHeight: 20,
+    }
+});
 export default class QuestionText extends React.Component {
     constructor() {
         super(...arguments);
@@ -23,9 +31,6 @@ export default class QuestionText extends React.Component {
     render() {
         const { rows = 1 } = this.props;
         const keyboardType = this.getKeyboardType();
-        return (<TextInput style={[
-            styles.input,
-            { minHeight: LINE_HEIGHT * rows },
-        ]} multiline={this.props.multiline} placeholder={this.props.placeholder} value={this.props.value} onChangeText={this.props.onChange} numberOfLines={rows} placeholderTextColor={colors.lightGray} underlineColorAndroid={'transparent'} blurOnSubmit={!this.props.multiline} keyboardType={keyboardType}/>);
+        return (<TextInput style={[styles.input, { minHeight: 20 * rows }]} multiline={this.props.multiline} placeholder={this.props.placeholder} value={this.props.value} onChangeText={this.props.onChange} numberOfLines={rows} placeholderTextColor={colors.lightGray} underlineColorAndroid={'transparent'} blurOnSubmit={!this.props.multiline} keyboardType={keyboardType}/>);
     }
 }

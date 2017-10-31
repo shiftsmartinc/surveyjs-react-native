@@ -1,12 +1,10 @@
 import React from 'react';
-
 import QuestionText from './QuestionText';
 import QuestionTextDatetime from './QuestionTextDatetime';
 import QuestionTextSlider from './QuestionTextSlider';
 import QuestionTextMonth from './QuestionTextMonth';
 
 export default class QuestionTextWrapper extends React.Component<any, any> {
-
   renderDate() {
     return (
       <QuestionTextDatetime

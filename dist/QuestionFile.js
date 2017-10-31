@@ -1,8 +1,27 @@
-import * as React from 'react';
-import { View, Text, Image, Alert } from 'react-native';
-import TouchableWithFeedback from './TouchableWithFeedback';
+import React from 'react';
+import { StyleSheet, View, Text, Image, Alert } from 'react-native';
+import colors from './colors';
 import ImagePicker from 'react-native-image-picker';
-import styles from './styles/questionFile';
+import TouchableWithFeedback from './TouchableWithFeedback';
+const styles = StyleSheet.create({
+    container: {},
+    button: {
+        padding: 5,
+        marginLeft: 5,
+        backgroundColor: colors.white,
+        borderWidth: 1,
+        borderColor: colors.lightGray,
+        borderRadius: 3,
+    },
+    buttonText: {
+        color: colors.primary,
+        textAlign: 'center',
+    },
+    image: {
+        marginTop: 5,
+        alignSelf: 'center',
+    },
+});
 export default class QuestionFile extends React.Component {
     constructor() {
         super(...arguments);

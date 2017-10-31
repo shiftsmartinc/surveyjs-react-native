@@ -5,8 +5,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 import React from 'react';
-import { View, Text } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { observer } from 'mobx-react/native';
+import colors from './colors';
 import QuestionText from './QuestionText';
 import QuestionCheckbox from './QuestionCheckbox';
 import QuestionRadiogroup from './QuestionRadiogroup';
@@ -18,7 +19,31 @@ import QuestionPanelDynamic from './QuestionPanelDynamic';
 import QuestionHtml from './QuestionHtml';
 import QuestionFile from './QuestionFile';
 import QuestionTextWrapper from './QuestionTextWrapper';
-import styles from './styles/questionWrapper';
+const styles = StyleSheet.create({
+    container: {},
+    title: {
+        paddingTop: 10,
+        paddingBottom: 5,
+        paddingLeft: 10,
+    },
+    error: {
+        paddingLeft: 10,
+        paddingRight: 10,
+        paddingTop: 3,
+        paddingBottom: 3,
+        backgroundColor: colors.red,
+    },
+    errorText: {
+        color: colors.white,
+    },
+    questionContent: {
+        paddingLeft: 10,
+        paddingRight: 10,
+        paddingTop: 5,
+        paddingBottom: 5,
+        backgroundColor: colors.white,
+    },
+});
 const commonBuilderCreator = Component => question => <Component {...question.json} value={question.value} comment={question.comment} onChange={question.setValue}/>;
 const choiceBuilderCreator = Component => (question) => {
     const json = question.json;

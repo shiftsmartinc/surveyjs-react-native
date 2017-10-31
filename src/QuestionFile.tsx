@@ -1,9 +1,29 @@
-import * as React from 'react';
-import { View, Text, Image, Alert } from 'react-native';
-import TouchableWithFeedback from './TouchableWithFeedback';
+import React from 'react';
+import { StyleSheet, View, Text, Image, Alert } from 'react-native';
+import colors from './colors';
 import ImagePicker from 'react-native-image-picker';
+import TouchableWithFeedback from './TouchableWithFeedback';
 
-import styles from './styles/questionFile';
+const styles = StyleSheet.create({
+  container: {
+  },
+  button: {
+    padding: 5,
+    marginLeft: 5,
+    backgroundColor: colors.white,
+    borderWidth: 1,
+    borderColor: colors.lightGray,
+    borderRadius: 3,
+  },
+  buttonText: {
+    color: colors.primary,
+    textAlign: 'center',
+  },
+  image: {
+    marginTop: 5,
+    alignSelf: 'center',
+  },
+});
 
 export interface Props {
   showPreview?: boolean;
@@ -16,7 +36,6 @@ export interface Props {
 }
 
 export default class QuestionFile extends React.Component<Props, any> {
-
   openPicker = () => {
     ImagePicker.showImagePicker({ title: 'Select File', noData: !this.props.storeDataAsText }, (response) => {
       if (response.error) {

@@ -1,9 +1,23 @@
-import * as React from 'react';
-import { ScrollView, View, Text } from 'react-native';
+import React from 'react';
+import { StyleSheet, ScrollView, View, Text } from 'react-native';
 import { inject, observer } from 'mobx-react/native';
 import SurveyNavigation from './SurveyNavigation';
 import SurveyPage from './SurveyPage';
-import styles from './styles/survey';
+
+const styles = StyleSheet.create({
+  container: {
+    flexGrow: 1,
+    backgroundColor: '#f8f8f8',
+  },
+  survey: {
+    flexGrow: 1,
+  },
+  results: {
+    flexGrow: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  }
+});
 
 export interface Props {
   store: any;
