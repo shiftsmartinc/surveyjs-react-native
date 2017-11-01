@@ -1,15 +1,15 @@
 import React from 'react';
 import { Provider } from 'mobx-react/native';
 import Survey from './Survey';
-import SurveyStore from './store/survey';
+import Model from './Model';
 export default class Factory extends React.PureComponent {
     constructor() {
         super(...arguments);
-        this.store = new SurveyStore(this.props.json, this.props.apis);
+        this.model = new Model(this.props.json, this.props.apis);
     }
     render() {
         return (<Provider>
-        <Survey store={this.store}/>
+        <Survey store={this.model}/>
       </Provider>);
     }
 }
