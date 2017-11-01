@@ -133,11 +133,18 @@ class Question {
   }
 }
 
-export interface ISurvey {
+export interface IModel {
+  isComplete: boolean;
+  currentPageProps: any;
+  setValue: any;
+  nextPage: any;
+  prevPage: any;
+  nextPageIndex: any;
+  prevPageIndex: any;
   onComplete(results);
 }
 
-export default class Survey {
+export default class Model {
   @observable questions = {};
   @observable curPageIndex = 0;
   @observable isComplete = false;
@@ -146,7 +153,7 @@ export default class Survey {
 
   triggers: Array<SurveyTrigger> = [];
 
-  apis: ISurvey = null;
+  apis: {};
 
   originalNumber = 0;
 

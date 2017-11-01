@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, ScrollView, View, Text } from 'react-native';
 import { inject, observer } from 'mobx-react/native';
+import { IModel } from './Model';
 import SurveyNavigation from './SurveyNavigation';
 import SurveyPage from './SurveyPage';
 
@@ -19,31 +20,35 @@ const styles = StyleSheet.create({
   }
 });
 
-export interface Props {
-  store: any;
-}
-
-@inject('store')
+@inject(store => ({
+  isComplete: store.model.isComplete,
+  currentPageProps: store.model.currentPageProps,
+  setValue: store.model.setValue,
+  nextPage: store.model.nextPage,
+  prevPage: store.model.prevPage,
+  nextPageIndex: store.model.nextPageIndex,
+  prevPageIndex: store.model.prevPageIndex,
+}))
 @observer
-export default class Survey extends React.Component<Props, any> {
+export default class Survey extends React.Component<IModel, {}> {
   render() {
-    const { store } = this.props;
+    const { isComplete, currentPageProps, setValue, nextPage, prevPage, nextPageIndex, prevPageIndex } = this.props;
     return (
       <ScrollView contentContainerStyle={styles.container}>
-        {store.isComplete
+        {isComplete
           ? <View style={styles.results}>
             <Text>Thank you for completing the survey!</Text>
           </View>
           : <View style={styles.survey}>
             <SurveyPage
-              {...store.currentPageProps}
-              onValueChange={store.setValue}
+              {...currentPageProps}
+              onValueChange={setValue}
             />
             <SurveyNavigation
-              onNextPage={store.nextPage}
-              onPrevPage={store.prevPage}
-              nextPageIndex={store.nextPageIndex}
-              prevPageIndex={store.prevPageIndex}
+              onNextPage={nextPage}
+              onPrevPage={prevPage}
+              nextPageIndex={nextPageIndex}
+              prevPageIndex={prevPageIndex}
             />
           </View>
         }

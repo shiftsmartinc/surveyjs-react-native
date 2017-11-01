@@ -13,8 +13,8 @@ export default class Factory extends React.PureComponent<Props, any> {
 
   render() {
     return (
-      <Provider>
-        <Survey store={this.model} />
+      <Provider model={this.model}>
+        <Survey />
       </Provider>
     )
   }
