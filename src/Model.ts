@@ -153,7 +153,7 @@ export default class Model {
 
   triggers: Array<SurveyTrigger> = [];
 
-  apis: {};
+  apis: any;
 
   originalNumber = 0;
 
