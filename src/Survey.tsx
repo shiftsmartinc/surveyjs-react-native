@@ -1,7 +1,6 @@
 import React from 'react';
-import { StyleSheet, ScrollView, View, Text } from 'react-native';
 import { inject, observer } from 'mobx-react/native';
-import { IModel } from './Model';
+import { StyleSheet, ScrollView, View, Text } from 'react-native';
 import SurveyNavigation from './SurveyNavigation';
 import SurveyPage from './SurveyPage';
 
@@ -20,37 +19,32 @@ const styles = StyleSheet.create({
   }
 });
 
-@inject(store => ({
-  isComplete: store.model.isComplete,
-  currentPageProps: store.model.currentPageProps,
-  setValue: store.model.setValue,
-  nextPage: store.model.nextPage,
-  prevPage: store.model.prevPage,
-  nextPageIndex: store.model.nextPageIndex,
-  prevPageIndex: store.model.prevPageIndex,
-}))
+export interface Injected {
+  isComplete?: boolean;
+}
+
+export interface Props {
+}
+
+@inject('isComplete')
 @observer
-export default class Survey extends React.Component<IModel> {
+export default class Survey extends React.Component<Injected & Props> {
   render() {
-    const { isComplete, currentPageProps, setValue, nextPage, prevPage, nextPageIndex, prevPageIndex } = this.props;
+    const { isComplete } = this.props;
     return (
       <ScrollView contentContainerStyle={styles.container}>
         {isComplete
-          ? <View style={styles.results}>
-            <Text>Thank you for completing the survey!</Text>
-          </View>
-          : <View style={styles.survey}>
-            <SurveyPage
-              {...currentPageProps}
-              onValueChange={setValue}
-            />
-            <SurveyNavigation
-              onNextPage={nextPage}
-              onPrevPage={prevPage}
-              nextPageIndex={nextPageIndex}
-              prevPageIndex={prevPageIndex}
-            />
-          </View>
+          ? (
+            <View style={styles.results}>
+              <Text>Thank you for completing the survey!</Text>
+            </View>
+          )
+          : (
+            <View style={styles.survey}>
+              <SurveyPage />
+              <SurveyNavigation />
+            </View>
+          )
         }
       </ScrollView>
     );

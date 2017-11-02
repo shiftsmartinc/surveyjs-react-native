@@ -1,4 +1,5 @@
 import React from 'react';
+import { inject, observer } from 'mobx-react/native';
 import { StyleSheet, View } from 'react-native';
 import colors from './colors';
 import QuestionWrapper from './QuestionWrapper';
@@ -32,16 +33,24 @@ const styles = StyleSheet.create({
   },
 });
 
-export interface Props {
-  questions: any;
-  // onValueChange: (name, value, comment?) => {};
+export interface Injected {
+  pages?: Array<any>;
+  curPageIndex?: number;
+  questions?: Array<any>;
 }
 
-export default class SurveyPage extends React.Component<Props> {
+export interface Props {
+}
+
+@inject('pages', 'curPageIndex', 'questions')
+@observer
+export default class SurveyPage extends React.Component<Injected & Props> {
   render() {
+    const { pages, curPageIndex, questions } = this.props;
+    const page = pages.find(v => v.pageIndex === curPageIndex);
     return (
       <View style={styles.container}>
-        {this.props.questions.map(question =>
+        {page.questionNames.map(name => questions[name]).map(question =>
           <QuestionWrapper key={question.json.name} question={question} />
         )}
       </View>
