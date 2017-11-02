@@ -133,17 +133,6 @@ class Question {
   }
 }
 
-export interface IModel {
-  isComplete: boolean;
-  currentPageProps: any;
-  setValue: any;
-  nextPage: any;
-  prevPage: any;
-  nextPageIndex: any;
-  prevPageIndex: any;
-  onComplete(results);
-}
-
 export default class Model {
   @observable questions = {};
   @observable curPageIndex = 0;

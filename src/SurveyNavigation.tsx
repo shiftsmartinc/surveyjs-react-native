@@ -26,10 +26,6 @@ const styles = StyleSheet.create({
   }
 });
 
-export interface Props {
-
-}
-
 export interface Injected {
   prevPage?: any;
   nextPage?: any;
@@ -40,7 +36,12 @@ export interface Injected {
 export interface Props {
 }
 
-@inject('prevPage', 'nextPage', 'prevPageIndex', 'nextPageIndex')
+@inject(({ model }) => ({
+  prevPage: model.prevPage,
+  nextPage: model.nextPage,
+  prevPageIndex: model.prevPageIndex,
+  nextPageIndex: model.nextPageIndex,
+}))
 @observer
 export default class SurveyNavigation extends React.Component<Injected & Props> {
   render() {

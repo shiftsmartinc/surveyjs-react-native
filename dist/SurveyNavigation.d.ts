@@ -1,11 +1,13 @@
 /// <reference types="react" />
 import React from 'react';
-export interface Props {
-    onNextPage: () => {};
-    onPrevPage: () => {};
-    nextPageIndex: number;
-    prevPageIndex: number;
+export interface Injected {
+    prevPage?: any;
+    nextPage?: any;
+    prevPageIndex?: number;
+    nextPageIndex?: number;
 }
-export default class SurveyNavigation extends React.Component<Props> {
+export interface Props {
+}
+export default class SurveyNavigation extends React.Component<Injected & Props> {
     render(): JSX.Element;
 }

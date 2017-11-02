@@ -26,7 +26,9 @@ export interface Injected {
 export interface Props {
 }
 
-@inject('isComplete')
+@inject(({ model }) => ({
+  isComplete: model.isComplete,
+}))
 @observer
 export default class Survey extends React.Component<Injected & Props> {
   render() {

@@ -1,8 +1,12 @@
 /// <reference types="react" />
 import React from 'react';
-export interface Props {
-    questions: any;
+export interface Injected {
+    pages?: Array<any>;
+    curPageIndex?: number;
+    questions?: Array<any>;
 }
-export default class SurveyPage extends React.Component<Props> {
+export interface Props {
+}
+export default class SurveyPage extends React.Component<Injected & Props> {
     render(): JSX.Element;
 }

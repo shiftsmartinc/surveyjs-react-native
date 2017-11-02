@@ -42,7 +42,11 @@ export interface Injected {
 export interface Props {
 }
 
-@inject('pages', 'curPageIndex', 'questions')
+@inject(({ model }) => ({
+  pages: model.pages,
+  curPageIndex: model.curPageIndex,
+  questions: model.questions,
+}))
 @observer
 export default class SurveyPage extends React.Component<Injected & Props> {
   render() {

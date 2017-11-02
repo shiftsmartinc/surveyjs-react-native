@@ -1,4 +1,11 @@
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 import React from 'react';
+import { inject, observer } from 'mobx-react/native';
 import { StyleSheet, View } from 'react-native';
 import colors from './colors';
 import QuestionWrapper from './QuestionWrapper';
@@ -30,10 +37,21 @@ const styles = StyleSheet.create({
         backgroundColor: colors.white,
     },
 });
-export default class SurveyPage extends React.Component {
+let SurveyPage = class SurveyPage extends React.Component {
     render() {
+        const { pages, curPageIndex, questions } = this.props;
+        const page = pages.find(v => v.pageIndex === curPageIndex);
         return (<View style={styles.container}>
-        {this.props.questions.map(question => <QuestionWrapper key={question.json.name} question={question}/>)}
+        {page.questionNames.map(name => questions[name]).map(question => <QuestionWrapper key={question.json.name} question={question}/>)}
       </View>);
     }
-}
+};
+SurveyPage = __decorate([
+    inject(({ model }) => ({
+        pages: model.pages,
+        curPageIndex: model.curPageIndex,
+        questions: model.questions,
+    })),
+    observer
+], SurveyPage);
+export default SurveyPage;

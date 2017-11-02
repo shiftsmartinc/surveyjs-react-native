@@ -1,6 +1,10 @@
 /// <reference types="react" />
 import React from 'react';
-import { IModel } from './Model';
-export default class Survey extends React.Component<IModel> {
+export interface Injected {
+    isComplete?: boolean;
+}
+export interface Props {
+}
+export default class Survey extends React.Component<Injected & Props> {
     render(): JSX.Element;
 }

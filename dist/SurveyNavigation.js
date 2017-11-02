@@ -1,4 +1,11 @@
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 import React from 'react';
+import { inject, observer } from 'mobx-react/native';
 import { StyleSheet, View, Text } from 'react-native';
 import colors from './colors';
 import TouchableWithFeedback from './TouchableWithFeedback';
@@ -23,21 +30,32 @@ const styles = StyleSheet.create({
         color: colors.white,
     }
 });
-export default class SurveyNavigation extends React.Component {
+let SurveyNavigation = class SurveyNavigation extends React.Component {
     render() {
+        const { prevPage, nextPage, prevPageIndex, nextPageIndex } = this.props;
         return (<View style={styles.container}>
-        {this.props.prevPageIndex !== -1 &&
-            <TouchableWithFeedback onPress={this.props.onPrevPage}>
+        {prevPageIndex !== -1 &&
+            <TouchableWithFeedback onPress={prevPage}>
             <View style={styles.button}>
               <Text style={styles.buttonText}>Back</Text>
             </View>
           </TouchableWithFeedback>}
-        <TouchableWithFeedback onPress={this.props.onNextPage}>
+        <TouchableWithFeedback onPress={nextPage}>
           <View style={styles.button}>
-            <Text style={styles.buttonText}>{this.props.nextPageIndex !== -1 ? 'Next' : 'Complete'}</Text>
+            <Text style={styles.buttonText}>{nextPageIndex !== -1 ? 'Next' : 'Complete'}</Text>
           </View>
         </TouchableWithFeedback>
 
       </View>);
     }
-}
+};
+SurveyNavigation = __decorate([
+    inject(({ model }) => ({
+        prevPage: model.prevPage,
+        nextPage: model.nextPage,
+        prevPageIndex: model.prevPageIndex,
+        nextPageIndex: model.nextPageIndex,
+    })),
+    observer
+], SurveyNavigation);
+export default SurveyNavigation;

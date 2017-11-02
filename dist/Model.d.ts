@@ -1,14 +1,4 @@
 import { SurveyTrigger } from './trigger';
-export interface IModel {
-    isComplete: boolean;
-    currentPageProps: any;
-    setValue: any;
-    nextPage: any;
-    prevPage: any;
-    nextPageIndex: any;
-    prevPageIndex: any;
-    onComplete(results: any): any;
-}
 export default class Model {
     questions: {};
     curPageIndex: number;
