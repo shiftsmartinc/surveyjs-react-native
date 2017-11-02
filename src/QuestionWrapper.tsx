@@ -142,7 +142,7 @@ export interface Props {
 }
 
 @observer
-export default class QuestionWrapper extends React.Component<Props, any> {
+export default class QuestionWrapper extends React.Component<Props> {
   panelBuilder = question => (
     <View>
       {question.json.elements.map((json) => {

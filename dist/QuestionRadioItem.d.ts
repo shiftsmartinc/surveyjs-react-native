@@ -7,7 +7,7 @@ export interface Props {
     checked: boolean;
     onChange?: (string) => void;
 }
-export default class QuestionRadioItem extends React.Component<Props, any> {
+export default class QuestionRadioItem extends React.Component<Props> {
     handlePress: () => void;
     render(): JSX.Element;
 }

@@ -1,8 +1,6 @@
 /// <reference types="react" />
 import React from 'react';
-export interface Props {
-    store: any;
-}
-export default class Survey extends React.Component<Props, any> {
+import { IModel } from './Model';
+export default class Survey extends React.Component<IModel> {
     render(): JSX.Element;
 }

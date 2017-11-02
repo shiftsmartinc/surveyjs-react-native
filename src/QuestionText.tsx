@@ -21,7 +21,7 @@ export interface Props {
   onChange(value);
 }
 
-export default class QuestionText extends React.Component<Props, any> {
+export default class QuestionText extends React.Component<Props> {
   getKeyboardType = ():KeyboardType => {
     const { inputType = 'text' } = this.props;
     let keyboardType = 'default';

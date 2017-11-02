@@ -37,7 +37,7 @@ export interface Props {
   // onValueChange: (name, value, comment?) => {};
 }
 
-export default class SurveyPage extends React.Component<Props, any> {
+export default class SurveyPage extends React.Component<Props> {
   render() {
     return (
       <View style={styles.container}>

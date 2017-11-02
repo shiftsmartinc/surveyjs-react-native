@@ -9,7 +9,7 @@ export interface Props {
     value: string;
     onChange(value: any): any;
 }
-export default class QuestionText extends React.Component<Props, any> {
+export default class QuestionText extends React.Component<Props> {
     getKeyboardType: () => KeyboardType;
     render(): JSX.Element;
 }

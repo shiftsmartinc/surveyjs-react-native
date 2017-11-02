@@ -35,7 +35,7 @@ export interface Props {
   onChange(value, comment?);
 }
 
-export default class QuestionFile extends React.Component<Props, any> {
+export default class QuestionFile extends React.Component<Props> {
   openPicker = () => {
     ImagePicker.showImagePicker({ title: 'Select File', noData: !this.props.storeDataAsText }, (response) => {
       if (response.error) {

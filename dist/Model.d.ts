@@ -1,14 +1,21 @@
 import { SurveyTrigger } from './trigger';
-export interface ISurvey {
+export interface IModel {
+    isComplete: boolean;
+    currentPageProps: any;
+    setValue: any;
+    nextPage: any;
+    prevPage: any;
+    nextPageIndex: any;
+    prevPageIndex: any;
     onComplete(results: any): any;
 }
-export default class Survey {
+export default class Model {
     questions: {};
     curPageIndex: number;
     isComplete: boolean;
     pages: any[];
     triggers: Array<SurveyTrigger>;
-    apis: ISurvey;
+    apis: any;
     originalNumber: number;
     questionNamesInOrder: any[];
     constructor(json: any, apis: any);

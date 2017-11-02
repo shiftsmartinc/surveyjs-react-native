@@ -8,7 +8,7 @@ export interface Props {
     checked: boolean;
     onChange?: (boolean, string) => void;
 }
-export default class CheckBoxItem extends React.Component<Props, any> {
+export default class CheckBoxItem extends React.Component<Props> {
     handlePress: () => void;
     render(): JSX.Element;
 }

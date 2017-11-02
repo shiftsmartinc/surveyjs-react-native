@@ -44,7 +44,7 @@ export interface Props {
   onChange(value, comment?);
 }
 
-export default class QuestionRate extends React.Component<Props, any> {
+export default class QuestionRate extends React.Component<Props> {
   onItemChecked = (value) => {
     this.props.onChange(value);
   }

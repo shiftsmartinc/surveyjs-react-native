@@ -9,7 +9,7 @@ export interface Props {
     value?: string;
     onChange(value: any, comment?: any): any;
 }
-export default class QuestionFile extends React.Component<Props, any> {
+export default class QuestionFile extends React.Component<Props> {
     openPicker: () => void;
     render(): JSX.Element;
 }

@@ -15,7 +15,7 @@ export interface Props {
 const OTHER_VALUE = 'other';
 const DEFAULT_OTHER_TEXT = 'other (describe)';
 
-export default class QuestionRadiogroup extends React.Component<Props, any> {
+export default class QuestionRadiogroup extends React.Component<Props> {
   handleChoicesChange = (value) => {
     this.props.onChange(value);
   }

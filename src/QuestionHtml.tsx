@@ -80,7 +80,7 @@ class MyWebView extends React.Component<any, any> {
   }
 }
 
-export default class QuestionHtml extends React.Component<Props, any> {
+export default class QuestionHtml extends React.Component<Props> {
   render() {
     return (
       <MyWebView

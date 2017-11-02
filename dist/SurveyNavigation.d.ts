@@ -6,6 +6,6 @@ export interface Props {
     nextPageIndex: number;
     prevPageIndex: number;
 }
-export default class SurveyNavigation extends React.Component<Props, any> {
+export default class SurveyNavigation extends React.Component<Props> {
     render(): JSX.Element;
 }

@@ -33,7 +33,7 @@ export interface Props {
 }
 
 @observer
-export default class QuestionMultipleText extends React.Component<Props, any> {
+export default class QuestionMultipleText extends React.Component<Props> {
   renderItem = (question, idx) => {
     const item = question.json;
     const isFirst = idx === 0;

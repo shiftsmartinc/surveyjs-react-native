@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   prevPageIndex: store.model.prevPageIndex,
 }))
 @observer
-export default class Survey extends React.Component<IModel, {}> {
+export default class Survey extends React.Component<IModel> {
   render() {
     const { isComplete, currentPageProps, setValue, nextPage, prevPage, nextPageIndex, prevPageIndex } = this.props;
     return (

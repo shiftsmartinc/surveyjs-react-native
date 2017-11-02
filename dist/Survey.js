@@ -25,21 +25,29 @@ const styles = StyleSheet.create({
 });
 let Survey = class Survey extends React.Component {
     render() {
-        const { store } = this.props;
+        const { isComplete, currentPageProps, setValue, nextPage, prevPage, nextPageIndex, prevPageIndex } = this.props;
         return (<ScrollView contentContainerStyle={styles.container}>
-        {store.isComplete
+        {isComplete
             ? <View style={styles.results}>
             <Text>Thank you for completing the survey!</Text>
           </View>
             : <View style={styles.survey}>
-            <SurveyPage {...store.currentPageProps} onValueChange={store.setValue}/>
-            <SurveyNavigation onNextPage={store.nextPage} onPrevPage={store.prevPage} nextPageIndex={store.nextPageIndex} prevPageIndex={store.prevPageIndex}/>
+            <SurveyPage {...currentPageProps} onValueChange={setValue}/>
+            <SurveyNavigation onNextPage={nextPage} onPrevPage={prevPage} nextPageIndex={nextPageIndex} prevPageIndex={prevPageIndex}/>
           </View>}
       </ScrollView>);
     }
 };
 Survey = __decorate([
-    inject('store'),
+    inject(store => ({
+        isComplete: store.model.isComplete,
+        currentPageProps: store.model.currentPageProps,
+        setValue: store.model.setValue,
+        nextPage: store.model.nextPage,
+        prevPage: store.model.prevPage,
+        nextPageIndex: store.model.nextPageIndex,
+        prevPageIndex: store.model.prevPageIndex,
+    })),
     observer
 ], Survey);
 export default Survey;

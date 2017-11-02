@@ -8,7 +8,7 @@ export interface Props {
     comment?: string;
     otherText?: string;
 }
-export default class QuestionRadiogroup extends React.Component<Props, any> {
+export default class QuestionRadiogroup extends React.Component<Props> {
     handleChoicesChange: (value: any) => void;
     handleTextInputChange: (comment: any) => void;
     render(): JSX.Element;

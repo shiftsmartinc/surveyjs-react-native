@@ -15,7 +15,7 @@ export interface Props {
 const OTHER_VALUE = 'other';
 const DEFAULT_OTHER_TEXT = 'other (describe)';
 
-export default class QuestionCheckbox extends React.Component<Props, any>{
+export default class QuestionCheckbox extends React.Component<Props>{
   handleChoicesChange = (checked, value) => {
 
     const valueSet = new Set(this.props.value);

@@ -147,14 +147,13 @@ __decorate([
 __decorate([
     action.bound
 ], Question.prototype, "setPage", null);
-export default class Survey {
+export default class Model {
     constructor(json, apis) {
         this.questions = {};
         this.curPageIndex = 0;
         this.isComplete = false;
         this.pages = [];
         this.triggers = [];
-        this.apis = null;
         this.originalNumber = 0;
         this.questionNamesInOrder = [];
         this.onComplete = () => {
@@ -304,37 +303,37 @@ export default class Survey {
 }
 __decorate([
     observable
-], Survey.prototype, "questions", void 0);
+], Model.prototype, "questions", void 0);
 __decorate([
     observable
-], Survey.prototype, "curPageIndex", void 0);
+], Model.prototype, "curPageIndex", void 0);
 __decorate([
     observable
-], Survey.prototype, "isComplete", void 0);
+], Model.prototype, "isComplete", void 0);
 __decorate([
     action.bound
-], Survey.prototype, "nextPage", null);
+], Model.prototype, "nextPage", null);
 __decorate([
     action.bound
-], Survey.prototype, "prevPage", null);
+], Model.prototype, "prevPage", null);
 __decorate([
     action.bound
-], Survey.prototype, "resetVisible", null);
+], Model.prototype, "resetVisible", null);
 __decorate([
     computed
-], Survey.prototype, "prevPageIndex", null);
+], Model.prototype, "prevPageIndex", null);
 __decorate([
     computed
-], Survey.prototype, "nextPageIndex", null);
+], Model.prototype, "nextPageIndex", null);
 __decorate([
     computed
-], Survey.prototype, "currentPageProps", null);
+], Model.prototype, "currentPageProps", null);
 __decorate([
     computed
-], Survey.prototype, "conditionValues", null);
+], Model.prototype, "conditionValues", null);
 __decorate([
     computed
-], Survey.prototype, "results", null);
+], Model.prototype, "results", null);
 __decorate([
     action.bound
-], Survey.prototype, "setTriggerValue", null);
+], Model.prototype, "setTriggerValue", null);

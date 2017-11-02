@@ -32,7 +32,7 @@ export interface Props {
   prevPageIndex: number;
 }
 
-export default class SurveyNavigation extends React.Component<Props, any> {
+export default class SurveyNavigation extends React.Component<Props> {
   render() {
     return (
       <View style={styles.container}>

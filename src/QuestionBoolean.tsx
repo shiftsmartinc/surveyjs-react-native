@@ -8,7 +8,7 @@ export interface Props {
   onChange(value, comment?);
 }
 
-export default class QuestionBoolean extends React.Component<Props, any>{
+export default class QuestionBoolean extends React.Component<Props>{
   constructor(props) {
     super(props);
 

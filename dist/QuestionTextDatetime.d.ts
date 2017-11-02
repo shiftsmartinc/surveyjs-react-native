@@ -6,7 +6,7 @@ export interface Props {
     value?: any;
     onChange(value: any): any;
 }
-export default class QuestionTextDatetime extends React.Component<Props, any> {
+export default class QuestionTextDatetime extends React.Component<Props> {
     private mode;
     constructor(props: any);
     showPicker: () => void;

@@ -8,7 +8,7 @@ export interface Props {
   apis: any;
 }
 
-export default class Factory extends React.PureComponent<Props, any> {
+export default class Factory extends React.PureComponent<Props> {
   private model = new Model(this.props.json, this.props.apis);
 
   render() {

@@ -8,8 +8,8 @@ export default class Factory extends React.PureComponent {
         this.model = new Model(this.props.json, this.props.apis);
     }
     render() {
-        return (<Provider>
-        <Survey store={this.model}/>
+        return (<Provider model={this.model}>
+        <Survey />
       </Provider>);
     }
 }
