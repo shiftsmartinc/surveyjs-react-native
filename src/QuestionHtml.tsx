@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, WebView,} from 'react-native';
+import { Dimensions, WebView, Linking } from 'react-native';
 
 export interface Props {
   html: string;
@@ -55,12 +55,25 @@ class MyWebView extends React.Component<any, any> {
     }
 
     this._onMessage = this._onMessage.bind(this);
+    this._onNavigationStateChange = this._onNavigationStateChange.bind(this);
   }
 
   _onMessage(e) {
     this.setState({
       webViewHeight: parseInt(e.nativeEvent.data)
     });
+  }
+
+  _onNavigationStateChange(e) {
+    const regex = /^data:text\/html;.+href\=\"(https?\:\/\/.*?\.pdf)\".*$/mi;
+    const matches = e.url.match(regex);
+    if (matches) {
+      return false;
+    }
+    else if (e.url.indexOf('http') > -1) {
+      return Linking.openURL(e.url);
+    }
+    return false;
   }
 
   render() {
@@ -70,6 +83,7 @@ class MyWebView extends React.Component<any, any> {
       <WebView
         injectedJavaScript={injectedScript}
         scrollEnabled={this.props.scrollEnabled || false}
+        onNavigationStateChange={this._onNavigationStateChange}
         onMessage={this._onMessage}
         javaScriptEnabled={true}
         automaticallyAdjustContentInsets={true}

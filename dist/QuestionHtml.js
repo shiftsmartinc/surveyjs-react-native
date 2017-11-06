@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, WebView, } from 'react-native';
+import { Dimensions, WebView, Linking } from 'react-native';
 const injectedStyles = `
   <style>
     body {
@@ -41,16 +41,28 @@ class MyWebView extends React.Component {
             webViewHeight: this.props.defaultHeight
         };
         this._onMessage = this._onMessage.bind(this);
+        this._onNavigationStateChange = this._onNavigationStateChange.bind(this);
     }
     _onMessage(e) {
         this.setState({
             webViewHeight: parseInt(e.nativeEvent.data)
         });
     }
+    _onNavigationStateChange(e) {
+        const regex = /^data:text\/html;.+href\=\"(https?\:\/\/.*?\.pdf)\".*$/mi;
+        const matches = e.url.match(regex);
+        if (matches) {
+            return false;
+        }
+        else if (e.url.indexOf('http') > -1) {
+            return Linking.openURL(e.url);
+        }
+        return false;
+    }
     render() {
         const _w = this.props.width || Dimensions.get('window').width;
         const _h = this.props.autoHeight ? this.state.webViewHeight : this.props.defaultHeight;
-        return (<WebView injectedJavaScript={injectedScript} scrollEnabled={this.props.scrollEnabled || false} onMessage={this._onMessage} javaScriptEnabled={true} automaticallyAdjustContentInsets={true} {...this.props} style={[{ width: _w }, this.props.style, { height: _h }]}/>);
+        return (<WebView injectedJavaScript={injectedScript} scrollEnabled={this.props.scrollEnabled || false} onNavigationStateChange={this._onNavigationStateChange} onMessage={this._onMessage} javaScriptEnabled={true} automaticallyAdjustContentInsets={true} {...this.props} style={[{ width: _w }, this.props.style, { height: _h }]}/>);
     }
 }
 MyWebView.defaultProps = {
