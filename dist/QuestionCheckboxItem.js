@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
         flex: 1,
         lineHeight: 20,
         fontWeight: '500',
-        color: 'slategrey',
+        color: colors.darkGray,
     }
 });
 export default class CheckBoxItem extends React.Component {

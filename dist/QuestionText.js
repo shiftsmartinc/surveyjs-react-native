@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         lineHeight: 20,
         fontWeight: '500',
-        color: 'slategrey',
+        color: colors.darkGray,
     }
 });
 export default class QuestionText extends React.Component {
@@ -33,6 +33,6 @@ export default class QuestionText extends React.Component {
     render() {
         const { rows = 1 } = this.props;
         const keyboardType = this.getKeyboardType();
-        return (<TextInput style={[styles.input, { minHeight: 20 * rows }]} multiline={this.props.multiline} placeholder={this.props.placeholder} value={this.props.value} onChangeText={this.props.onChange} numberOfLines={rows} placeholderTextColor={colors.lightGray} underlineColorAndroid={'transparent'} blurOnSubmit={!this.props.multiline} keyboardType={keyboardType}/>);
+        return (<TextInput style={[styles.input, { minHeight: 30 * rows }]} multiline={this.props.multiline} placeholder={this.props.placeholder} value={this.props.value} onChangeText={this.props.onChange} numberOfLines={rows} placeholderTextColor={colors.lightGray} underlineColorAndroid={'transparent'} blurOnSubmit={!this.props.multiline} keyboardType={keyboardType}/>);
     }
 }

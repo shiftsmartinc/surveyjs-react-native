@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
         marginLeft: 3,
         marginRight: 3,
         fontWeight: '500',
-        color: 'slategrey',
+        color: colors.darkGray,
     },
     rateItemTextChecked: {
         color: colors.white,

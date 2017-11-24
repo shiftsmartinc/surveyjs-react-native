@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 20,
     fontWeight: '500',
-    color: 'slategrey',
+    color: colors.darkGray,
   }
 });
 
@@ -45,7 +45,7 @@ export default class QuestionText extends React.Component<Props> {
     // const keyboardType = keyboardTypeEnums[this.props.inputType || 'text'];
     return (
       <TextInput
-        style={[styles.input, { minHeight: 20 * rows }]}
+        style={[styles.input, { minHeight: 30 * rows }]}
         multiline={this.props.multiline}
         placeholder={this.props.placeholder}
         value={this.props.value}
