@@ -11,7 +11,6 @@ import colors from './colors';
 import TouchableWithFeedback from './TouchableWithFeedback';
 const styles = StyleSheet.create({
     container: {
-        height: 44,
         padding: 10,
         flexDirection: 'row',
         alignItems: 'center',
@@ -19,14 +18,21 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     button: {
-        padding: 5,
+        flex: 0.5,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 44,
         marginLeft: 5,
         backgroundColor: colors.primary,
         borderWidth: 1,
         borderColor: colors.lightGray,
         borderRadius: 3,
     },
+    backButton: {
+        backgroundColor: 'darkgray',
+    },
     buttonText: {
+        fontSize: 16,
         color: colors.white,
     }
 });
@@ -35,17 +41,12 @@ let SurveyNavigation = class SurveyNavigation extends React.Component {
         const { prevPage, nextPage, prevPageIndex, nextPageIndex } = this.props;
         return (<View style={styles.container}>
         {prevPageIndex !== -1 &&
-            <TouchableWithFeedback onPress={prevPage}>
-            <View style={styles.button}>
+            <TouchableWithFeedback style={[styles.button, styles.backButton]} onPress={prevPage}>
               <Text style={styles.buttonText}>Back</Text>
-            </View>
           </TouchableWithFeedback>}
-        <TouchableWithFeedback onPress={nextPage}>
-          <View style={styles.button}>
-            <Text style={styles.buttonText}>{nextPageIndex !== -1 ? 'Next' : 'Complete'}</Text>
-          </View>
+        <TouchableWithFeedback style={styles.button} onPress={nextPage}>
+          <Text style={styles.buttonText}>{nextPageIndex !== -1 ? 'Next' : 'Complete'}</Text>
         </TouchableWithFeedback>
-
       </View>);
     }
 };
