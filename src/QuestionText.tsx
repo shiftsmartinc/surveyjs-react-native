@@ -9,6 +9,8 @@ const styles = StyleSheet.create({
     marginVertical: 2,
     fontSize: 16,
     lineHeight: 20,
+    fontWeight: '500',
+    color: 'slategrey',
   }
 });
 

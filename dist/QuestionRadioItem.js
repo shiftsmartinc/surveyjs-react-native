@@ -33,6 +33,8 @@ const styles = StyleSheet.create({
     label: {
         flex: 1,
         lineHeight: 20,
+        fontWeight: '500',
+        color: 'slategrey',
     }
 });
 export default class QuestionRadioItem extends React.Component {

@@ -4,10 +4,12 @@ import colors from './colors';
 const styles = StyleSheet.create({
     input: {
         textAlignVertical: 'top',
-        paddingVertical: 0,
+        paddingVertical: 8,
         marginVertical: 2,
         fontSize: 16,
         lineHeight: 20,
+        fontWeight: '500',
+        color: 'slategrey',
     }
 });
 export default class QuestionText extends React.Component {

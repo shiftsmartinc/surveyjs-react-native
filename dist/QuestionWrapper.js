@@ -20,11 +20,18 @@ import QuestionHtml from './QuestionHtml';
 import QuestionFile from './QuestionFile';
 import QuestionTextWrapper from './QuestionTextWrapper';
 const styles = StyleSheet.create({
-    container: {},
+    container: {
+        marginTop: 10,
+    },
     title: {
         paddingTop: 10,
         paddingBottom: 5,
         paddingLeft: 10,
+        backgroundColor: colors.white,
+    },
+    titleText: {
+        fontWeight: '700',
+        color: 'slategrey',
     },
     error: {
         paddingLeft: 10,
@@ -111,10 +118,10 @@ let QuestionWrapper = class QuestionWrapper extends React.Component {
             if (!question.visible) {
                 return null;
             }
-            return (<View key={json.name}>
+            return (<View key={json.name} style={styles.container}>
         {showTitle && question.json.type !== 'html' &&
                 <View style={styles.title}>
-            <Text>{number ? `${number}.` : ''} {title || name}</Text>
+            <Text style={styles.titleText}>{number ? `${number}.` : ''} {title || name}</Text>
           </View>}
         {question.error &&
                 <View style={styles.error}>
