@@ -16,12 +16,13 @@ import QuestionTextWrapper from './QuestionTextWrapper';
 
 const styles = StyleSheet.create({
   container: {
-
+    marginTop: 10,
   },
   title: {
     paddingTop: 10,
     paddingBottom: 5,
     paddingLeft: 10,
+    backgroundColor: colors.white,
   },
   error: {
     paddingLeft: 10,
@@ -200,7 +201,7 @@ export default class QuestionWrapper extends React.Component<Props> {
       return null;
     }
     return (
-      <View key={json.name}>
+      <View key={json.name} style={styles.container}>
         {
           showTitle && question.json.type !== 'html' &&
           <View style={styles.title}>
