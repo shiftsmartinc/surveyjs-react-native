@@ -24,6 +24,10 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     backgroundColor: colors.white,
   },
+  titleText: {
+    fontWeight: '700',
+    color: 'slategrey',
+  },
   error: {
     paddingLeft: 10,
     paddingRight: 10,
@@ -205,7 +209,7 @@ export default class QuestionWrapper extends React.Component<Props> {
         {
           showTitle && question.json.type !== 'html' &&
           <View style={styles.title}>
-            <Text>{number ? `${number}.` : ''} {title || name}</Text>
+            <Text style={styles.titleText}>{number ? `${number}.` : ''} {title || name}</Text>
           </View>
         }
         {
