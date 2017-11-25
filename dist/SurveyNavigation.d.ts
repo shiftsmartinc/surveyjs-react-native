@@ -7,5 +7,6 @@ export interface Props {
     prevPageIndex: number;
 }
 export default class SurveyNavigation extends React.Component<Props> {
+    getButton: (direction: any) => any;
     render(): JSX.Element;
 }
