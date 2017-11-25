@@ -1,6 +1,6 @@
 import React from 'react';
-import { inject, observer } from 'mobx-react/native';
 import { StyleSheet, ScrollView, View, Text } from 'react-native';
+import { inject, observer } from 'mobx-react/native';
 import SurveyNavigation from './SurveyNavigation';
 import SurveyPage from './SurveyPage';
 
@@ -19,34 +19,37 @@ const styles = StyleSheet.create({
   }
 });
 
-export interface Injected {
-  isComplete?: boolean;
-}
-
-export interface Props {
-}
-
-@inject(({ model }) => ({
-  isComplete: model.isComplete,
+@inject(store => ({
+  isComplete: store.model.isComplete,
+  currentPageProps: store.model.currentPageProps,
+  setValue: store.model.setValue,
+  nextPage: store.model.nextPage,
+  prevPage: store.model.prevPage,
+  nextPageIndex: store.model.nextPageIndex,
+  prevPageIndex: store.model.prevPageIndex,
 }))
 @observer
-export default class Survey extends React.Component<Injected & Props> {
+export default class Survey extends React.Component<any> {
   render() {
-    const { isComplete } = this.props;
+    const { isComplete, currentPageProps, setValue, nextPage, prevPage, nextPageIndex, prevPageIndex } = this.props;
     return (
       <ScrollView contentContainerStyle={styles.container}>
         {isComplete
-          ? (
-            <View style={styles.results}>
-              <Text>Thank you for completing the survey!</Text>
-            </View>
-          )
-          : (
-            <View style={styles.survey}>
-              <SurveyPage />
-              <SurveyNavigation />
-            </View>
-          )
+          ? <View style={styles.results}>
+            <Text>Thank you for completing the survey!</Text>
+          </View>
+          : <View style={styles.survey}>
+            <SurveyPage
+              {...currentPageProps}
+              onValueChange={setValue}
+            />
+            <SurveyNavigation
+              onNextPage={nextPage}
+              onPrevPage={prevPage}
+              nextPageIndex={nextPageIndex}
+              prevPageIndex={prevPageIndex}
+            />
+          </View>
         }
       </ScrollView>
     );

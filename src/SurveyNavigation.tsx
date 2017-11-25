@@ -1,5 +1,4 @@
 import React from 'react';
-import { inject, observer } from 'mobx-react/native';
 import { StyleSheet, View, Text } from 'react-native';
 import colors from './colors';
 import TouchableWithFeedback from './TouchableWithFeedback';
@@ -32,35 +31,32 @@ const styles = StyleSheet.create({
   }
 });
 
-export interface Injected {
-  prevPage?: any;
-  nextPage?: any;
-  prevPageIndex?: number;
-  nextPageIndex?: number;
-}
-
 export interface Props {
+  onNextPage: () => {};
+  onPrevPage: () => {};
+  nextPageIndex: number;
+  prevPageIndex: number;
 }
 
-@inject(({ model }) => ({
-  prevPage: model.prevPage,
-  nextPage: model.nextPage,
-  prevPageIndex: model.prevPageIndex,
-  nextPageIndex: model.nextPageIndex,
-}))
-@observer
-export default class SurveyNavigation extends React.Component<Injected & Props> {
+export default class SurveyNavigation extends React.Component<Props> {
   render() {
-    const { prevPage, nextPage, prevPageIndex, nextPageIndex } = this.props;
     return (
       <View style={styles.container}>
-        { prevPageIndex !== -1 &&
-          <TouchableWithFeedback style={[styles.button, styles.backButton]} onPress={prevPage}>
+        { this.props.prevPageIndex !== -1 &&
+          <TouchableWithFeedback
+            onPress={this.props.onPrevPage}
+          >
+            <View style={styles.button}>
               <Text style={styles.buttonText}>Back</Text>
+            </View>
           </TouchableWithFeedback>
         }
-        <TouchableWithFeedback style={styles.button} onPress={nextPage}>
-          <Text style={styles.buttonText}>{nextPageIndex !== -1 ? 'Next' : 'Complete'}</Text>
+        <TouchableWithFeedback
+          onPress={this.props.onNextPage}
+        >
+          <View style={styles.button}>
+            <Text style={styles.buttonText}>{this.props.nextPageIndex !== -1 ? 'Next' : 'Complete'}</Text>
+          </View>
         </TouchableWithFeedback>
       </View>
     );
