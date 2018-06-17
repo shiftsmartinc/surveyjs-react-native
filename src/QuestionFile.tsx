@@ -37,7 +37,7 @@ export interface Props {
 
 export default class QuestionFile extends React.Component<Props> {
   openPicker = () => {
-    ImagePicker.showImagePicker({ title: 'Select File', noData: !this.props.storeDataAsText }, (response) => {
+    ImagePicker.showImagePicker({ title: 'Select File', mediaType: 'mixed', noData: !this.props.storeDataAsText }, (response) => {
       if (response.error) {
         Alert.alert( 'Error', response.error, [{ text: 'OK' }]);
         return;
