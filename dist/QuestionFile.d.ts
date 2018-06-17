@@ -2,6 +2,7 @@
 import React from 'react';
 export interface Props {
     showPreview?: boolean;
+    isVideo?: boolean;
     imageHeight?: number;
     imageWidth?: number;
     maxSize?: number;

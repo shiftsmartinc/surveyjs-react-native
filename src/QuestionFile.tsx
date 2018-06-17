@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
 
 export interface Props {
   showPreview?: boolean;
+  isVideo?: boolean;
   imageHeight?: number;
   imageWidth?: number;
   maxSize?: number;
@@ -37,7 +38,11 @@ export interface Props {
 
 export default class QuestionFile extends React.Component<Props> {
   openPicker = () => {
-    ImagePicker.showImagePicker({ title: 'Select File', mediaType: 'mixed', noData: !this.props.storeDataAsText }, (response) => {
+    ImagePicker.showImagePicker({
+      title: 'Select File',
+      noData: !this.props.storeDataAsText,
+      mediaType: this.props.isVideo ? 'video' : 'mixed',
+      }, (response) => {
       if (response.error) {
         Alert.alert( 'Error', response.error, [{ text: 'OK' }]);
         return;
