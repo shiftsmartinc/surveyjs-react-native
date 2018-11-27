@@ -76,7 +76,7 @@ export default class QuestionActionsheet extends React.Component<Props, any>{
     if (index !== options.length) {
       this.props.onChange(options[index].value);
     } else {
-      this.props.onChange(null);
+      this.props.onChange('');
     }
   }
 
