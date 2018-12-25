@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert } from 'react-native';
+import { Alert, SafeAreaView } from 'react-native';
 import Survey from 'surveyjs-react-native';
 import { enableLogging } from 'mobx-logger';
 import json from './survey.json';
@@ -29,13 +29,15 @@ export default class Example extends React.Component {
   }
   render () {
     return (
-      <Survey
-        json={json}
-        apis={{
-          onComplete: this.onComplete,
-          onUpload: this.onUpload,
-        }}
-      />
+      <SafeAreaView style={{ flex: 1 }}>
+        <Survey
+          json={json}
+          apis={{
+            onComplete: this.onComplete,
+            onUpload: this.onUpload,
+          }}
+        />
+      </SafeAreaView>
     );
   }
 }
