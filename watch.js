@@ -3,9 +3,7 @@ const { spawn, exec } = require('child_process');
 const tsc = spawn('tsc', ['-w', '--inlineSourceMap', '--inlineSources', '--pretty']);
 
 tsc.stdout.on('data', (data) => {
-  if (`${data}`.includes('complete')) {
-    exec('cp -r ./dist/* ./example/node_modules/surveyjs-react-native');
-  }
+  exec('cp -rf ./dist/* ./example/node_modules/surveyjs-react-native/dist');
   console.log(`${data}`);
 });
 

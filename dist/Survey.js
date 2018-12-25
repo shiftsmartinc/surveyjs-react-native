@@ -25,16 +25,16 @@ const styles = StyleSheet.create({
 });
 let Survey = class Survey extends React.Component {
     render() {
-        const { isComplete, currentPageProps, setValue, nextPage, prevPage, nextPageIndex, prevPageIndex } = this.props;
+        const { isComplete, currentPageProps, setValue } = this.props;
         return (<ScrollView contentContainerStyle={styles.container}>
         {isComplete
-            ? <View style={styles.results}>
-            <Text>Thank you for completing the survey!</Text>
-          </View>
-            : <View style={styles.survey}>
-            <SurveyPage {...currentPageProps} onValueChange={setValue}/>
-            <SurveyNavigation onNextPage={nextPage} onPrevPage={prevPage} nextPageIndex={nextPageIndex} prevPageIndex={prevPageIndex}/>
-          </View>}
+            ? (<View style={styles.results}>
+              <Text>Thank you for completing the survey!</Text>
+            </View>)
+            : (<View style={styles.survey}>
+              <SurveyNavigation />
+              <SurveyPage {...currentPageProps} onValueChange={setValue}/>
+            </View>)}
       </ScrollView>);
     }
 };
@@ -43,10 +43,6 @@ Survey = __decorate([
         isComplete: store.model.isComplete,
         currentPageProps: store.model.currentPageProps,
         setValue: store.model.setValue,
-        nextPage: store.model.nextPage,
-        prevPage: store.model.prevPage,
-        nextPageIndex: store.model.nextPageIndex,
-        prevPageIndex: store.model.prevPageIndex,
     })),
     observer
 ], Survey);

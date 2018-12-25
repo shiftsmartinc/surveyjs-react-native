@@ -1,9 +1,27 @@
-import React from 'react';
-import { TouchableNativeFeedback, TouchableOpacity, Platform } from 'react-native';
+import React, { ReactNode } from 'react';
+import { Platform, TouchableNativeFeedback, TouchableOpacity, View, StyleProp, ViewStyle, TouchableWithoutFeedbackProps } from 'react-native';
 
-const TouchableWithFeedback = Platform.select({
-  android: props => <TouchableNativeFeedback {...props} />,
-  ios: props => <TouchableOpacity {...props} />,
-});
+interface Props extends TouchableWithoutFeedbackProps {
+  children?: ReactNode;
+  style?: StyleProp<ViewStyle>;
+}
 
-export default TouchableWithFeedback;
+export default class TouchableWithFeedback extends React.PureComponent<Props> {
+  render() {
+    const { children, style, ...rest } = this.props;
+    if (Platform.OS === 'android' && Platform.Version >= 21) {
+      return (
+        <TouchableNativeFeedback {...rest}>
+          <View style={style}>
+            {children}
+          </View>
+        </TouchableNativeFeedback>
+      );
+    }
+    return (
+      <TouchableOpacity {...rest} style={style}>
+        {children}
+      </TouchableOpacity>
+    );
+  }
+}

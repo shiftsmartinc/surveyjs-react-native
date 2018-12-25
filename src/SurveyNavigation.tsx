@@ -1,105 +1,106 @@
 import React from 'react';
-import { StyleSheet, View, Text, Platform } from 'react-native';
-import colors from './colors';
+import { inject, observer } from 'mobx-react/native';
+import { StyleSheet, View, Text } from 'react-native';
 import TouchableWithFeedback from './TouchableWithFeedback';
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    justifyContent: 'flex-end',
     backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 5,
   },
   button: {
-    flex: 0.5,
     justifyContent: 'center',
     alignItems: 'center',
-    height: 44,
-    marginLeft: 5,
-    backgroundColor: colors.primary,
-    borderWidth: 1,
-    borderColor: colors.lightGray,
-    borderRadius: 3,
-  },
-  backButton: {
-    backgroundColor: 'darkgray',
+    borderRadius: 4,
+    width: 33,
+    height: 33,
+    backgroundColor: '#fff',
+    shadowColor: '#8eb8ff',
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+    elevation: 5,
   },
   buttonText: {
     fontSize: 16,
-    color: colors.white,
-  }
+    color: '#337ed9',
+  },
+  placeholder: {
+    width: 33,
+    height: 33,
+  },
+  title: {
+    fontSize: 12,
+    color: '#1a71cf',
+  },
+  bold: {
+    fontWeight: 'bold',
+  },
 });
 
 export interface Props {
-  onNextPage: () => {};
-  onPrevPage: () => {};
-  nextPageIndex: number;
-  prevPageIndex: number;
+  prevPage?: () => {};
+  nextPage?: () => {};
+  prevPageIndex?: number;
+  nextPageIndex?: number;
+  curPageIndex?: number;
+  pages?: Array<any>;
 }
 
+@inject((store: any) => ({
+  prevPage: store.model.prevPage,
+  nextPage: store.model.nextPage,
+  prevPageIndex: store.model.prevPageIndex,
+  curPageIndex: store.model.curPageIndex,
+  pages: store.model.pages,
+}))
+@observer
 export default class SurveyNavigation extends React.Component<Props> {
-
-  getButton = (direction) => {
-
-    let button = null;
-    if (direction === 'back') {
-      if (Platform.OS === 'ios') {
-        button = (
-          <TouchableWithFeedback
-            onPress={this.props.onPrevPage}
-            style={[styles.button, styles.backButton]}
-          >
-            <Text style={styles.buttonText}>Back</Text>
-          </TouchableWithFeedback>
-        );
-      }
-      else {
-        button = (
-          <TouchableWithFeedback
-            onPress={this.props.onPrevPage}
-          >
-            <View style={[styles.button, styles.backButton]}>
-              <Text style={styles.buttonText}>Back</Text>
-            </View>
-          </TouchableWithFeedback>
-        );
-      }
-    }
-    else if (direction === 'next') {
-      if (Platform.OS === 'ios') {
-        button = (
-          <TouchableWithFeedback
-            onPress={this.props.onNextPage}
-            style={styles.button}
-          >
-            <Text style={styles.buttonText}>{this.props.nextPageIndex !== -1 ? 'Next' : 'Complete'}</Text>
-          </TouchableWithFeedback>
-        );
-      }
-      else {
-        button = (
-          <TouchableWithFeedback
-            onPress={this.props.onNextPage}
-          >
-            <View style={styles.button}>
-              <Text style={styles.buttonText}>{this.props.nextPageIndex !== -1 ? 'Next' : 'Complete'}</Text>
-            </View>
-          </TouchableWithFeedback>
-        );
-      }
-    }
-
-    return button;
-  }
   render() {
+    const {
+      prevPage,
+      nextPage,
+      prevPageIndex,
+      curPageIndex,
+      pages,
+    } = this.props;
     return (
       <View style={styles.container}>
-        { this.props.prevPageIndex !== -1 &&
-          this.getButton('back')
+        {prevPageIndex !== -1
+          ? (
+            <TouchableWithFeedback
+              onPress={prevPage}
+              style={styles.button}
+            >
+              <Text style={styles.buttonText}>&lt;</Text>
+            </TouchableWithFeedback>
+          )
+          : <View style={styles.placeholder} />
         }
-
-        {this.getButton('next')}
+        <Text style={styles.title}>
+          <Text style={styles.bold}>{curPageIndex}</Text> of <Text style={styles.bold}>{pages.length}</Text> Answered
+        </Text>
+        <TouchableWithFeedback
+          onPress={nextPage}
+          style={styles.button}
+        >
+          <Text style={styles.buttonText}>&gt;</Text>
+        </TouchableWithFeedback>
       </View>
     );
   }
