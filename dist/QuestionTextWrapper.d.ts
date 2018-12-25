@@ -1,4 +1,3 @@
-/// <reference types="react" />
 import React from 'react';
 export default class QuestionTextWrapper extends React.Component<any, any> {
     renderDate(): JSX.Element;

@@ -31,7 +31,7 @@ export declare class SurveyTriggerVisible extends SurveyTrigger {
     getType(): string;
     protected onSuccess(): void;
     protected onFailure(): void;
-    private onTrigger(func);
+    private onTrigger;
     protected onItemSuccess(item: any): void;
     protected onItemFailure(item: any): void;
 }

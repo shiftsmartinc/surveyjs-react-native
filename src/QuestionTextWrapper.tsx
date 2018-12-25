@@ -8,7 +8,7 @@ export default class QuestionTextWrapper extends React.Component<any, any> {
   renderDate() {
     return (
       <QuestionTextDatetime
-        {...this.props}
+        {...this.props as any}
       />
     );
   }
@@ -22,7 +22,7 @@ export default class QuestionTextWrapper extends React.Component<any, any> {
   renderText() {
     return (
       <QuestionText
-        {...this.props}
+        {...this.props as any}
       />
     );
   }

@@ -1,4 +1,3 @@
-/// <reference types="react" />
 import React from 'react';
 export interface Props {
     text?: string;
@@ -6,7 +5,7 @@ export interface Props {
     defaultChecked?: boolean;
     pristine?: boolean;
     checked: boolean;
-    onChange?: (boolean, string) => void;
+    onChange?: (boolean: any, string: any) => void;
 }
 export default class CheckBoxItem extends React.Component<Props> {
     handlePress: () => void;

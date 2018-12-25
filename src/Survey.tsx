@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
   }
 });
 
-@inject(store => ({
+@inject((store: any) => ({
   isComplete: store.model.isComplete,
   currentPageProps: store.model.currentPageProps,
   setValue: store.model.setValue,

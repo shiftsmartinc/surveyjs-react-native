@@ -39,7 +39,7 @@ let Survey = class Survey extends React.Component {
     }
 };
 Survey = __decorate([
-    inject(store => ({
+    inject((store) => ({
         isComplete: store.model.isComplete,
         currentPageProps: store.model.currentPageProps,
         setValue: store.model.setValue,

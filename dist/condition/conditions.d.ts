@@ -5,10 +5,10 @@ export declare class Operand {
     constructor(origionalValue: any);
     getValue(processValue: ProcessValue): any;
     operandToString(): any;
-    private removeQuotes(val);
-    private getValueName(val);
-    private isBoolean(value);
-    private isNumeric(value);
+    private removeQuotes;
+    private getValueName;
+    private isBoolean;
+    private isNumeric;
 }
 export declare class FunctionOperand extends Operand {
     origionalValue: any;
@@ -44,7 +44,7 @@ export declare class ConditionRunner {
     constructor(expression: string);
     expression: string;
     run(values: HashTable<any>): boolean;
-    private runNode(node);
-    private runNodeCondition(value);
-    private runCondition(condition);
+    private runNode;
+    private runNodeCondition;
+    private runCondition;
 }

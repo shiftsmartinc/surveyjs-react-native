@@ -1,4 +1,3 @@
-/// <reference types="react" />
 import React from 'react';
 export interface Props {
     choices: any;
@@ -12,7 +11,7 @@ export interface Props {
     confirmDelete?: boolean;
     confirmDeleteText?: string;
     templateElements: Array<any>;
-    buildComponent: (json) => {};
+    buildComponent: (json: any) => {};
 }
 export default class QuestionPanelDynamic extends React.Component<Props, any> {
     constructor(props: any);

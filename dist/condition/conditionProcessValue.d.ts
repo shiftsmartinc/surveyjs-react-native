@@ -5,6 +5,6 @@ export declare class ProcessValue {
     getFirstName(text: string): string;
     hasValue(text: string, values?: HashTable<any>): boolean;
     getValue(text: string, values?: HashTable<any>): any;
-    private getValueCore(text, values);
-    private getIntValue(str);
+    private getValueCore;
+    private getIntValue;
 }
