@@ -4,21 +4,21 @@
   "private": true,
   "main": "dist/index.js",
   "scripts": {
-    "watch": "tsc -w --inlineSourceMap --inlineSources --pretty",
-    "build": "tsc -d"
+    "watch": "node watch.js",
+    "build": "tsc"
   },
   "devDependencies": {
-    "@types/react": "16.0.0",
-    "@types/react-native": "0.49.3",
-    "mobx": "3.3.1",
-    "mobx-react": "4.3.3",
-    "moment": "2.19.1",
-    "react": "16.0.0-beta.5",
-    "react-native": "0.49.3",
-    "react-native-actionsheet": "2.3.0",
-    "react-native-image-picker": "0.26.7",
-    "react-native-modal-datetime-picker": "4.11.0",
-    "typescript": "2.5.3"
+    "@types/react": "16.7.18",
+    "@types/react-native": "0.57.23",
+    "mobx": "4.8.0",
+    "mobx-react": "5.4.3",
+    "moment": "2.23.0",
+    "react": "16.6.3",
+    "react-native": "0.57.8",
+    "react-native-actionsheet": "2.4.2",
+    "react-native-image-picker": "0.27.2",
+    "react-native-modal-datetime-picker": "6.0.0",
+    "typescript": "3.2.2"
   },
   "peerDependencies": {
     "mobx": "*",
