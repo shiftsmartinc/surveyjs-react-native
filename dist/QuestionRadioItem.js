@@ -1,41 +1,51 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import colors from './colors';
 import TouchableWithFeedback from './TouchableWithFeedback';
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
-        marginTop: 1,
-        marginBottom: 1,
-        paddingTop: 5,
-        paddingBottom: 5,
-        borderBottomColor: colors.extraLightGray,
-        borderBottomWidth: 1,
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 16,
+        marginHorizontal: 24,
+        paddingHorizontal: 10,
+        height: 54,
+        backgroundColor: '#fff',
+        shadowColor: '#e3e3e9',
+        shadowOffset: {
+            width: 0,
+            height: 3,
+        },
+        shadowOpacity: 1,
+        shadowRadius: 4,
+        elevation: 4,
+    },
+    containerChecked: {
+        backgroundColor: '#1a71cf',
+        shadowOpacity: 0.5,
+        shadowColor: '#8eb8ff',
+    },
+    label: {
+        fontSize: 16,
+        color: '#113260',
+    },
+    labelChecked: {
+        color: '#fff',
     },
     radio: {
-        width: 20,
-        height: 20,
         alignItems: 'center',
         justifyContent: 'center',
         marginRight: 5,
         borderRadius: 10,
         borderWidth: 1,
-        borderColor: colors.gray,
+        borderColor: '#1a71cf',
         overflow: 'hidden',
+        width: 20,
+        height: 20,
     },
     radioChecked: {
-        borderColor: colors.primary,
-        backgroundColor: colors.primary,
+        borderColor: '#fff',
     },
-    radioText: {
-        color: colors.white,
-    },
-    label: {
-        flex: 1,
-        lineHeight: 20,
-        fontWeight: '500',
-        color: colors.darkGray,
-    }
 });
 export default class QuestionRadioItem extends React.Component {
     constructor() {
@@ -48,17 +58,10 @@ export default class QuestionRadioItem extends React.Component {
         };
     }
     render() {
-        const { text = null, value, checked, } = this.props;
-        const radioStyle = [
-            styles.radio,
-            checked ? styles.radioChecked : null,
-        ];
-        return (<TouchableWithFeedback onPress={this.handlePress}>
-        <View style={styles.container}>
-          <View style={radioStyle}>
-            <Text style={styles.radioText}>{checked ? '✓' : ' '}</Text>
-          </View>
-          <Text style={styles.label}>{text || value}</Text>
+        const { text = null, value, checked } = this.props;
+        return (<TouchableWithFeedback style={[styles.container, checked && styles.containerChecked]} onPress={this.handlePress}>
+        <Text style={[styles.label, checked && styles.labelChecked]}>{text || value}</Text>
+        <View style={[styles.radio, checked && styles.radioChecked]}>
         </View>
       </TouchableWithFeedback>);
     }
