@@ -42,10 +42,7 @@ const styles = StyleSheet.create({
         color: colors.white,
     },
     questionContent: {
-        paddingLeft: 10,
-        paddingRight: 10,
-        paddingTop: 5,
-        paddingBottom: 5,
+        paddingVertical: 16,
     },
 });
 const commonBuilderCreator = Component => question => <Component {...question.json} value={question.value} comment={question.comment} onChange={question.setValue}/>;

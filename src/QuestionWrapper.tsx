@@ -37,10 +37,7 @@ const styles = StyleSheet.create({
     color: colors.white,
   },
   questionContent: {
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingTop: 5,
-    paddingBottom: 5,
+    paddingVertical: 16,
   },
 });
 

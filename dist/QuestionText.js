@@ -1,15 +1,21 @@
 import React from 'react';
 import { StyleSheet, TextInput } from 'react-native';
-import colors from './colors';
 const styles = StyleSheet.create({
     input: {
-        textAlignVertical: 'top',
-        paddingVertical: 8,
-        marginVertical: 2,
-        fontSize: 16,
-        lineHeight: 20,
-        fontWeight: '500',
-        color: colors.darkGray,
+        paddingVertical: 0,
+        paddingHorizontal: 16,
+        fontSize: 15,
+        height: 50,
+        color: '#4471a0',
+        backgroundColor: '#fff',
+        shadowColor: '#e3e3e9',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 1,
+        shadowRadius: 10,
+        elevation: 10,
     }
 });
 export default class QuestionText extends React.Component {
@@ -33,6 +39,6 @@ export default class QuestionText extends React.Component {
     render() {
         const { rows = 1 } = this.props;
         const keyboardType = this.getKeyboardType();
-        return (<TextInput style={[styles.input, { minHeight: 30 * rows }]} multiline={this.props.multiline} placeholder={this.props.placeholder} value={this.props.value} onChangeText={this.props.onChange} numberOfLines={rows} placeholderTextColor={colors.lightGray} underlineColorAndroid={'transparent'} blurOnSubmit={!this.props.multiline} keyboardType={keyboardType}/>);
+        return (<TextInput style={[styles.input, { minHeight: 50 * rows }]} multiline={this.props.multiline} placeholder={this.props.placeholder} value={this.props.value} onChangeText={this.props.onChange} numberOfLines={rows} placeholderTextColor="#4471a0" underlineColorAndroid={'transparent'} blurOnSubmit={!this.props.multiline} keyboardType={keyboardType}/>);
     }
 }
