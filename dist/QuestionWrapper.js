@@ -27,7 +27,6 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         paddingBottom: 5,
         paddingLeft: 10,
-        backgroundColor: colors.white,
     },
     titleText: {
         fontSize: 16,
@@ -49,7 +48,6 @@ const styles = StyleSheet.create({
         paddingRight: 10,
         paddingTop: 5,
         paddingBottom: 5,
-        backgroundColor: colors.white,
     },
 });
 const commonBuilderCreator = Component => question => <Component {...question.json} value={question.value} comment={question.comment} onChange={question.setValue}/>;
@@ -133,7 +131,6 @@ let QuestionWrapper = class QuestionWrapper extends React.Component {
         </View>
         {question.json.hasComment &&
                 <QuestionText value={question.comment} onChange={question.setComment}/>}
-
       </View>);
         };
     }

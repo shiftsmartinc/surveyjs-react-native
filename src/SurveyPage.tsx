@@ -1,50 +1,28 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import colors from './colors';
+import { StyleSheet, ScrollView } from 'react-native';
+import { inject, observer } from 'mobx-react/native';
 import QuestionWrapper from './QuestionWrapper';
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 10,
+    marginTop: 28,
     marginBottom: 10,
-  },
-  title: {
-    paddingTop: 10,
-    paddingBottom: 5,
-    paddingLeft: 100,
-  },
-  error: {
-    paddingLeft: 100,
-    paddingRight: 100,
-    paddingTop: 3,
-    paddingBottom: 3,
-    backgroundColor: colors.red,
-  },
-  errorText: {
-    color: colors.white,
-  },
-  questionContent: {
-    paddingLeft: 100,
-    paddingRight: 100,
-    paddingTop: 5,
-    paddingBottom: 5,
-    backgroundColor: colors.white,
   },
 });
 
-export interface Props {
-  questions: any;
-  // onValueChange: (name, value, comment?) => {};
-}
-
-export default class SurveyPage extends React.Component<Props> {
+@inject((store: any) => ({
+  currentPageProps: store.model.currentPageProps,
+}))
+@observer
+export default class SurveyPage extends React.Component<any> {
   render() {
+    const { currentPageProps } = this.props;
     return (
-      <View style={styles.container}>
-        {this.props.questions.map(question =>
+      <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
+        {currentPageProps.questions.map(question =>
           <QuestionWrapper key={question.json.name} question={question} />
         )}
-      </View>
+      </ScrollView>
     );
   }
 }

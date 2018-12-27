@@ -22,7 +22,6 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 5,
     paddingLeft: 10,
-    backgroundColor: colors.white,
   },
   titleText: {
     fontSize: 16,
@@ -44,7 +43,6 @@ const styles = StyleSheet.create({
     paddingRight: 10,
     paddingTop: 5,
     paddingBottom: 5,
-    backgroundColor: colors.white,
   },
 });
 
@@ -118,7 +116,6 @@ const ratingBuilder = question => {
   } = question;
 
   const newRateValues = rateValues || generateRateValues(rateMin, rateMax, rateStep);
-
   return (
     <QuestionRate
       {...question.json}
@@ -142,13 +139,8 @@ const commentBuilder = question => (
 );
 
 
-export interface Props {
-  question: any;
-  // onValueChange: (name, value, comment?) => {};
-}
-
 @observer
-export default class QuestionWrapper extends React.Component<Props> {
+export default class QuestionWrapper extends React.Component<any> {
   panelBuilder = question => (
     <View>
       {question.json.elements.map((json) => {
@@ -166,7 +158,6 @@ export default class QuestionWrapper extends React.Component<Props> {
       buildComponent={this.renderQuestion}
     />
   )
-
   multipleTextBuilder = question => (
     <QuestionMultipleText
       {...question.json}
@@ -174,7 +165,6 @@ export default class QuestionWrapper extends React.Component<Props> {
       onChange={question.setValue}
     />
   )
-
   private typeBuilderMap = {
     text: commonBuilderCreator(QuestionTextWrapper),
     checkbox: choiceBuilderCreator(QuestionCheckbox),
@@ -189,7 +179,6 @@ export default class QuestionWrapper extends React.Component<Props> {
     html: commonBuilderCreator(QuestionHtml),
     file: commonBuilderCreator(QuestionFile),
   };
-
   renderQuestion = (question) => {
     const json = question.json || question;
     const build = this.typeBuilderMap[json.type];
@@ -207,14 +196,12 @@ export default class QuestionWrapper extends React.Component<Props> {
     }
     return (
       <View key={json.name} style={styles.container}>
-        {
-          showTitle && question.json.type !== 'html' &&
+        {showTitle && question.json.type !== 'html' &&
           <View style={styles.title}>
             <Text style={styles.titleText}>{number ? `${number}.` : ''} {title || name}</Text>
           </View>
         }
-        {
-          question.error &&
+        {question.error &&
           <View style={styles.error}>
             <Text style={styles.errorText}>{question.error}</Text>
           </View>
@@ -222,20 +209,16 @@ export default class QuestionWrapper extends React.Component<Props> {
         <View style={styles.questionContent}>
           {content}
         </View>
-        {
-          question.json.hasComment &&
+        {question.json.hasComment &&
           <QuestionText
             value={question.comment}
             onChange={question.setComment}
           />
         }
-
       </View>
     );
   }
-
   render() {
     return this.renderQuestion(this.props.question);
   }
-
 }

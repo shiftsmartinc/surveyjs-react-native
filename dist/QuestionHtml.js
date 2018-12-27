@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions, WebView, Linking } from 'react-native';
+import { WebView, Linking } from 'react-native';
 const injectedStyles = `
   <style>
     body {
@@ -60,9 +60,8 @@ class MyWebView extends React.Component {
         return false;
     }
     render() {
-        const _w = this.props.width || Dimensions.get('window').width;
-        const _h = this.props.autoHeight ? this.state.webViewHeight : this.props.defaultHeight;
-        return (<WebView injectedJavaScript={injectedScript} scrollEnabled={this.props.scrollEnabled || false} onNavigationStateChange={this._onNavigationStateChange} onMessage={this._onMessage} javaScriptEnabled={true} automaticallyAdjustContentInsets={true} {...this.props} style={[{ width: _w }, this.props.style, { height: _h }]}/>);
+        const height = this.props.autoHeight ? this.state.webViewHeight : this.props.defaultHeight;
+        return (<WebView injectedJavaScript={injectedScript} scrollEnabled={this.props.scrollEnabled || false} onNavigationStateChange={this._onNavigationStateChange} onMessage={this._onMessage} javaScriptEnabled={true} automaticallyAdjustContentInsets={true} {...this.props} style={[this.props.style, { height }]}/>);
     }
 }
 MyWebView.defaultProps = {

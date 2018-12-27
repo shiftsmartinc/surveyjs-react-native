@@ -1,39 +1,31 @@
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import colors from './colors';
+import { StyleSheet, ScrollView } from 'react-native';
+import { inject, observer } from 'mobx-react/native';
 import QuestionWrapper from './QuestionWrapper';
 const styles = StyleSheet.create({
     container: {
-        marginTop: 10,
+        marginTop: 28,
         marginBottom: 10,
     },
-    title: {
-        paddingTop: 10,
-        paddingBottom: 5,
-        paddingLeft: 100,
-    },
-    error: {
-        paddingLeft: 100,
-        paddingRight: 100,
-        paddingTop: 3,
-        paddingBottom: 3,
-        backgroundColor: colors.red,
-    },
-    errorText: {
-        color: colors.white,
-    },
-    questionContent: {
-        paddingLeft: 100,
-        paddingRight: 100,
-        paddingTop: 5,
-        paddingBottom: 5,
-        backgroundColor: colors.white,
-    },
 });
-export default class SurveyPage extends React.Component {
+let SurveyPage = class SurveyPage extends React.Component {
     render() {
-        return (<View style={styles.container}>
-        {this.props.questions.map(question => <QuestionWrapper key={question.json.name} question={question}/>)}
-      </View>);
+        const { currentPageProps } = this.props;
+        return (<ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
+        {currentPageProps.questions.map(question => <QuestionWrapper key={question.json.name} question={question}/>)}
+      </ScrollView>);
     }
-}
+};
+SurveyPage = __decorate([
+    inject((store) => ({
+        currentPageProps: store.model.currentPageProps,
+    })),
+    observer
+], SurveyPage);
+export default SurveyPage;

@@ -5,44 +5,65 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 import React from 'react';
-import { StyleSheet, ScrollView, View, Text } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { inject, observer } from 'mobx-react/native';
 import SurveyNavigation from './SurveyNavigation';
 import SurveyPage from './SurveyPage';
+import TouchableWithFeedback from './TouchableWithFeedback';
 const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
-        backgroundColor: '#f8f8f8',
-    },
-    survey: {
-        flexGrow: 1,
+        backgroundColor: '#fafafa',
     },
     results: {
         flexGrow: 1,
         alignItems: 'center',
         justifyContent: 'center',
-    }
+    },
+    button: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 5,
+        marginHorizontal: 24,
+        height: 50,
+        backgroundColor: '#1a71cf',
+        shadowColor: '#8eb8ff',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.5,
+        shadowRadius: 5,
+        elevation: 5,
+    },
+    buttonText: {
+        fontSize: 15,
+        fontWeight: 'bold',
+        color: '#fff',
+    },
 });
 let Survey = class Survey extends React.Component {
     render() {
-        const { isComplete, currentPageProps, setValue } = this.props;
-        return (<ScrollView contentContainerStyle={styles.container}>
-        {isComplete
-            ? (<View style={styles.results}>
-              <Text>Thank you for completing the survey!</Text>
-            </View>)
-            : (<View style={styles.survey}>
-              <SurveyNavigation />
-              <SurveyPage {...currentPageProps} onValueChange={setValue}/>
-            </View>)}
-      </ScrollView>);
+        const { isComplete, nextPageIndex, nextPage } = this.props;
+        if (isComplete) {
+            return (<View style={styles.results}>
+          <Text>Thank you for completing the survey!</Text>
+        </View>);
+        }
+        return (<View style={styles.container}>
+        <SurveyNavigation />
+        <SurveyPage />
+        <TouchableWithFeedback style={styles.button} onPress={nextPage}>
+          <Text style={styles.buttonText}>{nextPageIndex !== -1 ? 'Next' : 'Complete'}</Text>
+        </TouchableWithFeedback>
+      </View>);
     }
 };
 Survey = __decorate([
     inject((store) => ({
         isComplete: store.model.isComplete,
-        currentPageProps: store.model.currentPageProps,
-        setValue: store.model.setValue,
+        nextPageIndex: store.model.nextPageIndex,
+        nextPage: store.model.nextPage,
     })),
     observer
 ], Survey);
