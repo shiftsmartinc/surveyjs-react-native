@@ -20,6 +20,7 @@
     "surveyjs-react-native": "git+https://bitbucket.org/shiftsmart/surveyjs-react-native.git"
   },
   "devDependencies": {
-    "metro-react-native-babel-preset": "0.51.0"
+    "metro-react-native-babel-preset": "0.51.0",
+    "react-devtools": "3.4.3"
   }
 }
