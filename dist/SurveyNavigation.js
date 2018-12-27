@@ -25,6 +25,10 @@ const styles = StyleSheet.create({
         shadowRadius: 5,
         elevation: 5,
     },
+    progressBar: {
+        height: 3,
+        backgroundColor: '#1a71cf',
+    },
     button: {
         justifyContent: 'center',
         alignItems: 'center',
@@ -60,19 +64,22 @@ const styles = StyleSheet.create({
 let SurveyNavigation = class SurveyNavigation extends React.Component {
     render() {
         const { prevPage, nextPage, prevPageIndex, curPageIndex, pages, } = this.props;
-        return (<View style={styles.container}>
+        return [
+            <View key="navigation" style={styles.container}>
         {prevPageIndex !== -1
-            ? (<TouchableWithFeedback onPress={prevPage} style={styles.button}>
+                ? (<TouchableWithFeedback onPress={prevPage} style={styles.button}>
               <Text style={styles.buttonText}>&lt;</Text>
             </TouchableWithFeedback>)
-            : <View style={styles.placeholder}/>}
+                : <View style={styles.placeholder}/>}
         <Text style={styles.title}>
           <Text style={styles.bold}>{curPageIndex}</Text> of <Text style={styles.bold}>{pages.length}</Text> Answered
-        </Text>
+      </Text>
         <TouchableWithFeedback onPress={nextPage} style={styles.button}>
           <Text style={styles.buttonText}>&gt;</Text>
         </TouchableWithFeedback>
-      </View>);
+      </View>,
+            <View key="progress-bar" style={[styles.progressBar, { width: `${curPageIndex / pages.length * 100}%` }]}/>,
+        ];
     }
 };
 SurveyNavigation = __decorate([
