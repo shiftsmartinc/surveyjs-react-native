@@ -24,14 +24,12 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
     title: {
-        paddingTop: 10,
-        paddingBottom: 5,
-        paddingLeft: 10,
+        alignItems: 'center',
     },
     titleText: {
         fontSize: 16,
-        fontWeight: '600',
-        color: colors.darkGray,
+        fontWeight: 'bold',
+        color: '#113260',
     },
     error: {
         paddingLeft: 10,
