@@ -28,14 +28,16 @@ const styles = StyleSheet.create({
     color: '#113260',
   },
   error: {
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingTop: 3,
-    paddingBottom: 3,
-    backgroundColor: colors.red,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 16,
+    paddingHorizontal: 32,
+    height: 37,
+    backgroundColor: '#ff7171',
   },
   errorText: {
-    color: colors.white,
+    fontSize: 13,
+    color: '#fff',
   },
   questionContent: {
     paddingVertical: 16,
