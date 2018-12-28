@@ -1,42 +1,62 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import colors from './colors';
 import TouchableWithFeedback from './TouchableWithFeedback';
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
-        marginTop: 1,
-        marginBottom: 1,
-        paddingTop: 5,
-        paddingBottom: 5,
-        borderBottomColor: colors.extraLightGray,
-        borderBottomWidth: 1,
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 16,
+        marginHorizontal: 24,
+        paddingHorizontal: 10,
+        height: 54,
+        backgroundColor: '#fff',
+        shadowColor: '#e3e3e9',
+        shadowOffset: {
+            width: 0,
+            height: 3,
+        },
+        shadowOpacity: 1,
+        shadowRadius: 4,
+        elevation: 4,
     },
-    checkbox: {
-        width: 20,
-        height: 20,
-        marginRight: 5,
-        borderRadius: 2,
-        borderWidth: 1,
-        borderColor: colors.gray,
-    },
-    checkboxChecked: {
-        borderColor: colors.primary,
-        backgroundColor: colors.primary,
-    },
-    checkboxText: {
-        color: colors.white,
-        textAlign: 'center',
-    },
-    checkboxTextPristine: {
-        color: colors.black,
+    containerChecked: {
+        backgroundColor: '#1a71cf',
+        shadowOpacity: 0.5,
+        shadowColor: '#8eb8ff',
     },
     label: {
-        flex: 1,
-        lineHeight: 20,
-        fontWeight: '500',
-        color: colors.darkGray,
-    }
+        fontSize: 16,
+        color: '#113260',
+    },
+    labelChecked: {
+        color: '#fff',
+    },
+    checkbox: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginRight: 5,
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: '#1a71cf',
+        overflow: 'hidden',
+        width: 20,
+        height: 20,
+    },
+    checkboxChecked: {
+        borderColor: '#fff',
+    },
+    pristine: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginRight: 5,
+        borderRadius: 10,
+        borderWidth: 1,
+        borderColor: '#000',
+        overflow: 'hidden',
+        width: 20,
+        height: 20,
+    },
 });
 export default class CheckBoxItem extends React.Component {
     constructor() {
@@ -49,23 +69,15 @@ export default class CheckBoxItem extends React.Component {
         };
     }
     render() {
-        const { text = null, value, checked, pristine = false, } = this.props;
-        const checkboxStyles = [
-            styles.checkbox,
-            checked ? styles.checkboxChecked : null,
-        ];
-        const checkboxTextStyles = [
-            styles.checkboxText,
-            pristine ? styles.checkboxTextPristine : null,
-        ];
+        const { text = null, value, checked, pristine = false } = this.props;
         return (<TouchableWithFeedback onPress={this.handlePress}>
-        <View style={styles.container}>
-          <View style={checkboxStyles}>
-            <Text style={checkboxTextStyles}>
-              {pristine ? '-' : checked ? '✓' : ' '}
-            </Text>
-          </View>
-          <Text style={styles.label}>{text || value}</Text>
+        <View style={[styles.container, checked && styles.containerChecked]}>
+          <Text style={[styles.label, checked && styles.labelChecked]}>{text || value}</Text>
+          {pristine
+            ? (<View style={styles.pristine}>
+              </View>)
+            : (<View style={[styles.checkbox, checked && styles.checkboxChecked]}>
+              </View>)}
         </View>
       </TouchableWithFeedback>);
     }
