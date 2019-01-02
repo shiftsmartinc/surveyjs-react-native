@@ -10,14 +10,18 @@ import { inject, observer } from 'mobx-react/native';
 import QuestionWrapper from './QuestionWrapper';
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
+    },
+    content: {
+        flexGrow: 1,
         marginTop: 28,
-        marginBottom: 10,
+        paddingBottom: 28,
     },
 });
 let SurveyPage = class SurveyPage extends React.Component {
     render() {
         const { currentPageProps } = this.props;
-        return (<ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
+        return (<ScrollView style={styles.container} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         {currentPageProps.questions.map(question => <QuestionWrapper key={question.json.name} question={question}/>)}
       </ScrollView>);
     }

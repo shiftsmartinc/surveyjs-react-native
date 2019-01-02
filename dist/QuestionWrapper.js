@@ -7,7 +7,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { observer } from 'mobx-react/native';
-import colors from './colors';
 import QuestionText from './QuestionText';
 import QuestionCheckbox from './QuestionCheckbox';
 import QuestionRadiogroup from './QuestionRadiogroup';
@@ -33,14 +32,16 @@ const styles = StyleSheet.create({
         color: '#113260',
     },
     error: {
-        paddingLeft: 10,
-        paddingRight: 10,
-        paddingTop: 3,
-        paddingBottom: 3,
-        backgroundColor: colors.red,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 16,
+        paddingHorizontal: 32,
+        height: 37,
+        backgroundColor: '#ff7171',
     },
     errorText: {
-        color: colors.white,
+        fontSize: 13,
+        color: '#fff',
     },
     questionContent: {
         paddingVertical: 16,

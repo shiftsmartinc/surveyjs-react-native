@@ -8,8 +8,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: 16,
         marginHorizontal: 24,
-        paddingHorizontal: 10,
-        height: 54,
         backgroundColor: '#fff',
         shadowColor: '#e3e3e9',
         shadowOffset: {
@@ -26,6 +24,10 @@ const styles = StyleSheet.create({
         shadowColor: '#8eb8ff',
     },
     label: {
+        flex: 1,
+        paddingVertical: 14,
+        paddingHorizontal: 10,
+        lineHeight: 26,
         fontSize: 16,
         color: '#113260',
     },
@@ -35,7 +37,7 @@ const styles = StyleSheet.create({
     checkbox: {
         alignItems: 'center',
         justifyContent: 'center',
-        marginRight: 5,
+        marginRight: 10,
         borderRadius: 10,
         borderWidth: 1,
         borderColor: '#1a71cf',
@@ -49,7 +51,7 @@ const styles = StyleSheet.create({
     pristine: {
         alignItems: 'center',
         justifyContent: 'center',
-        marginRight: 5,
+        marginRight: 10,
         borderRadius: 10,
         borderWidth: 1,
         borderColor: '#000',
@@ -70,15 +72,13 @@ export default class CheckBoxItem extends React.Component {
     }
     render() {
         const { text = null, value, checked, pristine = false } = this.props;
-        return (<TouchableWithFeedback onPress={this.handlePress}>
-        <View style={[styles.container, checked && styles.containerChecked]}>
-          <Text style={[styles.label, checked && styles.labelChecked]}>{text || value}</Text>
-          {pristine
+        return (<TouchableWithFeedback style={[styles.container, checked && styles.containerChecked]} onPress={this.handlePress}>
+        <Text style={[styles.label, checked && styles.labelChecked]}>{text || value}</Text>
+        {pristine
             ? (<View style={styles.pristine}>
-              </View>)
+            </View>)
             : (<View style={[styles.checkbox, checked && styles.checkboxChecked]}>
-              </View>)}
-        </View>
+            </View>)}
       </TouchableWithFeedback>);
     }
 }
