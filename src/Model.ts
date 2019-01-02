@@ -86,7 +86,7 @@ class Question {
   }
 
   @action.bound setValue(value, comment = null) {
-    this.value = value.uri || value;
+    this.value = value && value.uri || value;
     if (comment != null) {
       this.comment = comment;
     }
@@ -103,7 +103,7 @@ class Question {
         .filter(v => v.name === this.json.name && !v.isOnNextPage)
         .forEach(trigger => trigger.check(value));
 
-      if (this.json.type === 'file' && this.collection.apis.onUpload) {
+      if (this.json.type === 'file' && this.collection.apis.onUpload && value !== null) {
         this.collection.apis.onUpload(value, this);
       }
     }
