@@ -5,7 +5,6 @@ import TouchableWithFeedback from './TouchableWithFeedback';
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 16,
     marginHorizontal: 24,
@@ -26,6 +25,24 @@ const styles = StyleSheet.create({
     shadowColor: '#8eb8ff',
   },
   label: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#1a71cf',
+    marginRight: 8,
+    width: 29,
+    height: 29,
+    backgroundColor: '#fff',
+  },
+  labelChecked: {
+    borderColor: '#fff',
+  },
+  labelText: {
+    fontSize: 17,
+    fontWeight: 'bold',
+    color: '#1a71cf',
+  },
+  text: {
     flex: 1,
     paddingVertical: 14,
     paddingHorizontal: 10,
@@ -33,7 +50,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#113260',
   },
-  labelChecked: {
+  textChecked: {
     color: '#fff',
   },
   radio: {
@@ -54,6 +71,7 @@ const styles = StyleSheet.create({
 
 export interface Props {
   text?: string;
+  label?: string;
   value: string;
   defaultChecked?: boolean;
   checked: boolean;
@@ -69,10 +87,15 @@ export default class QuestionRadioItem extends React.Component<Props> {
   }
 
   render() {
-    const { text = null, value, checked } = this.props;
+    const { label, text, value, checked } = this.props;
     return (
       <TouchableWithFeedback style={[styles.container, checked && styles.containerChecked]} onPress={this.handlePress}>
-        <Text style={[styles.label, checked && styles.labelChecked]}>{text || value}</Text>
+        {label &&
+          <View style={[styles.label, checked && styles.labelChecked]}>
+            <Text style={styles.labelText}>{label}</Text>
+          </View>
+        }
+        <Text style={[styles.text, checked && styles.textChecked]}>{text || value}</Text>
         <View style={[styles.radio, checked && styles.radioChecked]}>
         </View>
       </TouchableWithFeedback>

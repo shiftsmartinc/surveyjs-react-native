@@ -368,6 +368,46 @@
               "text": "Sales associate was unsure/did not know any of the above features"
             }
           ]
+        },
+        {
+          "type": "checkbox",
+          "name": "question7c",
+          "title": "What did the retail sales associate mention as advantages of Amazon Echo compared to the Google Home? [Select all that apply]",
+          "hasOther": true,
+          "choices": [
+            {
+              "value": "1",
+              "text": "Breadth of music streaming options"
+            },
+            {
+              "value": "2",
+              "text": "Breadth of smart home devices it can control (i.e., streaming devices, smart light bulbs etc.)"
+            },
+            {
+              "value": "3",
+              "text": "Diversity of daily tasks it can help with (i.e., setting alarms, making to-do lists, etc.)"
+            },
+            {
+              "value": "4",
+              "text": "Power of search/answers function"
+            },
+            {
+              "value": "5",
+              "text": "Speaker sound quality"
+            },
+            {
+              "value": "6",
+              "text": "Customizable appearance"
+            },
+            {
+              "value": "7",
+              "text": "Price"
+            },
+            {
+              "value": "8",
+              "text": "Sales associate was unsure/did not know any of the above features"
+            }
+          ]
         }
       ],
       "title": "You will now ask the associate about Google Home advantages compared to Amazon Echo and Amazon Echo advantages compared to Google Home. "

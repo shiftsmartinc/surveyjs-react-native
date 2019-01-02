@@ -1,6 +1,6 @@
 import React from 'react';
 export interface Props {
-    choices: any;
+    choices: Array<any>;
     hasOther?: boolean;
     value: Array<string>;
     comment?: string;

@@ -4,6 +4,7 @@ import RadioItem from './QuestionRadioItem';
 import QuestionText from './QuestionText';
 const OTHER_VALUE = 'other';
 const DEFAULT_OTHER_TEXT = 'other (describe)';
+const ALPHABET = [...Array(26)].map((_e, i) => (i + 10).toString(36).toUpperCase());
 export default class QuestionRadiogroup extends React.Component {
     constructor() {
         super(...arguments);
@@ -16,8 +17,9 @@ export default class QuestionRadiogroup extends React.Component {
     }
     render() {
         const { otherText = DEFAULT_OTHER_TEXT, choices = [], } = this.props;
+        const generatedChoices = choices.length > 26 ? choices : choices.map((c, i) => ({ ...c, label: ALPHABET[i] }));
         return (<View>
-        {choices.map(v => <RadioItem key={v.value} value={v.value} text={v.text} checked={this.props.value === v.value} onChange={this.handleChoicesChange}/>)}
+        {generatedChoices.map(v => <RadioItem key={v.value} label={v.label} value={v.value} text={v.text} checked={this.props.value === v.value} onChange={this.handleChoicesChange}/>)}
         {this.props.hasOther &&
             <View>
             <RadioItem value={OTHER_VALUE} text={otherText} checked={this.props.value === OTHER_VALUE} onChange={this.handleChoicesChange}/>

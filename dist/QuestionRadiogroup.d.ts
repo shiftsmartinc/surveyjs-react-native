@@ -1,6 +1,6 @@
 import React from 'react';
 export interface Props {
-    choices: any;
+    choices: Array<any>;
     hasOther?: boolean;
     onChange(value: any, comment?: any): any;
     value: string;

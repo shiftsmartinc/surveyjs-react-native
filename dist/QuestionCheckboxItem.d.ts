@@ -1,6 +1,7 @@
 import React from 'react';
 export interface Props {
     text?: string;
+    label?: string;
     value: string;
     defaultChecked?: boolean;
     pristine?: boolean;
