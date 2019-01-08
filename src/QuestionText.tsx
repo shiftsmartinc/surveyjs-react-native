@@ -50,7 +50,7 @@ export default class QuestionText extends React.Component<Props> {
     const keyboardType = this.getKeyboardType();
     return (
       <TextInput
-        style={[styles.input, { minHeight: 50 * rows }]}
+        style={[styles.input, { minHeight: 22 * rows }]}
         multiline={this.props.multiline}
         placeholder={this.props.placeholder}
         value={this.props.value}

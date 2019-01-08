@@ -40,6 +40,6 @@ export default class QuestionText extends React.Component {
     render() {
         const { rows = 1 } = this.props;
         const keyboardType = this.getKeyboardType();
-        return (<TextInput style={[styles.input, { minHeight: 50 * rows }]} multiline={this.props.multiline} placeholder={this.props.placeholder} value={this.props.value} onChangeText={this.props.onChange} numberOfLines={rows} placeholderTextColor="#4471a0" underlineColorAndroid={'transparent'} blurOnSubmit={!this.props.multiline} keyboardType={keyboardType}/>);
+        return (<TextInput style={[styles.input, { minHeight: 22 * rows }]} multiline={this.props.multiline} placeholder={this.props.placeholder} value={this.props.value} onChangeText={this.props.onChange} numberOfLines={rows} placeholderTextColor="#4471a0" underlineColorAndroid={'transparent'} blurOnSubmit={!this.props.multiline} keyboardType={keyboardType}/>);
     }
 }
