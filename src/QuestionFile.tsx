@@ -89,7 +89,7 @@ export default class QuestionFile extends React.Component<Props> {
           ? (
             <View style={styles.buttons}>
               <TouchableWithFeedback style={styles.button} onPress={() => onChange(null)}>
-                <Text style={styles.buttonText}>Clean</Text>
+                <Text style={styles.buttonText}>Remove</Text>
               </TouchableWithFeedback>
             </View>
           )
