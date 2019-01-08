@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 14,
     paddingHorizontal: 10,
-    lineHeight: 26,
+    lineHeight: 20,
     fontSize: 16,
     color: '#113260',
   },
