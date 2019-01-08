@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Image } from 'react-native';
 import TouchableWithFeedback from './TouchableWithFeedback';
 
 const styles = StyleSheet.create({
@@ -54,18 +54,8 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   radio: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 10,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#1a71cf',
-    overflow: 'hidden',
-    width: 20,
-    height: 20,
-  },
-  radioChecked: {
-    borderColor: '#fff',
+    width: 23,
+    height: 23,
   },
 });
 
@@ -96,8 +86,7 @@ export default class QuestionRadioItem extends React.Component<Props> {
           </View>
         }
         <Text style={[styles.text, checked && styles.textChecked]}>{text || value}</Text>
-        <View style={[styles.radio, checked && styles.radioChecked]}>
-        </View>
+        <Image style={styles.radio} source={checked ? require('./images/radio-checked.png') : require('./images/check.png')} />
       </TouchableWithFeedback>
     );
   }

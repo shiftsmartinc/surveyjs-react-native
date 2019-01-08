@@ -67,7 +67,7 @@ class Question {
         }
     }
     validate() {
-        if (this.value) {
+        if (this.value && typeof this.value === 'string') {
             this.value = this.value.trim();
         }
         const questionValidator = new QuestionValidator(this);
