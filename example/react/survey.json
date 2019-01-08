@@ -223,7 +223,7 @@
       "name": "Personal Usage of Google Device",
       "elements": [
         {
-          "type": "radiogroup",
+          "type": "dropdown",
           "name": "question5",
           "title": "When prompted, did the retail sales associate say they had tried out a Google Home?",
           "isRequired": true,

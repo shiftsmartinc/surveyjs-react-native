@@ -15,7 +15,6 @@
     "moment": "2.23.0",
     "react": "16.6.3",
     "react-native": "0.57.8",
-    "react-native-actionsheet": "2.4.2",
     "react-native-image-picker": "0.27.2",
     "react-native-modal-datetime-picker": "6.0.0",
     "typescript": "3.2.2"
@@ -26,7 +25,6 @@
     "moment": "*",
     "react": "*",
     "react-native": "*",
-    "react-native-actionsheet": "*",
     "react-native-image-picker": "*",
     "react-native-modal-datetime-picker": "*"
   }

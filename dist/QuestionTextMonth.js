@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import moment from 'moment';
-import QuestionActionsheet from './QuestionActionsheet';
+import QuestionDropdown from './QuestionDropdown';
 import QuestionText from './QuestionText';
 const styles = StyleSheet.create({
     container: {
@@ -69,7 +69,7 @@ export default class QuestionTextMonth extends React.Component {
     render() {
         return (<View style={styles.container}>
         <View style={styles.month}>
-          <QuestionActionsheet value={this.state.month} onChange={this.onMonthChange} optionsCaption="Month" choices={MONTH_CHOICES}/>
+          <QuestionDropdown value={this.state.month} onChange={this.onMonthChange} optionsCaption="Month" choices={MONTH_CHOICES}/>
         </View>
         <View style={styles.year}>
           <QuestionText value={this.state.year} onChange={this.onYearChange} placeholder={`${new Date().getFullYear()}`}/>

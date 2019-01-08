@@ -10,7 +10,6 @@
   * `moment`
   * `react`
   * `react-native`
-  * `react-native-actionsheet`
   * `react-native-image-picker`
   * `react-native-modal-datetime-picker`
 

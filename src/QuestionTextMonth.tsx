@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import moment from 'moment';
-import QuestionActionsheet from './QuestionActionsheet';
+import QuestionDropdown from './QuestionDropdown';
 import QuestionText from './QuestionText';
 
 const styles = StyleSheet.create({
@@ -80,7 +80,7 @@ export default class QuestionTextMonth extends React.Component<any, any> {
     return (
       <View style={styles.container}>
         <View style={styles.month}>
-          <QuestionActionsheet
+          <QuestionDropdown
             value={this.state.month}
             onChange={this.onMonthChange}
             optionsCaption="Month"

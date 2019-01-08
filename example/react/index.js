@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, SafeAreaView } from 'react-native';
+import { SafeAreaView } from 'react-native';
 import Survey from 'surveyjs-react-native';
 import { enableLogging } from 'mobx-logger';
 import json from './survey.json';
@@ -14,18 +14,10 @@ enableLogging({
 
 export default class Example extends React.Component {
   onComplete = (results) => {
-    Alert.alert(
-      'onComplete',
-      JSON.stringify(results),
-      [{ text: 'OK' }],
-    )
+    console.log('onComplete', results);
   }
   onUpload = (value) => {
-    Alert.alert(
-      'onUpload',
-      JSON.stringify(value),
-      [{ text: 'OK' }],
-    )
+    console.log('onUpload', value);
   }
   render () {
     return (

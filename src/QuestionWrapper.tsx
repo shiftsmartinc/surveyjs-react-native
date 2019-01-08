@@ -4,7 +4,7 @@ import { observer } from 'mobx-react/native';
 import QuestionText from './QuestionText';
 import QuestionCheckbox from './QuestionCheckbox';
 import QuestionRadiogroup from './QuestionRadiogroup';
-import QuestionActionsheet from './QuestionActionsheet'
+import QuestionDropdown from './QuestionDropdown'
 import QuestionRate from './QuestionRate';
 import QuestionBoolean from './QuestionBoolean';
 import QuestionMultipleText from './QuestionMultipleText';
@@ -166,7 +166,7 @@ export default class QuestionWrapper extends React.Component<any> {
     text: commonBuilderCreator(QuestionTextWrapper),
     checkbox: choiceBuilderCreator(QuestionCheckbox),
     radiogroup: choiceBuilderCreator(QuestionRadiogroup),
-    dropdown: choiceBuilderCreator(QuestionActionsheet),
+    dropdown: choiceBuilderCreator(QuestionDropdown),
     comment: commentBuilder,
     boolean: booleanBuilder,
     rating: ratingBuilder,
