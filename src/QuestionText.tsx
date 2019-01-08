@@ -3,6 +3,7 @@ import { StyleSheet, TextInput, KeyboardType } from 'react-native';
 
 const styles = StyleSheet.create({
   input: {
+    marginHorizontal: 24,
     paddingVertical: 0,
     paddingHorizontal: 16,
     fontSize: 15,
@@ -44,11 +45,9 @@ export default class QuestionText extends React.Component<Props> {
     }
     return keyboardType as KeyboardType;
   }
-
   render() {
     const { rows = 1 } = this.props;
     const keyboardType = this.getKeyboardType();
-    // const keyboardType = keyboardTypeEnums[this.props.inputType || 'text'];
     return (
       <TextInput
         style={[styles.input, { minHeight: 50 * rows }]}

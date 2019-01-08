@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, TextInput } from 'react-native';
 const styles = StyleSheet.create({
     input: {
+        marginHorizontal: 24,
         paddingVertical: 0,
         paddingHorizontal: 16,
         fontSize: 15,

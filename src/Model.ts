@@ -76,7 +76,10 @@ class Question {
     }
   }
 
-  validate() {
+  @action.bound validate() {
+    if(this.value) {
+      this.value = this.value.trim();
+    }
     const questionValidator = new QuestionValidator(this);
     return questionValidator.validate();
   }

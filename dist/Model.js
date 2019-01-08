@@ -67,6 +67,9 @@ class Question {
         }
     }
     validate() {
+        if (this.value) {
+            this.value = this.value.trim();
+        }
         const questionValidator = new QuestionValidator(this);
         return questionValidator.validate();
     }
@@ -126,6 +129,9 @@ __decorate([
 __decorate([
     observable
 ], Question.prototype, "questions", void 0);
+__decorate([
+    action.bound
+], Question.prototype, "validate", null);
 __decorate([
     computed
 ], Question.prototype, "plainValue", null);
