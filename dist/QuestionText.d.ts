@@ -1,14 +1,12 @@
 import React from 'react';
-import { KeyboardType } from 'react-native';
 export interface Props {
     placeholder?: string;
     inputType?: string;
-    multiline?: boolean;
     rows?: number;
     value: string;
     onChange(value: any): any;
 }
 export default class QuestionText extends React.Component<Props> {
-    getKeyboardType: () => KeyboardType;
+    getKeyboardType: () => "default" | "email-address" | "numeric";
     render(): JSX.Element;
 }

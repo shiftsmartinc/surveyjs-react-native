@@ -76,7 +76,7 @@ const ratingBuilder = question => {
     const newRateValues = rateValues || generateRateValues(rateMin, rateMax, rateStep);
     return (<QuestionRate {...question.json} rateValues={newRateValues} value={question.value} comment={question.comment} onChange={question.setValue}/>);
 };
-const commentBuilder = question => (<QuestionText {...question.json} multiline value={question.value} comment={question.comment} onChange={question.setValue}/>);
+const commentBuilder = question => (<QuestionText {...question.json} value={question.value} comment={question.comment} onChange={question.setValue}/>);
 let QuestionWrapper = class QuestionWrapper extends React.Component {
     constructor() {
         super(...arguments);

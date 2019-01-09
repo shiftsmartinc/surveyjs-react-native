@@ -127,7 +127,6 @@ const ratingBuilder = question => {
 const commentBuilder = question => (
   <QuestionText
     {...question.json}
-    multiline
     value={question.value}
     comment={question.comment}
     onChange={question.setValue}
