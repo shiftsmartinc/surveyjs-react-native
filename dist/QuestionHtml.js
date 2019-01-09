@@ -8,8 +8,8 @@ const styles = StyleSheet.create({
 const injectedStyles = `
   <style>
     body {
-      font-family: 'lucida grande', tahoma, verdana, arial, sans-serif;
-      font-size: 13;
+      font-family: 'avenir', 'lucida grande', tahoma, verdana, arial, sans-serif;
+      font-size: 14;
       padding-right: 15;
     }
   </style>
