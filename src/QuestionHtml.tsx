@@ -1,5 +1,11 @@
 import React from 'react';
-import { WebView, Linking } from 'react-native';
+import { StyleSheet, WebView, Linking } from 'react-native';
+
+const styles = StyleSheet.create({
+  container: {
+    marginHorizontal: 24,
+  },
+});
 
 export interface Props {
   html: string;
@@ -88,7 +94,7 @@ class MyWebView extends React.Component<any, any> {
         javaScriptEnabled={true}
         automaticallyAdjustContentInsets={true}
         {...this.props}
-        style={[this.props.style, { height }]}
+        style={[styles.container, this.props.style, { height }]}
       />
     )
   }
