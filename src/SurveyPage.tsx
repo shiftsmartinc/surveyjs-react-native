@@ -24,7 +24,9 @@ export default class SurveyPage extends React.Component<any> {
   scrollView: KeyboardAwareScrollView;
   componentWillReceiveProps(nextProps) {
     if (this.props.currentPageProps !== nextProps.curPageIndex) {
-      this.scrollView.scrollToPosition(0, 0, true);
+      requestAnimationFrame(() => {
+        this.scrollView.scrollToPosition(0, 0, true);
+      });
     }
   }
   render() {
