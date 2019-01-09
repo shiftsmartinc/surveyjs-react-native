@@ -19,9 +19,14 @@ const styles = StyleSheet.create({
     },
 });
 let SurveyPage = class SurveyPage extends React.Component {
+    componentWillReceiveProps(nextProps) {
+        if (this.props.currentPageProps !== nextProps.curPageIndex) {
+            this.scrollView.scrollTo({ y: 0, animated: true });
+        }
+    }
     render() {
         const { currentPageProps } = this.props;
-        return (<ScrollView style={styles.container} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+        return (<ScrollView ref={(ref) => { this.scrollView = ref; }} style={styles.container} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         {currentPageProps.questions.map(question => <QuestionWrapper key={question.json.name} question={question}/>)}
       </ScrollView>);
     }
@@ -29,6 +34,7 @@ let SurveyPage = class SurveyPage extends React.Component {
 SurveyPage = __decorate([
     inject((store) => ({
         currentPageProps: store.model.currentPageProps,
+        curPageIndex: store.model.curPageIndex,
     })),
     observer
 ], SurveyPage);
