@@ -2,34 +2,19 @@ import React from 'react';
 import QuestionText from './QuestionText';
 import QuestionTextDatetime from './QuestionTextDatetime';
 import QuestionTextSlider from './QuestionTextSlider';
-import QuestionTextMonth from './QuestionTextMonth';
 export default class QuestionTextWrapper extends React.Component {
-    renderDate() {
-        return (<QuestionTextDatetime {...this.props}/>);
-    }
-    renderSlider() {
-        return (<QuestionTextSlider {...this.props}/>);
-    }
-    renderText() {
-        return (<QuestionText {...this.props}/>);
-    }
-    renderMonth() {
-        return (<QuestionTextMonth {...this.props}/>);
-    }
     render() {
         const { inputType } = this.props;
-        if (inputType === 'date' ||
-            inputType === 'datetime' ||
-            inputType === 'datetime-local' ||
-            inputType === 'time') {
-            return this.renderDate();
+        switch (inputType) {
+            case 'date':
+            case 'datetime':
+            case 'datetime-local':
+            case 'time':
+                return <QuestionTextDatetime {...this.props}/>;
+            case 'range':
+                return <QuestionTextSlider {...this.props}/>;
+            default:
+                return <QuestionText {...this.props}/>;
         }
-        else if (inputType === 'range') {
-            return this.renderSlider();
-        }
-        else if (inputType === 'month') {
-            return this.renderMonth();
-        }
-        return this.renderText();
     }
 }

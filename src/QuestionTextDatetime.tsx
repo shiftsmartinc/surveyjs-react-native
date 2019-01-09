@@ -1,8 +1,33 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { StyleSheet, Image, View, Text } from 'react-native';
 import TouchableWithFeedback from './TouchableWithFeedback';
-import DateTimePicker from 'react-native-modal-datetime-picker';
+// @ts-ignore
+import DateTimePicker from './DatetimePicker';
 import moment from 'moment';
+
+const styles = StyleSheet.create({
+  caption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginHorizontal: 24,
+    paddingHorizontal: 16,
+    height: 64,
+    backgroundColor: '#fff',
+    shadowColor: '#e3e3e9',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 10,
+    elevation: 10,
+  },
+  captionText: {
+    paddingLeft: 12,
+    fontSize: 15,
+    color: '#4471a0',
+  },
+});
 
 export interface Props {
   placeholder?: string;
@@ -11,77 +36,60 @@ export interface Props {
   onChange(value);
 }
 
-export default class QuestionTextDatetime extends React.Component<Props, any> {
-  private mode;
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      isPickerVisible: false,
-      value: null,
-    };
-
-    this.mode = (this.props.inputType === 'datetimte-local') ? 'datetime' : this.props.inputType;
+export default class QuestionTextDatetime extends React.Component<Props> {
+  state = {
+    isDateTimePickerVisible: false,
+    value: null,
   }
-
-  showPicker = () => {
-    this.setState({
-      isPickerVisible: true,
-    });
+  openPicker = () => {
+    this.setState({ isDateTimePickerVisible: true });
   }
-
-  hidePicker = () => {
-    this.setState({
-      isPickerVisible: false,
-    });
+  closePicker = () => {
+    this.setState({ isDateTimePickerVisible: false });
   }
-
-  handleConfirm = (date) => {
-    this.setState({
-      value: date,
-    });
+  onConfirm = (date) => {
+    this.setState({ value: date });
     this.props.onChange(date);
-    this.hidePicker();
+    this.closePicker();
   }
-
-  getFormatedValue = (value) => {
+  getPlaceholder() {
+    const { inputType } = this.props;
+    if (inputType === 'date') {
+      return 'Select Date';
+    }
+    if (inputType === 'time') {
+      return 'Select Time';
+    }
+    return 'Select Date & Time';
+  }
+  getFormatedValue(value) {
     const { inputType } = this.props;
     if (inputType === 'date') {
       return moment(value).format('LL');
-    } else if (inputType === 'time') {
+    }
+    if (inputType === 'time') {
       return moment(value).format('LT');
     }
-    return moment(value).format('LLL');
+    return moment(value).format('LLLL');
   }
-
   render() {
-    const {
-      placeholder = 'show picker',
-      value,
-    } = this.props;
-    const dateProps = {};
-    if (value) {
-      dateProps['date'] = new Date(value);
-    }
+    const { placeholder = this.getPlaceholder(), value, inputType } = this.props;
+    const { isDateTimePickerVisible } = this.state;
     return (
       <View>
-        <TouchableWithFeedback
-          onPress={this.showPicker}
-        >
-          <Text>
-            {
-              value ?
-                this.getFormatedValue(value) : placeholder
-            }
-          </Text>
+        <TouchableWithFeedback style={styles.caption} onPress={this.openPicker}>
+          {(inputType === 'datetime' || inputType === 'datetimte-local') &&
+            <Image style={{ width: 36, height: 38 }} source={require('./images/date-time.png')} />
+          }
+          {inputType === 'date' && <Image style={{ width: 32, height: 33 }} source={require('./images/date.png')} />}
+          {inputType === 'time' && <Image style={{ width: 30, height: 30 }} source={require('./images/time.png')} />}
+          <Text style={styles.captionText}>{value ? this.getFormatedValue(value) : placeholder}</Text>
         </TouchableWithFeedback>
         <DateTimePicker
-          isVisible={this.state.isPickerVisible}
-          mode={this.mode}
-          onConfirm={this.handleConfirm}
-          onCancel={this.hidePicker}
-          {...dateProps}
+          isVisible={isDateTimePickerVisible}
+          mode={inputType === 'datetimte-local' ? 'datetime' : inputType}
+          onConfirm={this.onConfirm}
+          onCancel={this.closePicker}
         />
       </View>
     );

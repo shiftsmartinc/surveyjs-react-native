@@ -100,6 +100,32 @@
       ]
     },
     {
+      "name": "Date & Time",
+      "elements": [
+        {
+          "type": "text",
+          "inputType": "date",
+          "name": "date",
+          "title": "This is a date question.",
+          "isRequired": true
+        },
+        {
+          "type": "text",
+          "inputType": "time",
+          "name": "time",
+          "title": "This is a time question.",
+          "isRequired": true
+        },
+        {
+          "type": "text",
+          "inputType": "datetime",
+          "name": "datetime",
+          "title": "This is a date & time question.",
+          "isRequired": true
+        }
+      ]
+    },
+    {
       "name": "Top of Mind Recommendation",
       "elements": [
         {
