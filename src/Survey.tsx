@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, SafeAreaView, View, Text } from 'react-native';
 import { inject, observer } from 'mobx-react/native';
 import SurveyNavigation from './SurveyNavigation';
 import SurveyPage from './SurveyPage';
@@ -55,13 +55,13 @@ export default class Survey extends React.Component<any> {
       );
     }
     return (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <SurveyNavigation />
         <SurveyPage />
         <TouchableWithFeedback style={styles.button} onPress={nextPage}>
           <Text style={styles.buttonText}>{nextPageIndex !== -1 ? 'Next' : 'Complete'}</Text>
         </TouchableWithFeedback>
-      </View>
+      </SafeAreaView>
     );
   }
 }

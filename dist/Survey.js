@@ -5,7 +5,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, SafeAreaView, View, Text } from 'react-native';
 import { inject, observer } from 'mobx-react/native';
 import SurveyNavigation from './SurveyNavigation';
 import SurveyPage from './SurveyPage';
@@ -50,13 +50,13 @@ let Survey = class Survey extends React.Component {
           <Text>Thank you for completing the survey!</Text>
         </View>);
         }
-        return (<View style={styles.container}>
+        return (<SafeAreaView style={styles.container}>
         <SurveyNavigation />
         <SurveyPage />
         <TouchableWithFeedback style={styles.button} onPress={nextPage}>
           <Text style={styles.buttonText}>{nextPageIndex !== -1 ? 'Next' : 'Complete'}</Text>
         </TouchableWithFeedback>
-      </View>);
+      </SafeAreaView>);
     }
 };
 Survey = __decorate([
