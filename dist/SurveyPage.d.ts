@@ -1,7 +1,7 @@
 import React from 'react';
-import { ScrollView } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 export default class SurveyPage extends React.Component<any> {
-    scrollView: ScrollView;
+    scrollView: KeyboardAwareScrollView;
     componentWillReceiveProps(nextProps: any): void;
     render(): JSX.Element;
 }

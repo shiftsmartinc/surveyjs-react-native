@@ -11,6 +11,7 @@
   * `react`
   * `react-native`
   * `react-native-image-picker`
+  * `react-native-keyboard-aware-scroll-view`
   * `react-native-modal-datetime-picker`
 
 3. `react-native link react-native-image-picker`

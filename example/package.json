@@ -15,6 +15,7 @@
     "react": "16.6.3",
     "react-native": "0.57.8",
     "react-native-image-picker": "0.27.2",
+    "react-native-keyboard-aware-scroll-view": "0.8.0",
     "react-native-modal-datetime-picker": "6.0.0",
     "surveyjs-react-native": "git+https://bitbucket.org/shiftsmart/surveyjs-react-native.git"
   },

@@ -16,6 +16,7 @@
     "react": "16.6.3",
     "react-native": "0.57.8",
     "react-native-image-picker": "0.27.2",
+    "react-native-keyboard-aware-scroll-view": "0.8.0",
     "react-native-modal-datetime-picker": "6.0.0",
     "typescript": "3.2.2"
   },
@@ -26,6 +27,7 @@
     "react": "*",
     "react-native": "*",
     "react-native-image-picker": "*",
+    "react-native-keyboard-aware-scroll-view": "*",
     "react-native-modal-datetime-picker": "*"
   }
 }

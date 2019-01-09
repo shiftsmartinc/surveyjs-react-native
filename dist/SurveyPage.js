@@ -5,7 +5,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 import React from 'react';
-import { StyleSheet, ScrollView } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { inject, observer } from 'mobx-react/native';
 import QuestionWrapper from './QuestionWrapper';
 const styles = StyleSheet.create({
@@ -21,14 +22,14 @@ const styles = StyleSheet.create({
 let SurveyPage = class SurveyPage extends React.Component {
     componentWillReceiveProps(nextProps) {
         if (this.props.currentPageProps !== nextProps.curPageIndex) {
-            this.scrollView.scrollTo({ y: 0, animated: true });
+            this.scrollView.scrollToPosition(0, 0, true);
         }
     }
     render() {
         const { currentPageProps } = this.props;
-        return (<ScrollView ref={(ref) => { this.scrollView = ref; }} style={styles.container} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+        return (<KeyboardAwareScrollView ref={(ref) => { this.scrollView = ref; }} style={styles.container} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false} enableOnAndroid>
         {currentPageProps.questions.map(question => <QuestionWrapper key={question.json.name} question={question}/>)}
-      </ScrollView>);
+      </KeyboardAwareScrollView>);
     }
 };
 SurveyPage = __decorate([
