@@ -72,13 +72,13 @@ let SurveyNavigation = class SurveyNavigation extends React.Component {
             </TouchableWithFeedback>)
                 : <View style={styles.placeholder}/>}
         <Text style={styles.title}>
-          <Text style={styles.bold}>{curPageIndex}</Text> of <Text style={styles.bold}>{pages.length}</Text> Answered
+          Page <Text style={styles.bold}>{curPageIndex + 1}</Text> of <Text style={styles.bold}>{pages.length}</Text>
       </Text>
         <TouchableWithFeedback onPress={nextPage} style={styles.button}>
           <Text style={styles.buttonText}>&gt;</Text>
         </TouchableWithFeedback>
       </View>,
-            <View key="progress-bar" style={[styles.progressBar, { width: `${curPageIndex / pages.length * 100}%` }]}/>,
+            <View key="progress-bar" style={[styles.progressBar, { width: `${curPageIndex + 1 / pages.length * 100}%` }]}/>,
         ];
     }
 };

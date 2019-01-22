@@ -61,11 +61,11 @@ export default class QuestionFile extends React.Component {
         };
     }
     render() {
-        const { showPreview, value, onChange } = this.props;
+        const { value, onChange } = this.props;
         return (<View style={styles.container}>
         {!value &&
             <Image style={styles.image} source={require('./images/file-placeholder.png')}/>}
-        {showPreview && value &&
+        {value &&
             <Image style={styles.image} source={{ uri: value }}/>}
         {value
             ? (<View style={styles.buttons}>

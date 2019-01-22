@@ -9,8 +9,10 @@ const injectedStyles = `
   <style>
     body {
       font-family: 'avenir', 'lucida grande', tahoma, verdana, arial, sans-serif;
-      font-size: 14;
+      font-size: 16;
       padding-right: 15;
+      background-color: #FAFAFA;
+      color: #4471a0;
     }
   </style>
 `;
