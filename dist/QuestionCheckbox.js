@@ -31,7 +31,7 @@ export default class QuestionCheckbox extends React.Component {
         {generatedChoices.map(v => <CheckboxItem key={v.value} label={v.label} value={v.value} text={v.text} checked={value.indexOf(v.value) !== -1} onChange={this.handleChoicesChange}/>)}
         {this.props.hasOther &&
             <View>
-            <CheckboxItem value={OTHER_VALUE} text={otherText} checked={otherChecked} onChange={this.handleChoicesChange}/>
+            <CheckboxItem value={OTHER_VALUE} text="Other" checked={otherChecked} onChange={this.handleChoicesChange}/>
             {otherChecked &&
                 <QuestionText value={comment} onChange={this.handleCommentChange} placeholder={otherText}/>}
           </View>}

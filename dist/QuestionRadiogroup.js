@@ -22,7 +22,7 @@ export default class QuestionRadiogroup extends React.Component {
         {generatedChoices.map(v => <RadioItem key={v.value} label={v.label} value={v.value} text={v.text} checked={this.props.value === v.value} onChange={this.handleChoicesChange}/>)}
         {this.props.hasOther &&
             <View>
-            <RadioItem value={OTHER_VALUE} text={otherText} checked={this.props.value === OTHER_VALUE} onChange={this.handleChoicesChange}/>
+            <RadioItem value={OTHER_VALUE} text="Other" checked={this.props.value === OTHER_VALUE} onChange={this.handleChoicesChange}/>
             {this.props.value === OTHER_VALUE &&
                 <QuestionText onChange={this.handleTextInputChange} value={this.props.comment} placeholder={otherText}/>}
           </View>}

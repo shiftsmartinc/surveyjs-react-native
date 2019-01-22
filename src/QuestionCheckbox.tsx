@@ -56,7 +56,7 @@ export default class QuestionCheckbox extends React.Component<Props>{
           <View>
             <CheckboxItem
               value={OTHER_VALUE}
-              text={otherText}
+              text="Other"
               checked={otherChecked}
               onChange={this.handleChoicesChange}
             />

@@ -46,7 +46,7 @@ export default class QuestionRadiogroup extends React.Component<Props> {
           <View>
             <RadioItem
               value={OTHER_VALUE}
-              text={otherText}
+              text="Other"
               checked={this.props.value === OTHER_VALUE}
               onChange={this.handleChoicesChange}
             />
