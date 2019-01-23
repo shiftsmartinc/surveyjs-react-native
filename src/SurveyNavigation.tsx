@@ -106,7 +106,7 @@ export default class SurveyNavigation extends React.Component<Props> {
           <Text style={styles.buttonText}>&gt;</Text>
         </TouchableWithFeedback>
       </View>,
-      <View key="progress-bar" style={[styles.progressBar, { width: `${curPageIndex + 1 / pages.length * 100}%` }]} />,
+      <View key="progress-bar" style={[styles.progressBar, { width: `${(curPageIndex + 1) / pages.length * 100}%` }]} />,
     ];
   }
 }

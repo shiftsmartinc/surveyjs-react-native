@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
 const injectedStyles = `
   <style>
     body {
-      font-family: 'avenir', 'lucida grande', tahoma, verdana, arial, sans-serif;
+      font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu;
       font-size: 16;
       padding-right: 15;
       background-color: #FAFAFA;
