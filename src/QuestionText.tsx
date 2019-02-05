@@ -53,7 +53,7 @@ export default class QuestionText extends React.Component<Props> {
         placeholder={placeholder}
         value={value}
         onChangeText={onChange}
-        numberOfLines={rows}
+        numberOfLines={Number(rows)}
         placeholderTextColor="#4471a0"
         underlineColorAndroid={'transparent'}
         keyboardType={this.getKeyboardType()}

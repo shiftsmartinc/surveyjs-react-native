@@ -37,6 +37,6 @@ export default class QuestionText extends React.Component {
     render() {
         const { placeholder, value, onChange, rows = 1 } = this.props;
         const isMultiline = rows > 1;
-        return (<TextInput style={[styles.input, isMultiline && { height: 19 * rows }]} multiline={isMultiline} placeholder={placeholder} value={value} onChangeText={onChange} numberOfLines={rows} placeholderTextColor="#4471a0" underlineColorAndroid={'transparent'} keyboardType={this.getKeyboardType()}/>);
+        return (<TextInput style={[styles.input, isMultiline && { height: 19 * rows }]} multiline={isMultiline} placeholder={placeholder} value={value} onChangeText={onChange} numberOfLines={Number(rows)} placeholderTextColor="#4471a0" underlineColorAndroid={'transparent'} keyboardType={this.getKeyboardType()}/>);
     }
 }
