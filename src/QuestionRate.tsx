@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     flexGrow: 0,
-    alignSelf: 'flex-start',
+    alignSelf: 'center',
     borderRadius: 5,
     overflow: 'hidden',
   },
