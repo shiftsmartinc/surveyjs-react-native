@@ -102,6 +102,9 @@ class Question {
         if (this.conditionRunner) {
             const visible = this.conditionRunner.run(this.collection.conditionValues);
             this.visible = visible;
+            if (!visible) {
+                this.value = null;
+            }
         }
     }
     setError(error) {
