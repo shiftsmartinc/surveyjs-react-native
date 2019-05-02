@@ -90,6 +90,7 @@ export default class QuestionTextDatetime extends React.Component<Props> {
           mode={inputType === 'datetimte-local' ? 'datetime' : inputType}
           onConfirm={this.onConfirm}
           onCancel={this.closePicker}
+          is24Hour={false}
         />
       </View>
     );

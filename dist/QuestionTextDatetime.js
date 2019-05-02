@@ -76,7 +76,7 @@ export default class QuestionTextDatetime extends React.Component {
           {inputType === 'time' && <Image style={{ width: 30, height: 30 }} source={require('./images/time.png')}/>}
           <Text style={styles.captionText}>{value ? this.getFormatedValue(value) : placeholder}</Text>
         </TouchableWithFeedback>
-        <DateTimePicker isVisible={isDateTimePickerVisible} mode={inputType === 'datetimte-local' ? 'datetime' : inputType} onConfirm={this.onConfirm} onCancel={this.closePicker}/>
+        <DateTimePicker isVisible={isDateTimePickerVisible} mode={inputType === 'datetimte-local' ? 'datetime' : inputType} onConfirm={this.onConfirm} onCancel={this.closePicker} is24Hour={false}/>
       </View>);
     }
 }
