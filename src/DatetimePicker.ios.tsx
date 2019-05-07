@@ -1,7 +1,8 @@
 import React from 'react';
-import { StyleSheet, Modal, Image, View, Text, DatePickerIOS } from 'react-native';
+import { Dimensions, StyleSheet, Modal, Image, View, Text, DatePickerIOS } from 'react-native';
 import TouchableWithFeedback from './TouchableWithFeedback';
 
+const { height } = Dimensions.get('window');
 const styles = StyleSheet.create({
   caption: {
     flexDirection: 'row',
@@ -34,7 +35,7 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     position: 'absolute',
-    top: '50%',
+    top: height - 360,
     left: 0,
     right: 0,
     bottom: 0,
