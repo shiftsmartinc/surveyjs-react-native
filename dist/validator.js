@@ -29,6 +29,19 @@ export default class QuestionValidator {
             }
             return null;
         };
+        this.validateNumber = (value, validator) => {
+            if (!this.isNumber(value)) {
+                return getErrorStr('numericError', [], validator.text);
+            }
+            const floatValue = parseFloat(value);
+            if (validator.minValue !== null && validator.minValue > floatValue) {
+                return getErrorStr('numericMin', [validator.minValue], validator.text);
+            }
+            if (validator.maxValue !== null && validator.maxValue < floatValue) {
+                return getErrorStr('numericMax', [validator.maxValue], validator.text);
+            }
+            return (typeof floatValue === 'number') ? null : getErrorStr('numericError');
+        };
         this.validateText = (value, validator) => {
             if (validator.minLength > 0 && value.length < validator.minLength) {
                 return getErrorStr('textMinLength', [validator.minLength], validator.text);
@@ -64,6 +77,9 @@ export default class QuestionValidator {
             if (this.emailRegex.test(value))
                 return null;
             return getErrorStr('invalidEmail', [], validator.text);
+        };
+        this.isNumber = (value) => {
+            return !isNaN(parseFloat(value)) && isFinite(value);
         };
         this.owner = owner;
         this.methodMap = {
@@ -103,22 +119,6 @@ export default class QuestionValidator {
             return [requireValidator, ...originalValidators];
         }
         return originalValidators;
-    }
-    validateNumber(value, validator) {
-        if (!this.isNumber(value)) {
-            return getErrorStr('numericError', [], validator.text);
-        }
-        const floatValue = parseFloat(value);
-        if (validator.minValue !== null && validator.minValue > floatValue) {
-            return getErrorStr('numericMin', [validator.minValue], validator.text);
-        }
-        if (validator.maxValue !== null && validator.maxValue < floatValue) {
-            return getErrorStr('numericMax', [validator.maxValue], validator.text);
-        }
-        return (typeof floatValue === 'number') ? null : getErrorStr('numericError');
-    }
-    isNumber(value) {
-        return !isNaN(parseFloat(value)) && isFinite(value);
     }
     isValueEmpty(value) {
         if (Array.isArray(value) && value.length === 0)
