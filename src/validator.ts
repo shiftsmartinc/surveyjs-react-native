@@ -84,7 +84,7 @@ export default class QuestionValidator {
     return null;
   }
 
-  public validateNumber(value: any, validator: any) {
+  public validateNumber = (value: any, validator: any) => {
     if (!this.isNumber(value)) {
       return getErrorStr('numericError', [], validator.text);
     }
@@ -136,7 +136,7 @@ export default class QuestionValidator {
     return getErrorStr('invalidEmail', [], validator.text);
   }
 
-  isNumber(value): boolean {
+  isNumber = (value: any): boolean => {
     return !isNaN(parseFloat(value)) && isFinite(value);
   }
 
