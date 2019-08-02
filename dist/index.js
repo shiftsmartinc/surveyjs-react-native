@@ -1,5 +1,5 @@
 import React from 'react';
-import { Provider } from 'mobx-react/native';
+import { Provider } from 'mobx-react';
 import Survey from './Survey';
 import Model from './Model';
 export default class Factory extends React.PureComponent {

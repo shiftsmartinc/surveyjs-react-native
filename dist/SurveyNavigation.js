@@ -5,7 +5,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 import React from 'react';
-import { inject, observer } from 'mobx-react/native';
+import { inject, observer } from 'mobx-react';
 import { StyleSheet, View, Text } from 'react-native';
 import TouchableWithFeedback from './TouchableWithFeedback';
 const styles = StyleSheet.create({
