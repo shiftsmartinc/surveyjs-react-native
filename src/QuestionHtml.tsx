@@ -24,29 +24,33 @@ const injectedStyles = `
   </style>
 `;
 
+const injectedMeta = '<meta name="viewport" content="width=device-width, initial-scale=1" />';
 
-const injectedScript = `(function () {
-  function getAndSendHeight() {
-    let height = 0;
-    if (document.documentElement.clientHeight > document.body.clientHeight) {
-      height = document.documentElement.clientHeight
-    }
-    else {
-      height = document.body.clientHeight
-    }
+/* Use an updated injectedScript to handle new react-native-webview [Pavan 2019-08-15] */
+const injectedScript = 'window.ReactNativeWebView.postMessage(document.body.scrollHeight)';
 
-    window.postMessage(height);
-  }
-  function waitForBridge() {
-    if (window.postMessage.length !== 1) {
-      setTimeout(waitForBridge, 200);
-    }
-    else {
-      getAndSendHeight();
-    }
-  }
-  setTimeout(waitForBridge, 50);
-})();`;
+// const injectedScript = `(function () {
+//   function getAndSendHeight() {
+//     let height = 0;
+//     if (document.documentElement.clientHeight > document.body.clientHeight) {
+//       height = document.documentElement.clientHeight
+//     }
+//     else {
+//       height = document.body.clientHeight
+//     }
+//
+//     window.postMessage(height);
+//   }
+//   function waitForBridge() {
+//     if (window.postMessage.length !== 1) {
+//       setTimeout(waitForBridge, 200);
+//     }
+//     else {
+//       getAndSendHeight();
+//     }
+//   }
+//   setTimeout(waitForBridge, 50);
+// })();`;
 
 class MyWebView extends React.Component<any, any> {
   state = {
@@ -108,12 +112,11 @@ export default class QuestionHtml extends React.Component<Props> {
     return (
       <MyWebView
         source={{
-          html: `${injectedStyles}${this.props.html}`,
+          html: `${injectedMeta}${injectedStyles}${this.props.html}`,
         }}
         defaultHeight={1}
         startInLoadingState={true}
         scrollEnabled={false}
-        scalesPageToFit={true}
       />
     );
   }
