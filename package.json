@@ -18,6 +18,7 @@
     "react-native-image-picker": "1.0.1",
     "react-native-keyboard-aware-scroll-view": "0.8.0",
     "react-native-modal-datetime-picker": "7.5.0",
+    "react-native-webview": "^6.9.0",
     "typescript": "3.2.2"
   },
   "peerDependencies": {
@@ -28,6 +29,7 @@
     "react-native": "*",
     "react-native-image-picker": "*",
     "react-native-keyboard-aware-scroll-view": "*",
-    "react-native-modal-datetime-picker": "*"
+    "react-native-modal-datetime-picker": "*",
+    "react-native-webview": "^6.9.0"
   }
 }

@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, WebView, Linking } from 'react-native';
+import { StyleSheet, Linking } from 'react-native';
+import WebView from 'react-native-webview';
 const styles = StyleSheet.create({
     container: {
         marginHorizontal: 24,
