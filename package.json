@@ -10,14 +10,15 @@
   "devDependencies": {
     "@types/react": "16.7.18",
     "@types/react-native": "0.57.23",
-    "mobx": "4.8.0",
-    "mobx-react": "5.4.3",
+    "mobx": "4.13.0",
+    "mobx-react": "6.1.1",
     "moment": "2.23.0",
-    "react": "16.6.3",
-    "react-native": "0.57.8",
-    "react-native-image-picker": "0.27.2",
+    "react": "16.8.6",
+    "react-native": "0.60.4",
+    "react-native-image-picker": "1.0.1",
     "react-native-keyboard-aware-scroll-view": "0.8.0",
-    "react-native-modal-datetime-picker": "6.0.0",
+    "react-native-modal-datetime-picker": "7.5.0",
+    "react-native-webview": "^6.9.0",
     "typescript": "3.2.2"
   },
   "peerDependencies": {
@@ -28,6 +29,7 @@
     "react-native": "*",
     "react-native-image-picker": "*",
     "react-native-keyboard-aware-scroll-view": "*",
-    "react-native-modal-datetime-picker": "*"
+    "react-native-modal-datetime-picker": "*",
+    "react-native-webview": "^6.9.0"
   }
 }

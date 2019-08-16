@@ -6,7 +6,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 import React from 'react';
 import { StyleSheet, SafeAreaView, View, Text } from 'react-native';
-import { inject, observer } from 'mobx-react/native';
+import { inject, observer } from 'mobx-react';
 import SurveyNavigation from './SurveyNavigation';
 import SurveyPage from './SurveyPage';
 import TouchableWithFeedback from './TouchableWithFeedback';

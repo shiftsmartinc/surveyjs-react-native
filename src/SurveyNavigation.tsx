@@ -1,5 +1,5 @@
 import React from 'react';
-import { inject, observer } from 'mobx-react/native';
+import { inject, observer } from 'mobx-react';
 import { StyleSheet, View, Text } from 'react-native';
 import TouchableWithFeedback from './TouchableWithFeedback';
 

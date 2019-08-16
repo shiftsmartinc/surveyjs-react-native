@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, WebView, Linking } from 'react-native';
+import { StyleSheet, Linking } from 'react-native';
+import WebView from 'react-native-webview';
 const styles = StyleSheet.create({
     container: {
         marginHorizontal: 24,
@@ -16,28 +17,8 @@ const injectedStyles = `
     }
   </style>
 `;
-const injectedScript = `(function () {
-  function getAndSendHeight() {
-    let height = 0;
-    if (document.documentElement.clientHeight > document.body.clientHeight) {
-      height = document.documentElement.clientHeight
-    }
-    else {
-      height = document.body.clientHeight
-    }
-
-    window.postMessage(height);
-  }
-  function waitForBridge() {
-    if (window.postMessage.length !== 1) {
-      setTimeout(waitForBridge, 200);
-    }
-    else {
-      getAndSendHeight();
-    }
-  }
-  setTimeout(waitForBridge, 50);
-})();`;
+const injectedMeta = '<meta name="viewport" content="width=device-width, initial-scale=1" />';
+const injectedScript = 'window.ReactNativeWebView.postMessage(document.body.scrollHeight)';
 class MyWebView extends React.Component {
     constructor(props) {
         super(props);
@@ -77,7 +58,7 @@ MyWebView.defaultProps = {
 export default class QuestionHtml extends React.Component {
     render() {
         return (<MyWebView source={{
-            html: `${injectedStyles}${this.props.html}`,
-        }} defaultHeight={1} startInLoadingState={true} scrollEnabled={false} scalesPageToFit={true}/>);
+            html: `${injectedMeta}${injectedStyles}${this.props.html}`,
+        }} defaultHeight={1} startInLoadingState={true} scrollEnabled={false}/>);
     }
 }
