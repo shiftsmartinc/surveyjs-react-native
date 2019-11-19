@@ -2,7 +2,7 @@
 
 ## Installation
 
-1. npm install `https://bitbucket.org/shiftsmart/surveyjs-react-native`
+1. install `https://bitbucket.org/shiftsmart/surveyjs-react-native`
 
 2. install peerDependencies:
   * `mobx`
@@ -13,8 +13,11 @@
   * `react-native-image-picker`
   * `react-native-keyboard-aware-scroll-view`
   * `react-native-modal-datetime-picker`
+  * `react-native-webview`
 
-3. `react-native link react-native-image-picker`
+3. link native dependencies
+  * `react-native link react-native-image-picker`
+  * `react-native link react-native-webview`
 
 4. Add the required permissions in AndroidManifest.xml:
 ```xml
@@ -35,5 +38,5 @@
 # Example
 
 1. `cd example`
-2. `npm install`
-3. `npm run ios` or `npm run android`
+2. install dependencies
+3. run project

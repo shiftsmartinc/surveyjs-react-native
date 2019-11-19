@@ -3,24 +3,27 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "ios": "react-native run-ios",
-    "android": "react-native run-android",
+    "start": "react-native start",
     "devtools": "react-devtools"
   },
   "dependencies": {
-    "mobx": "4.8.0",
+    "mobx": "4.13.0",
     "mobx-logger": "0.7.1",
-    "mobx-react": "5.4.3",
+    "mobx-react": "6.1.1",
     "moment": "2.23.0",
-    "react": "16.6.3",
-    "react-native": "0.57.8",
-    "react-native-image-picker": "0.27.2",
+    "react": "16.8.6",
+    "react-native": "0.60.4",
+    "react-native-image-picker": "1.0.1",
     "react-native-keyboard-aware-scroll-view": "0.8.0",
-    "react-native-modal-datetime-picker": "6.0.0",
+    "react-native-modal-datetime-picker": "7.5.0",
+    "react-native-webview": "6.9.0",
     "surveyjs-react-native": "git+https://bitbucket.org/shiftsmart/surveyjs-react-native.git"
   },
   "devDependencies": {
-    "metro-react-native-babel-preset": "0.51.0",
-    "react-devtools": "3.4.3"
+    "@babel/core": "^7.5.0",
+    "@babel/runtime": "^7.5.0",
+    "@react-native-community/eslint-config": "^0.0.3",
+    "metro-react-native-babel-preset": "^0.54.1",
+    "react-devtools": "^3.6.3"
   }
 }
