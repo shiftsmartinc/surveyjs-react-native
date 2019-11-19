@@ -4,6 +4,8 @@ import Survey from 'surveyjs-react-native';
 import { enableLogging } from 'mobx-logger';
 import json from './survey.json';
 
+const isPreview = true;
+
 enableLogging({
   predicate: () => __DEV__ && Boolean(global.navigator.userAgent),
   action: true,
@@ -28,6 +30,7 @@ export default class Example extends React.Component {
             onComplete: this.onComplete,
             onUpload: this.onUpload,
           }}
+          isPreview={isPreview}
         />
       </View>
     );

@@ -150,12 +150,15 @@ export default class Model {
 
   apis: any;
 
+  isPreview: boolean;
+
   originalNumber = 0;
 
   questionNamesInOrder = [];
 
-  constructor(json, apis) {
+  constructor({ json, apis, isPreview = false }) {
     this.apis = apis;
+    this.isPreview = isPreview;
     this.initStoreFromJson(json);
   }
 

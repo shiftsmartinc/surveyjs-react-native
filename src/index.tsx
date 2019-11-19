@@ -6,10 +6,11 @@ import Model from './Model';
 export interface Props {
   json: any;
   apis: any;
+  isPreview: boolean | undefined;
 }
 
 export default class Factory extends React.PureComponent<Props> {
-  private model = new Model(this.props.json, this.props.apis);
+  private model = new Model(this.props);
 
   render() {
     return (
