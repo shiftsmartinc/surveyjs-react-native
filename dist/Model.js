@@ -157,7 +157,7 @@ __decorate([
     action.bound
 ], Question.prototype, "setPage", null);
 export default class Model {
-    constructor(json, apis) {
+    constructor({ json, apis, isPreview = false }) {
         this.questions = {};
         this.curPageIndex = 0;
         this.isComplete = false;
@@ -223,7 +223,15 @@ export default class Model {
             const questions = questionNames.map(v => this.questions[v]);
             return [...pages, ...questions];
         };
+        if (isPreview) {
+            json.pages = [{
+                    name: 'Preview',
+                    title: 'Preview',
+                    elements: json.pages.reduce((prev, curr) => ([...prev, ...curr.elements]), []),
+                }];
+        }
         this.apis = apis;
+        this.isPreview = isPreview;
         this.initStoreFromJson(json);
     }
     initStoreFromJson(json) {

@@ -6,9 +6,14 @@ export default class Model {
     pages: any[];
     triggers: Array<SurveyTrigger>;
     apis: any;
+    isPreview: boolean;
     originalNumber: number;
     questionNamesInOrder: any[];
-    constructor(json: any, apis: any);
+    constructor({ json, apis, isPreview }: {
+        json: any;
+        apis: any;
+        isPreview?: boolean;
+    });
     initStoreFromJson(json: any): void;
     nextPage(): void;
     prevPage(): void;

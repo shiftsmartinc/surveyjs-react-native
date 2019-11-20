@@ -41,13 +41,14 @@ const styles = StyleSheet.create({
 
 @inject((store: any) => ({
   isComplete: store.model.isComplete,
+  isPreview: store.model.isPreview,
   nextPageIndex: store.model.nextPageIndex,
   nextPage: store.model.nextPage,
 }))
 @observer
 export default class Survey extends React.Component<any> {
   render() {
-    const { isComplete, nextPageIndex, nextPage } = this.props;
+    const { isComplete, isPreview, nextPageIndex, nextPage } = this.props;
     if (isComplete) {
       return (
         <View style={styles.results}>
@@ -57,7 +58,7 @@ export default class Survey extends React.Component<any> {
     }
     return (
       <SafeAreaView style={styles.container}>
-        <SurveyNavigation />
+        {!isPreview && <SurveyNavigation />}
         <SurveyPage />
         <TouchableWithFeedback style={styles.button} onPress={nextPage}>
           <Text style={styles.buttonText}>{nextPageIndex !== -1 ? 'Next' : 'Complete'}</Text>

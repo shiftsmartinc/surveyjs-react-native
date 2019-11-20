@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import QuestionText from './QuestionText';
 import QuestionCheckbox from './QuestionCheckbox';
 import QuestionRadiogroup from './QuestionRadiogroup';
@@ -18,12 +18,20 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   title: {
-    paddingHorizontal: 24,
+    marginHorizontal: 24,
+  },
+  previewTitle: {
+    padding: 10,
+    backgroundColor: '#e5f2ff',
   },
   titleText: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#113260',
+  },
+  previewTitleText: {
+    fontWeight: 'normal',
+    color: '#4471a0',
   },
   error: {
     justifyContent: 'center',
@@ -134,6 +142,9 @@ const commentBuilder = question => (
 );
 
 
+@inject((store: any) => ({
+  isPreview: store.model.isPreview,
+}))
 @observer
 export default class QuestionWrapper extends React.Component<any> {
   panelBuilder = question => (
@@ -175,6 +186,7 @@ export default class QuestionWrapper extends React.Component<any> {
     file: commonBuilderCreator(QuestionFile),
   };
   renderQuestion = (question) => {
+    const { isPreview } = this.props;
     const json = question.json || question;
     const build = this.typeBuilderMap[json.type];
     const content = build(question);
@@ -192,8 +204,10 @@ export default class QuestionWrapper extends React.Component<any> {
     return (
       <View key={json.name} style={styles.container}>
         {showTitle && question.json.type !== 'html' &&
-          <View style={styles.title}>
-            <Text style={styles.titleText}>{number ? `${number}.` : ''} {title || name}</Text>
+          <View style={[styles.title, isPreview && styles.previewTitle]}>
+            <Text style={[styles.titleText, isPreview && styles.previewTitleText]}>
+              {number ? `${number}.` : ''} {title || name}
+            </Text>
           </View>
         }
         {question.error &&

@@ -157,6 +157,13 @@ export default class Model {
   questionNamesInOrder = [];
 
   constructor({ json, apis, isPreview = false }) {
+    if (isPreview) {
+      json.pages = [{
+        name: 'Preview',
+        title: 'Preview',
+        elements: json.pages.reduce((prev, curr) => ([...prev, ...curr.elements]), []),
+      }];
+    }
     this.apis = apis;
     this.isPreview = isPreview;
     this.initStoreFromJson(json);

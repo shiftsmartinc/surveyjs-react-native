@@ -5,7 +5,7 @@ import Model from './Model';
 export default class Factory extends React.PureComponent {
     constructor() {
         super(...arguments);
-        this.model = new Model(this.props.json, this.props.apis);
+        this.model = new Model(this.props);
     }
     render() {
         return (<Provider model={this.model}>
