@@ -12,7 +12,7 @@ interface Props extends TouchableWithoutFeedbackProps {
   isPreview: store.model.isPreview,
 }))
 @observer
-export default class TouchableWithFeedback extends React.PureComponent<Props> {
+export default class TouchableWithFeedback extends React.Component<Props> {
   render() {
     const { isPreview, children, style, ...rest } = this.props;
     if (Platform.OS === 'android' && Platform.Version >= 21) {

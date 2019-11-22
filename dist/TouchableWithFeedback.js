@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 import React from 'react';
 import { Platform, TouchableNativeFeedback, TouchableOpacity, View } from 'react-native';
 import { inject, observer } from 'mobx-react';
-let TouchableWithFeedback = class TouchableWithFeedback extends React.PureComponent {
+let TouchableWithFeedback = class TouchableWithFeedback extends React.Component {
     render() {
         const { isPreview, children, style, ...rest } = this.props;
         if (Platform.OS === 'android' && Platform.Version >= 21) {
