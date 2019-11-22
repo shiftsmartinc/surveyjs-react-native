@@ -1,5 +1,6 @@
 import React from 'react';
 export interface Props {
+    isPreview?: boolean;
     placeholder?: string;
     inputType?: string;
     rows?: number;

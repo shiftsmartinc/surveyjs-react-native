@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, TextInput } from 'react-native';
+import { inject, observer } from 'mobx-react';
 
 const styles = StyleSheet.create({
   input: {
@@ -22,6 +23,7 @@ const styles = StyleSheet.create({
 });
 
 export interface Props {
+  isPreview?: boolean;
   placeholder?: string;
   inputType?: string;
   rows?: number;
@@ -29,6 +31,10 @@ export interface Props {
   onChange(value);
 }
 
+@inject((store: any) => ({
+  isPreview: store.model.isPreview,
+}))
+@observer
 export default class QuestionText extends React.Component<Props> {
   getKeyboardType = () => {
     const { inputType = 'text' } = this.props;
@@ -44,7 +50,7 @@ export default class QuestionText extends React.Component<Props> {
     }
   }
   render() {
-    const { placeholder, value, onChange, rows = 1 } = this.props;
+    const { isPreview, placeholder, value, onChange, rows = 1 } = this.props;
     const isMultiline = rows > 1;
     return (
       <TextInput
@@ -57,6 +63,7 @@ export default class QuestionText extends React.Component<Props> {
         placeholderTextColor="#4471a0"
         underlineColorAndroid={'transparent'}
         keyboardType={this.getKeyboardType()}
+        editable={!isPreview}
       />
     );
   }
