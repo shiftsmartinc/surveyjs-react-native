@@ -1,5 +1,6 @@
 import React from 'react';
 export interface Props {
+    isPreview?: boolean;
     text?: string;
     label?: string;
     value: string;

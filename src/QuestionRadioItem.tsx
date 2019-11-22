@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
+import { inject, observer } from 'mobx-react';
 import TouchableWithFeedback from './TouchableWithFeedback';
 
 const styles = StyleSheet.create({
@@ -60,6 +61,7 @@ const styles = StyleSheet.create({
 });
 
 export interface Props {
+  isPreview?: boolean;
   text?: string;
   label?: string;
   value: string;
@@ -68,6 +70,10 @@ export interface Props {
   onChange?: (string) => void;
 }
 
+@inject((store: any) => ({
+  isPreview: store.model.isPreview,
+}))
+@observer
 export default class QuestionRadioItem extends React.Component<Props> {
   handlePress = () => {
     const checked = !this.props.checked;
@@ -77,7 +83,7 @@ export default class QuestionRadioItem extends React.Component<Props> {
   }
 
   render() {
-    const { label, text, value, checked } = this.props;
+    const { isPreview, label, text, value, checked } = this.props;
     return (
       <TouchableWithFeedback style={[styles.container, checked && styles.containerChecked]} onPress={this.handlePress}>
         {label &&
@@ -86,7 +92,9 @@ export default class QuestionRadioItem extends React.Component<Props> {
           </View>
         }
         <Text style={[styles.text, checked && styles.textChecked]}>{text || value}</Text>
-        <Image style={styles.radio} source={checked ? require('./images/radio-checked.png') : require('./images/check.png')} />
+        {!isPreview &&
+          <Image style={styles.radio} source={checked ? require('./images/radio-checked.png') : require('./images/check.png')} />
+        }
       </TouchableWithFeedback>
     );
   }
