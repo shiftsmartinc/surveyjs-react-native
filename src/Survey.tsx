@@ -60,9 +60,11 @@ export default class Survey extends React.Component<any> {
       <SafeAreaView style={styles.container}>
         {!isPreview && <SurveyNavigation />}
         <SurveyPage />
-        <TouchableWithFeedback style={styles.button} onPress={nextPage}>
-          <Text style={styles.buttonText}>{nextPageIndex !== -1 ? 'Next' : 'Complete'}</Text>
-        </TouchableWithFeedback>
+        {!isPreview &&
+          <TouchableWithFeedback style={styles.button} onPress={nextPage}>
+            <Text style={styles.buttonText}>{nextPageIndex !== -1 ? 'Next' : 'Complete'}</Text>
+          </TouchableWithFeedback>
+        }
       </SafeAreaView>
     );
   }

@@ -54,9 +54,10 @@ let Survey = class Survey extends React.Component {
         return (<SafeAreaView style={styles.container}>
         {!isPreview && <SurveyNavigation />}
         <SurveyPage />
-        <TouchableWithFeedback style={styles.button} onPress={nextPage}>
-          <Text style={styles.buttonText}>{nextPageIndex !== -1 ? 'Next' : 'Complete'}</Text>
-        </TouchableWithFeedback>
+        {!isPreview &&
+            <TouchableWithFeedback style={styles.button} onPress={nextPage}>
+            <Text style={styles.buttonText}>{nextPageIndex !== -1 ? 'Next' : 'Complete'}</Text>
+          </TouchableWithFeedback>}
       </SafeAreaView>);
     }
 };
