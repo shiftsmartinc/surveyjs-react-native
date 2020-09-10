@@ -55,6 +55,8 @@ export default class QuestionFile extends React.Component<Props> {
     ImagePicker[method]({
       noData: !storeDataAsText,
       mediaType: isVideo ? 'video' : 'mixed',
+      quality: 0.5,
+      videoQuality: 'low',
       }, (response) => {
       if (response.error) {
         Alert.alert( 'Error', response.error, [{ text: 'OK' }]);
