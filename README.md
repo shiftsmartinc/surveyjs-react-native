@@ -14,18 +14,15 @@
   * `react-native-keyboard-aware-scroll-view`
   * `react-native-modal-datetime-picker`
   * `react-native-webview`
+  * `@react-native-community/datetimepicker`
 
-3. link native dependencies
-  * `react-native link react-native-image-picker`
-  * `react-native link react-native-webview`
-
-4. Add the required permissions in AndroidManifest.xml:
+3. Add the required permissions in AndroidManifest.xml:
 ```xml
 <uses-permission android:name="android.permission.CAMERA" />
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 ```
 
-5. Add the required permissions in Info.plist:
+4. Add the required permissions in Info.plist:
 ```xml
 <key>NSPhotoLibraryUsageDescription</key>
 <string></string>

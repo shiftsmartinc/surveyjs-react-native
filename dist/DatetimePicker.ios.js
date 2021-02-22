@@ -1,5 +1,6 @@
 import React from 'react';
-import { Dimensions, StyleSheet, Modal, Image, View, Text, DatePickerIOS } from 'react-native';
+import { Dimensions, StyleSheet, Modal, Image, View, Text } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import TouchableWithFeedback from './TouchableWithFeedback';
 const { height } = Dimensions.get('window');
 const styles = StyleSheet.create({
@@ -114,7 +115,7 @@ export default class DatetimePicker extends React.PureComponent {
               </TouchableWithFeedback>
               <Text style={styles.modalHeaderText}>{this.getTitle()}</Text>
             </View>
-            <DatePickerIOS mode={mode} date={date} onDateChange={date => this.setState({ date })}/>
+            <DateTimePicker mode={mode} value={date} onChange={(_e, date) => this.setState({ date })}/>
             <TouchableWithFeedback style={styles.button} onPress={() => onConfirm(date)}>
               <Text style={styles.buttonText}>Done</Text>
             </TouchableWithFeedback>

@@ -22,8 +22,8 @@ const styles = StyleSheet.create({
 @observer
 export default class SurveyPage extends React.Component<any> {
   scrollView: KeyboardAwareScrollView;
-  componentWillReceiveProps(nextProps) {
-    if (this.props.curPageIndex !== nextProps.curPageIndex) {
+  componentDidUpdate(prevProps) {
+    if (this.props.curPageIndex !== prevProps.curPageIndex) {
       requestAnimationFrame(() => {
         this.scrollView.scrollToPosition(0, 0, true);
       });

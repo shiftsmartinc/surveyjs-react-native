@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Text, Image, Alert } from 'react-native';
-import ImagePicker from 'react-native-image-picker';
+import * as ImagePicker from 'react-native-image-picker';
 import TouchableWithFeedback from './TouchableWithFeedback';
 const styles = StyleSheet.create({
     container: {},
@@ -41,13 +41,13 @@ export default class QuestionFile extends React.Component {
         this.openPicker = (method) => {
             const { storeDataAsText, isVideo, maxSize, onChange } = this.props;
             ImagePicker[method]({
-                noData: !storeDataAsText,
-                mediaType: isVideo ? 'video' : 'mixed',
+                includeBase64: storeDataAsText,
+                mediaType: isVideo ? 'video' : 'photo',
                 quality: 0.5,
                 videoQuality: 'low',
             }, (response) => {
-                if (response.error) {
-                    Alert.alert('Error', response.error, [{ text: 'OK' }]);
+                if (response.errorCode) {
+                    Alert.alert('Error', response.errorMessage || response.errorCode, [{ text: 'OK' }]);
                     return;
                 }
                 if (response.didCancel) {
@@ -57,7 +57,7 @@ export default class QuestionFile extends React.Component {
                     Alert.alert('FileSize', 'Too Large FileSize', [{ text: 'OK' }]);
                     return;
                 }
-                const value = storeDataAsText ? response.data : response;
+                const value = storeDataAsText ? response.base64 : response.uri;
                 onChange(value);
             });
         };
