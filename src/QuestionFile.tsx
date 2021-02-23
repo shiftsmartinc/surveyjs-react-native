@@ -51,7 +51,7 @@ export interface Props {
 
 export default class QuestionFile extends React.Component<Props> {
   openPicker = (method: 'launchCamera' | 'launchImageLibrary') => {
-    const { storeDataAsText, isVideo, maxSize, onChange } = this.props;
+    const { storeDataAsText = false, isVideo, maxSize, onChange } = this.props;
     ImagePicker[method]({
       includeBase64: storeDataAsText,
       mediaType: isVideo ? 'video' : 'photo',

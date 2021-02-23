@@ -39,7 +39,7 @@ export default class QuestionFile extends React.Component {
     constructor() {
         super(...arguments);
         this.openPicker = (method) => {
-            const { storeDataAsText, isVideo, maxSize, onChange } = this.props;
+            const { storeDataAsText = false, isVideo, maxSize, onChange } = this.props;
             ImagePicker[method]({
                 includeBase64: storeDataAsText,
                 mediaType: isVideo ? 'video' : 'photo',
