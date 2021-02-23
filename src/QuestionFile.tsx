@@ -73,7 +73,7 @@ export default class QuestionFile extends React.Component<Props> {
         );
         return;
       }
-      const value = storeDataAsText ? response.base64 : response.uri;
+      const value = storeDataAsText ? response.base64 : response;
       onChange(value);
     });
   }

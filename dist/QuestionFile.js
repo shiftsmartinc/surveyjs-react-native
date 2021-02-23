@@ -57,7 +57,7 @@ export default class QuestionFile extends React.Component {
                     Alert.alert('FileSize', 'Too Large FileSize', [{ text: 'OK' }]);
                     return;
                 }
-                const value = storeDataAsText ? response.base64 : response.uri;
+                const value = storeDataAsText ? response.base64 : response;
                 onChange(value);
             });
         };
