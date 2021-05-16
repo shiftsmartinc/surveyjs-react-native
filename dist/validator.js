@@ -109,6 +109,7 @@ export default class QuestionValidator {
     }
     getValidators() {
         const originalValidators = this.owner.json.validators || [];
+        const additionalValidators = [];
         if (this.owner.json.isRequired) {
             const requireValidator = {
                 type: 'required',
@@ -116,9 +117,17 @@ export default class QuestionValidator {
             if (this.owner.requiredErrorText) {
                 requireValidator['text'] = this.owner.requiredErrorText;
             }
-            return [requireValidator, ...originalValidators];
+            additionalValidators.push(requireValidator);
         }
-        return originalValidators;
+        if (this.owner.value && (this.owner.json.maxLength || this.owner.json.minLength)) {
+            const lengthValidator = {
+                type: 'text',
+                maxLength: this.owner.json.maxLength,
+                minLength: this.owner.json.minLength,
+            };
+            additionalValidators.push(lengthValidator);
+        }
+        return [...additionalValidators, ...originalValidators];
     }
     isValueEmpty(value) {
         if (Array.isArray(value) && value.length === 0)
