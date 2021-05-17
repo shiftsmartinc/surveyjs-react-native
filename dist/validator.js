@@ -125,6 +125,9 @@ export default class QuestionValidator {
                 maxLength: this.owner.json.maxLength,
                 minLength: this.owner.json.minLength,
             };
+            if (this.owner.json.lengthValidationErrorText) {
+                lengthValidator['text'] = this.owner.json.lengthValidationErrorText;
+            }
             additionalValidators.push(lengthValidator);
         }
         return [...additionalValidators, ...originalValidators];
