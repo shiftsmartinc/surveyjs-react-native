@@ -141,6 +141,9 @@ export class Condition {
                 return left <= right;
             },
             anyof: function (left, right) {
+                if (!left || !right) {
+                    return false;
+                }
                 if (!Array.isArray(left.slice()) || !Array.isArray(right.slice())) {
                     return false;
                 }
