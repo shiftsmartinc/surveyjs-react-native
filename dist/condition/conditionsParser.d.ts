@@ -26,6 +26,9 @@ export declare class ConditionsParser {
     private isOpenBracket;
     private isCloseBracket;
     private isBrackets;
+    private isOpenSquareBracket;
+    private isCloseSquareBracket;
+    private isSquareBrackets;
     private readString;
     private createOperand;
     private readParameters;

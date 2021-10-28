@@ -137,32 +137,57 @@ export class ConditionsParser {
   private isBrackets(c: string): boolean {
     return this.isOpenBracket(c) || this.isCloseBracket(c);
   }
-  private readString(): string {
+  private isOpenSquareBracket(c: string): boolean { return c == '['; }
+  private isCloseSquareBracket(c: string): boolean { return c == ']'; }
+  private isSquareBrackets(c: string): boolean {
+      return this.isOpenSquareBracket(c) || this.isCloseSquareBracket(c);
+  }
+  private readString(): string | Array<string> {
     this.skip();
     if (this.at >= this.length) return null;
     var start = this.at;
     var hasQuotes = this.isQuotes(this.ch);
     if (hasQuotes) this.at++;
     var isFirstOpCh = this.isOperatorChar(this.ch);
+    var isAnyOf = this.text.includes('anyof');
+    var inArray = false;
     while (this.at < this.length) {
-      if (!hasQuotes && this.isSpace(this.ch)) break;
-      if (this.isQuotes(this.ch)) {
+      if (!hasQuotes && this.isSpace(this.ch) && !inArray) break;
+      if (this.isQuotes(this.ch) && !inArray) {
         if (hasQuotes) this.at++;
         break;
       }
       if (!hasQuotes) {
         if (isFirstOpCh != this.isOperatorChar(this.ch)) break;
-        if (this.isBrackets(this.ch) || this.isComma(this.ch)) break;
+        if (isAnyOf && this.isSquareBrackets(this.ch)) {
+          inArray = !inArray;
+        }
+        else if ((this.isBrackets(this.ch) || this.isComma(this.ch)) && !inArray) break;
       }
       this.at++;
     }
     if (this.at <= start) return null;
-    var res = this.text.substr(start, this.at - start);
+    var res: (string | Array<string>) = this.text.substr(start, this.at - start);
     if (res) {
       if (res.length > 1 && this.isQuotes(res[0])) {
         var len = res.length - 1;
         if (this.isQuotes(res[res.length - 1])) len--;
         res = res.substr(1, len);
+      }
+      if (res.length > 1 && this.isSquareBrackets(res[0]) && isAnyOf) {
+          var len = res.length - 1;
+          if (this.isSquareBrackets(res[res.length - 1]))
+              len--;
+          res = res.substr(1, len).split(', ');
+          res = res.map(choice => {
+            if (choice.length > 1 && this.isQuotes(choice[0])) {
+                var len = choice.length - 1;
+                if (this.isQuotes(choice[choice.length - 1]))
+                    len--;
+                choice = choice.substr(1, len);
+            }
+            return choice;
+          })
       }
     }
     return res;
@@ -207,6 +232,7 @@ export class ConditionsParser {
     if (op == '<>' || op == '!=') op = "notequal";
     if (op == 'contain') op = "contains";
     if (op == 'notcontain') op = "notcontains";
+    if (op == 'anyof') op = "anyof";
     return op;
   }
   private readConnective(): string {

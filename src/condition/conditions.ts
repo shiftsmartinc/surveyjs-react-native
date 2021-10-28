@@ -111,6 +111,13 @@ export class Condition {
         if (left != null && right == null) return false;
         if (left == null) return true;
         return left <= right;
+      },
+      anyof: function(left, right) {
+        if (!Array.isArray(left.slice()) || !Array.isArray(right.slice())) {
+          return false;
+        }
+        const found = left.some(r=> right.includes(r))
+        return found;
       }
     };
     return Condition.operatorsValue;
