@@ -89,15 +89,18 @@ class Question {
     this.collection = collection;
 
     this.conditionRunner = null;
-    if (json.choices && json.choices.length > 0 && json.choicesOrder && json.choicesOrder !== "none") {
+    if (json.choices && json.choices.length > 0) {
       const clonedChoices = json.choices.map(c => c);
-      let order = json.choicesOrder.toLowerCase();
-      if (order == "asc") {
-        this.choices = sortArray(clonedChoices, 1);
-      } else if (order == "desc") {
-        this.choices = sortArray(clonedChoices, -1);
-      } else if (order == "random") {
-        this.choices = randomizeArray(clonedChoices);
+      this.choices = clonedChoices;
+      if (json.choicesOrder && json.choicesOrder !== "none") {
+        let order = json.choicesOrder.toLowerCase();
+        if (order == "asc") {
+          this.choices = sortArray(clonedChoices, 1);
+        } else if (order == "desc") {
+          this.choices = sortArray(clonedChoices, -1);
+        } else if (order == "random") {
+          this.choices = randomizeArray(clonedChoices);
+        }
       }
     }
     if (json.visibleIf) {
