@@ -54,40 +54,10 @@ const styles = StyleSheet.create({
         paddingVertical: 16,
     },
 });
-const sortArray = (array, mult) => {
-    return array.sort(function (a, b) {
-        if (a.text < b.text)
-            return -1 * mult;
-        if (a.text > b.text)
-            return 1 * mult;
-        return 0;
-    });
-};
-const randomizeArray = (array) => {
-    for (var i = array.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
-    }
-    return array;
-};
 const commonBuilderCreator = Component => question => <Component {...question.json} value={question.value} comment={question.comment} onChange={question.setValue}/>;
 const choiceBuilderCreator = Component => (question) => {
     const json = question.json;
-    let choices = json.choices.map(v => typeof v === 'string' ? { value: v, text: v } : v);
-    if (json.choicesOrder && json.choicesOrder !== "none") {
-        let order = json.choicesOrder.toLowerCase();
-        if (order == "asc") {
-            choices = sortArray(choices, 1);
-        }
-        else if (order == "desc") {
-            choices = sortArray(choices, -1);
-        }
-        else if (order == "random") {
-            choices = randomizeArray(choices);
-        }
-    }
+    const choices = (question.choices || json.choices).map(v => typeof v === 'string' ? { value: v, text: v } : v);
     return (<Component {...json} choices={choices} value={question.value} comment={question.comment} onChange={question.setValue}/>);
 };
 const booleanBuilder = question => {

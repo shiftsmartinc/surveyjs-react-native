@@ -10,6 +10,24 @@ import moment from 'moment';
 import { ConditionRunner } from './condition/conditions';
 import QuestionValidator from './validator';
 import { isValueEmpty } from './utils';
+const sortArray = (array, mult) => {
+    return array.sort(function (a, b) {
+        if (a < b)
+            return -1 * mult;
+        if (a > b)
+            return 1 * mult;
+        return 0;
+    });
+};
+const randomizeArray = (array) => {
+    for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+    return array;
+};
 class Page {
     constructor(json, collection, pageIndex, questionNames) {
         this.json = json;
@@ -56,11 +74,25 @@ class Question {
         this.error = null;
         this.comment = null;
         this.questions = [];
+        this.choices = [];
         this.json = json;
         this.visible = json.visible != null ? json.visible : true;
         this.originalNumber = originalNumber;
         this.collection = collection;
         this.conditionRunner = null;
+        if (json.choices && json.choices.length > 0 && json.choicesOrder && json.choicesOrder !== "none") {
+            const clonedChoices = json.choices.map(c => c);
+            let order = json.choicesOrder.toLowerCase();
+            if (order == "asc") {
+                this.choices = sortArray(clonedChoices, 1);
+            }
+            else if (order == "desc") {
+                this.choices = sortArray(clonedChoices, -1);
+            }
+            else if (order == "random") {
+                this.choices = randomizeArray(clonedChoices);
+            }
+        }
         if (json.visibleIf) {
             this.conditionRunner = new ConditionRunner('');
             this.conditionRunner.expression = json.visibleIf;
@@ -132,6 +164,9 @@ __decorate([
 __decorate([
     observable
 ], Question.prototype, "questions", void 0);
+__decorate([
+    observable
+], Question.prototype, "choices", void 0);
 __decorate([
     action.bound
 ], Question.prototype, "validate", null);
