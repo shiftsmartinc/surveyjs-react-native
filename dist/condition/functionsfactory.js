@@ -1,9 +1,13 @@
 export class FunctionFactory {
     constructor() {
         this.functionHash = {};
+        this.isAsyncHash = {};
     }
     register(name, func) {
         this.functionHash[name] = func;
+    }
+    isAsyncFunction(name) {
+        return !!this.isAsyncHash[name];
     }
     clear() {
         this.functionHash = {};
@@ -15,11 +19,19 @@ export class FunctionFactory {
         }
         return result.sort();
     }
-    run(name, params) {
+    run(name, params, properties = null) {
         var func = this.functionHash[name];
         if (!func)
             return null;
-        return func(params);
+        let classRunner = {
+            func: func,
+        };
+        if (properties) {
+            for (var key in properties) {
+                classRunner[key] = properties[key];
+            }
+        }
+        return classRunner.func(params);
     }
 }
 FunctionFactory.Instance = new FunctionFactory();
