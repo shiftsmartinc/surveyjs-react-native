@@ -2,7 +2,7 @@ import { Helpers } from "../helpers";
 import { FunctionFactory } from "../functionsfactory";
 import { ProcessValue } from "../conditionProcessValue";
 export class Operand {
-    toString(_func = undefined) {
+    toString(func = undefined) {
         return "";
     }
     hasFunction() {
@@ -11,7 +11,13 @@ export class Operand {
     hasAsyncFunction() {
         return false;
     }
-    addToAsyncList(_list) { }
+    addToAsyncList(list) { }
+    isEqual(op) {
+        return !!op && op.getType() === this.getType() && this.isContentEqual(op);
+    }
+    areOperatorsEquals(op1, op2) {
+        return !op1 && !op2 || !!op1 && op1.isEqual(op2);
+    }
 }
 export class BinaryOperand extends Operand {
     constructor(operatorName, left = null, right = null, isArithmeticOp = false) {
@@ -50,6 +56,12 @@ export class BinaryOperand extends Operand {
     }
     get rightOperand() {
         return this.right;
+    }
+    isContentEqual(op) {
+        const bOp = op;
+        return bOp.operator === this.operator &&
+            this.areOperatorsEquals(this.left, bOp.left) &&
+            this.areOperatorsEquals(this.right, bOp.right);
     }
     evaluateParam(x, processValue) {
         return x == null ? null : x.evaluate(processValue);
@@ -121,6 +133,10 @@ export class UnaryOperand extends Operand {
             " " +
             this.expression.toString(func));
     }
+    isContentEqual(op) {
+        const uOp = op;
+        return uOp.operator == this.operator && this.areOperatorsEquals(this.expression, uOp.expression);
+    }
     evaluate(processValue) {
         let value = this.expression.evaluate(processValue);
         return this.consumer.call(this, value);
@@ -170,6 +186,16 @@ export class ArrayOperand extends Operand {
     addToAsyncList(list) {
         this.values.forEach((operand) => operand.addToAsyncList(list));
     }
+    isContentEqual(op) {
+        const aOp = op;
+        if (aOp.values.length !== this.values.length)
+            return false;
+        for (var i = 0; i < this.values.length; i++) {
+            if (!aOp.values[i].isEqual(this.values[i]))
+                return false;
+        }
+        return true;
+    }
 }
 export class Const extends Operand {
     constructor(value) {
@@ -193,7 +219,7 @@ export class Const extends Operand {
     evaluate() {
         return this.getCorrectValue(this.value);
     }
-    setVariables(_variables) { }
+    setVariables(variables) { }
     getCorrectValue(value) {
         if (!value || typeof value != "string")
             return value;
@@ -211,6 +237,10 @@ export class Const extends Operand {
             return parseFloat(value);
         }
         return value;
+    }
+    isContentEqual(op) {
+        const cOp = op;
+        return cOp.value == this.value;
     }
     isQuote(ch) {
         return ch == "'" || ch == '"';
@@ -262,6 +292,10 @@ export class Variable extends Const {
         if (this.useValueAsItIs)
             return value;
         return super.getCorrectValue(value);
+    }
+    isContentEqual(op) {
+        const vOp = op;
+        return vOp.variable == this.variable;
     }
 }
 Variable.DisableConversionChar = "#";
@@ -323,6 +357,10 @@ export class FunctionOperand extends Operand {
             list.push(this);
         }
     }
+    isContentEqual(op) {
+        const fOp = op;
+        return fOp.originalValue == this.originalValue && this.areOperatorsEquals(fOp.parameters, this.parameters);
+    }
 }
 export class OperandMaker {
     static throwInvalidOperatorError(op) {
@@ -357,6 +395,22 @@ export class OperandMaker {
     static isBooleanValue(value) {
         return (!!value &&
             (value.toLowerCase() === "true" || value.toLowerCase() === "false"));
+    }
+    static countDecimals(value) {
+        if (Helpers.isNumber(value) && Math.floor(value) !== value) {
+            const strs = value.toString().split(".");
+            return strs.length > 1 && strs[1].length || 0;
+        }
+        return 0;
+    }
+    static plusMinus(a, b, res) {
+        const digitsA = OperandMaker.countDecimals(a);
+        const digitsB = OperandMaker.countDecimals(b);
+        if (digitsA > 0 || digitsB > 0) {
+            const digits = Math.max(digitsA, digitsB);
+            res = parseFloat(res.toFixed(digits));
+        }
+        return res;
     }
     static isTwoValueEquals(x, y) {
         if (x === "undefined")
@@ -401,13 +455,13 @@ OperandMaker.binaryFunctions = {
         return a || b;
     },
     plus: function (a, b) {
-        return a + b;
+        return Helpers.correctAfterPlusMinis(a, b, a + b);
     },
     minus: function (a, b) {
-        return a - b;
+        return Helpers.correctAfterPlusMinis(a, b, a - b);
     },
     mul: function (a, b) {
-        return a * b;
+        return Helpers.correctAfterMultiple(a, b, a * b);
     },
     div: function (a, b) {
         if (!b)

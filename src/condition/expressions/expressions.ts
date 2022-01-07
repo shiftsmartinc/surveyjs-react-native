@@ -3,7 +3,7 @@ import { FunctionFactory } from "../functionsfactory";
 import { ProcessValue } from "../conditionProcessValue";
 
 export abstract class Operand {
-  public toString(_func: (op: Operand) => string = undefined): string {
+  public toString(func: (op: Operand) => string = undefined): string {
     return "";
   }
   public abstract getType(): string;
@@ -15,7 +15,14 @@ export abstract class Operand {
   public hasAsyncFunction() {
     return false;
   }
-  public addToAsyncList(_list: Array<FunctionOperand>): void {}
+  public addToAsyncList(list: Array<FunctionOperand>): void {}
+  public isEqual(op: Operand): boolean {
+    return !!op && op.getType() === this.getType() && this.isContentEqual(op);
+  }
+  protected abstract isContentEqual(op: Operand): boolean;
+  protected areOperatorsEquals(op1: Operand, op2: Operand): boolean {
+    return !op1 && !op2 || !!op1 && op1.isEqual(op2);
+  }
 }
 
 export class BinaryOperand extends Operand {
@@ -62,7 +69,12 @@ export class BinaryOperand extends Operand {
   public get rightOperand() {
     return this.right;
   }
-
+  protected isContentEqual(op: Operand): boolean {
+    const bOp = <BinaryOperand>op;
+    return bOp.operator === this.operator &&
+      this.areOperatorsEquals(this.left, bOp.left) &&
+      this.areOperatorsEquals(this.right, bOp.right);
+  }
   private evaluateParam(x: any, processValue?: ProcessValue): any {
     return x == null ? null : x.evaluate(processValue);
   }
@@ -143,7 +155,10 @@ export class UnaryOperand extends Operand {
       this.expression.toString(func)
     );
   }
-
+  protected isContentEqual(op: Operand): boolean {
+    const uOp = <UnaryOperand>op;
+    return uOp.operator == this.operator && this.areOperatorsEquals(this.expression, uOp.expression);
+  }
   public evaluate(processValue?: ProcessValue): boolean {
     let value = this.expression.evaluate(processValue);
     return this.consumer.call(this, value);
@@ -198,6 +213,14 @@ export class ArrayOperand extends Operand {
   public addToAsyncList(list: Array<FunctionOperand>) {
     this.values.forEach((operand) => operand.addToAsyncList(list));
   }
+  protected isContentEqual(op: Operand): boolean {
+    const aOp = <ArrayOperand>op;
+    if(aOp.values.length !== this.values.length) return false;
+    for(var i = 0; i < this.values.length; i ++) {
+      if(!aOp.values[i].isEqual(this.values[i])) return false;
+    }
+    return true;
+  }
 }
 
 export class Const extends Operand {
@@ -222,7 +245,7 @@ export class Const extends Operand {
     return this.getCorrectValue(this.value);
   }
 
-  public setVariables(_variables: Array<string>) {}
+  public setVariables(variables: Array<string>) {}
   protected getCorrectValue(value: any): any {
     if (!value || typeof value != "string") return value;
     if (this.isBooleanValue(value)) return value.toLowerCase() === "true";
@@ -238,6 +261,10 @@ export class Const extends Operand {
       return parseFloat(value);
     }
     return value;
+  }
+  protected isContentEqual(op: Operand): boolean {
+    const cOp = <Const>op;
+    return cOp.value == this.value;
   }
   private isQuote(ch: string): boolean {
     return ch == "'" || ch == '"';
@@ -276,7 +303,7 @@ export class Variable extends Const {
     var prefix = this.useValueAsItIs ? Variable.DisableConversionChar : "";
     return "{" + prefix + this.variableName + "}";
   }
-  public get variable() {
+  public get variable(): string {
     return this.variableName;
   }
   public evaluate(processValue?: ProcessValue): any {
@@ -292,6 +319,10 @@ export class Variable extends Const {
   protected getCorrectValue(value: any): any {
     if (this.useValueAsItIs) return value;
     return super.getCorrectValue(value);
+  }
+  protected isContentEqual(op: Operand): boolean {
+    const vOp = <Variable>op;
+    return vOp.variable == this.variable;
   }
 }
 
@@ -358,6 +389,10 @@ export class FunctionOperand extends Operand {
       list.push(this);
     }
   }
+  protected isContentEqual(op: Operand): boolean {
+    const fOp = <FunctionOperand>op;
+    return fOp.originalValue == this.originalValue && this.areOperatorsEquals(fOp.parameters, this.parameters);
+  }
 }
 
 export class OperandMaker {
@@ -404,18 +439,34 @@ export class OperandMaker {
       (value.toLowerCase() === "true" || value.toLowerCase() === "false")
     );
   }
+  static countDecimals(value: number): number {
+    if (Helpers.isNumber(value) && Math.floor(value) !== value) {
+      const strs = value.toString().split(".");
+      return strs.length > 1 && strs[1].length || 0;
+    }
+    return 0;
+  }
+  static plusMinus(a: number, b: number, res: number): number {
+    const digitsA = OperandMaker.countDecimals(a);
+    const digitsB = OperandMaker.countDecimals(b);
+    if(digitsA > 0 || digitsB > 0) {
+      const digits = Math.max(digitsA, digitsB);
+      res = parseFloat(res.toFixed(digits));
+    }
+    return res;
+  }
 
-  static unaryFunctions: HashTable<Function> = {
-    empty: function(value: any): boolean {
-      return Helpers.isValueEmpty(value);
-    },
-    notempty: function(value: any): boolean {
-      return !OperandMaker.unaryFunctions.empty(value);
-    },
-    negate: function(value: boolean): boolean {
-      return !value;
-    },
-  };
+static unaryFunctions: HashTable<Function> = {
+  empty: function(value: any): boolean {
+    return Helpers.isValueEmpty(value);
+  },
+  notempty: function(value: any): boolean {
+    return !OperandMaker.unaryFunctions.empty(value);
+  },
+  negate: function(value: boolean): boolean {
+    return !value;
+  },
+};
 
   static binaryFunctions: HashTable<Function> = {
     arithmeticOp(operatorName: string) {
@@ -438,13 +489,13 @@ export class OperandMaker {
       return a || b;
     },
     plus: function(a: any, b: any): any {
-      return a + b;
+      return Helpers.correctAfterPlusMinis(a, b, a + b);
     },
     minus: function(a: number, b: number): number {
-      return a - b;
+      return Helpers.correctAfterPlusMinis(a, b, a - b);
     },
     mul: function(a: number, b: number): number {
-      return a * b;
+      return Helpers.correctAfterMultiple(a, b, a * b);
     },
     div: function(a: number, b: number): number {
       if (!b) return null;

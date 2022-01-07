@@ -295,11 +295,29 @@ function peg$parse(input, options) {
     function text() {
         return input.substring(peg$savedPos, peg$currPos);
     }
+    function location() {
+        return peg$computeLocation(peg$savedPos, peg$currPos);
+    }
+    function expected(description, location1) {
+        location1 = location1 !== undefined
+            ? location1
+            : peg$computeLocation(peg$savedPos, peg$currPos);
+        throw peg$buildStructuredError([peg$otherExpectation(description)], input.substring(peg$savedPos, peg$currPos), location1);
+    }
+    function error(message, location1) {
+        location1 = location1 !== undefined
+            ? location1
+            : peg$computeLocation(peg$savedPos, peg$currPos);
+        throw peg$buildSimpleError(message, location1);
+    }
     function peg$literalExpectation(text1, ignoreCase) {
         return { type: "literal", text: text1, ignoreCase: ignoreCase };
     }
     function peg$classExpectation(parts, inverted, ignoreCase) {
         return { type: "class", parts: parts, inverted: inverted, ignoreCase: ignoreCase };
+    }
+    function peg$anyExpectation() {
+        return { type: "any" };
     }
     function peg$endExpectation() {
         return { type: "end" };
@@ -362,6 +380,9 @@ function peg$parse(input, options) {
             peg$maxFailExpected = [];
         }
         peg$maxFailExpected.push(expected1);
+    }
+    function peg$buildSimpleError(message, location1) {
+        return new SyntaxError(message, [], "", location1);
     }
     function peg$buildStructuredError(expected1, found, location1) {
         return new SyntaxError(SyntaxError.buildMessage(expected1, found), expected1, found, location1);

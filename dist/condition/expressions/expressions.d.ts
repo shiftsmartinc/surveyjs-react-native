@@ -1,13 +1,16 @@
 import { HashTable } from "../helpers";
 import { ProcessValue } from "../conditionProcessValue";
 export declare abstract class Operand {
-    toString(_func?: (op: Operand) => string): string;
+    toString(func?: (op: Operand) => string): string;
     abstract getType(): string;
     abstract evaluate(processValue?: ProcessValue): any;
     abstract setVariables(variables: Array<string>): any;
     hasFunction(): boolean;
     hasAsyncFunction(): boolean;
-    addToAsyncList(_list: Array<FunctionOperand>): void;
+    addToAsyncList(list: Array<FunctionOperand>): void;
+    isEqual(op: Operand): boolean;
+    protected abstract isContentEqual(op: Operand): boolean;
+    protected areOperatorsEquals(op1: Operand, op2: Operand): boolean;
 }
 export declare class BinaryOperand extends Operand {
     private operatorName;
@@ -23,6 +26,7 @@ export declare class BinaryOperand extends Operand {
     readonly operator: string;
     readonly leftOperand: any;
     readonly rightOperand: any;
+    protected isContentEqual(op: Operand): boolean;
     private evaluateParam;
     evaluate(processValue?: ProcessValue): any;
     toString(func?: (op: Operand) => string): string;
@@ -40,6 +44,7 @@ export declare class UnaryOperand extends Operand {
     readonly expression: Operand;
     getType(): string;
     toString(func?: (op: Operand) => string): string;
+    protected isContentEqual(op: Operand): boolean;
     evaluate(processValue?: ProcessValue): boolean;
     setVariables(variables: Array<string>): void;
 }
@@ -53,6 +58,7 @@ export declare class ArrayOperand extends Operand {
     hasFunction(): boolean;
     hasAsyncFunction(): boolean;
     addToAsyncList(list: Array<FunctionOperand>): void;
+    protected isContentEqual(op: Operand): boolean;
 }
 export declare class Const extends Operand {
     private value;
@@ -61,8 +67,9 @@ export declare class Const extends Operand {
     toString(func?: (op: Operand) => string): string;
     readonly correctValue: any;
     evaluate(): any;
-    setVariables(_variables: Array<string>): void;
+    setVariables(variables: Array<string>): void;
     protected getCorrectValue(value: any): any;
+    protected isContentEqual(op: Operand): boolean;
     private isQuote;
     private isBooleanValue;
 }
@@ -78,6 +85,7 @@ export declare class Variable extends Const {
     evaluate(processValue?: ProcessValue): any;
     setVariables(variables: Array<string>): void;
     protected getCorrectValue(value: any): any;
+    protected isContentEqual(op: Operand): boolean;
 }
 export declare class FunctionOperand extends Operand {
     private originalValue;
@@ -96,6 +104,7 @@ export declare class FunctionOperand extends Operand {
     hasFunction(): boolean;
     hasAsyncFunction(): boolean;
     addToAsyncList(list: Array<FunctionOperand>): void;
+    protected isContentEqual(op: Operand): boolean;
 }
 export declare class OperandMaker {
     static throwInvalidOperatorError(op: string): void;
@@ -104,6 +113,8 @@ export declare class OperandMaker {
     static isSpaceString(str: string): boolean;
     static isNumeric(value: string): boolean;
     static isBooleanValue(value: string): boolean;
+    static countDecimals(value: number): number;
+    static plusMinus(a: number, b: number, res: number): number;
     static unaryFunctions: HashTable<Function>;
     static binaryFunctions: HashTable<Function>;
     static isTwoValueEquals(x: any, y: any): boolean;
