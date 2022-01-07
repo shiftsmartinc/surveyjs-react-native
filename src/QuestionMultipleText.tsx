@@ -11,12 +11,14 @@ const styles = StyleSheet.create({
   },
   item: {
     flexDirection: 'row',
-    padding: 5,
-    borderTopWidth: 2,
-    borderTopColor: '#333',
+    paddingHorizontal: 5,
+    paddingVertical: 10,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(0, 0, 0, 0.1)',
+    alignItems: 'center',
   },
   itemFirst: {
-    borderTopWidth: 1,
+    borderTopWidth: 0,
   },
   itemLabel: {
     flex: 0.25,
