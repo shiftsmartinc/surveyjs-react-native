@@ -1,3 +1,4 @@
+import { SyntaxError, parse } from './condition/expressions/expressionParser';
 const errorTemplates = {
     requiredError: "Please answer the question.",
     numericError: "The value should be numeric.",
@@ -8,6 +9,9 @@ const errorTemplates = {
     textMaxLength: "Please enter less than {0} symbols.",
     minSelectError: "Please select at least {0} variants.",
     maxSelectError: "Please select no more than {0} variants.",
+    expressionError: "The expression: {0} {1} should return {1}.",
+    syntaxError: "Syntax error in expression ({0})",
+    unknownError: "An unknown error occurred ({0})",
 };
 const stringFormat = (str, ...args) => {
     return str.replace(/{(\d+)}/g, function (match, number) {
@@ -78,6 +82,26 @@ export default class QuestionValidator {
                 return null;
             return getErrorStr('invalidEmail', [], validator.text);
         };
+        this.validateExpression = (_value, validator) => {
+            if (!validator.expression)
+                return null;
+            try {
+                const { consumer, left, right, operator } = parse(validator.expression);
+                const question = this.owner.collection.questions[left.value];
+                if (!question)
+                    return null;
+                const operationResult = consumer(question.value, right.correctValue);
+                if (operationResult)
+                    return null;
+                return getErrorStr('expressionError', [operator, right], validator.text);
+            }
+            catch (error) {
+                if (error instanceof SyntaxError) {
+                    return getErrorStr('syntaxError', [error.message]);
+                }
+                return getErrorStr('unknownError', [error.message]);
+            }
+        };
         this.isNumber = (value) => {
             return !isNaN(parseFloat(value)) && isFinite(value);
         };
@@ -89,6 +113,7 @@ export default class QuestionValidator {
             regex: this.validateRegex,
             answercount: this.validateAnswerCount,
             email: this.validateEmail,
+            expression: this.validateExpression,
         };
     }
     validate() {

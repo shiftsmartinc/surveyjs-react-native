@@ -1,4 +1,4 @@
-import { HashTable } from './base';
+import { HashTable } from './helpers';
 import { ProcessValue } from "./conditionProcessValue";
 export declare class Operand {
     origionalValue: any;
