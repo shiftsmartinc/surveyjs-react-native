@@ -10,6 +10,12 @@ import moment from 'moment';
 import { ConditionRunner } from './condition/conditions';
 import QuestionValidator from './validator';
 import { isValueEmpty } from './utils';
+const getResponseValue = (obj, desc) => {
+    var arr = desc.split(".");
+    while (arr.length && (obj = obj[arr.shift()]))
+        ;
+    return obj;
+};
 const sortArray = (array, mult) => {
     return array.sort(function (a, b) {
         if (a < b)
@@ -75,10 +81,12 @@ class Question {
         this.comment = null;
         this.questions = [];
         this.choices = [];
+        this.title = '';
         this.json = json;
         this.visible = json.visible != null ? json.visible : true;
         this.originalNumber = originalNumber;
         this.collection = collection;
+        this.title = json.title;
         this.conditionRunner = null;
         if (json.choices && json.choices.length > 0) {
             const clonedChoices = json.choices.map(c => c);
@@ -119,6 +127,7 @@ class Question {
         if (this.collection) {
             this.collection.resetVisible();
             this.collection.regenerateNumbers();
+            this.collection.resetTitle();
             this.collection.triggers
                 .filter(v => v.name === this.json.name && !v.isOnNextPage)
                 .forEach(trigger => trigger.check(value));
@@ -141,6 +150,20 @@ class Question {
                 this.value = null;
             }
         }
+    }
+    resetTitle() {
+        const results = this.collection.results;
+        const defaultTitle = this.json.title || this.json.name;
+        const matches = defaultTitle.match(/{.+?}/g);
+        let processedTitle = defaultTitle;
+        if (matches) {
+            matches.forEach((match) => {
+                const valueName = match.replace('{', '').replace('}', '');
+                const varValue = getResponseValue(results, valueName) || match;
+                processedTitle = processedTitle.replace(match, varValue);
+            });
+        }
+        this.title = processedTitle;
     }
     setError(error) {
         this.error = error;
@@ -171,6 +194,9 @@ __decorate([
     observable
 ], Question.prototype, "choices", void 0);
 __decorate([
+    observable
+], Question.prototype, "title", void 0);
+__decorate([
     action.bound
 ], Question.prototype, "validate", null);
 __decorate([
@@ -188,6 +214,9 @@ __decorate([
 __decorate([
     action.bound
 ], Question.prototype, "resetVisible", null);
+__decorate([
+    action.bound
+], Question.prototype, "resetTitle", null);
 __decorate([
     action.bound
 ], Question.prototype, "setError", null);
@@ -302,6 +331,9 @@ export default class Model {
         Object.keys(this.questions).forEach(name => this.questions[name].resetVisible());
         this.pages.forEach(page => page.resetVisible());
     }
+    resetTitle() {
+        Object.keys(this.questions).forEach(name => this.questions[name].resetTitle());
+    }
     get prevPageIndex() {
         const reversedPages = this.pages.slice().reverse();
         const page = reversedPages.find(v => v.visible && v.pageIndex < this.curPageIndex);
@@ -374,6 +406,9 @@ __decorate([
 __decorate([
     action.bound
 ], Model.prototype, "resetVisible", null);
+__decorate([
+    action.bound
+], Model.prototype, "resetTitle", null);
 __decorate([
     computed
 ], Model.prototype, "prevPageIndex", null);

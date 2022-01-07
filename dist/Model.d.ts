@@ -18,6 +18,7 @@ export default class Model {
     nextPage(): void;
     prevPage(): void;
     resetVisible(): void;
+    resetTitle(): void;
     readonly prevPageIndex: any;
     readonly nextPageIndex: number;
     readonly currentPageProps: {

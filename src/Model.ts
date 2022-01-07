@@ -5,6 +5,12 @@ import { ConditionRunner } from './condition/conditions';
 import QuestionValidator from './validator';
 import { isValueEmpty } from './utils';
 
+const getResponseValue = (obj: any, desc: string) => {
+    var arr = desc.split(".");
+    while(arr.length && (obj = obj[arr.shift()]));
+    return obj;
+}
+
 const sortArray = (array: Array<string>, mult: number) => {
   return array.sort(function(a, b) {
     if (a < b) return -1 * mult;
@@ -75,6 +81,7 @@ class Question {
   @observable number;
   @observable questions = [];
   @observable choices = [];
+  @observable title = '';
 
   originalNumber;
   json;
@@ -87,6 +94,7 @@ class Question {
     this.visible = json.visible != null ? json.visible : true;
     this.originalNumber = originalNumber;
     this.collection = collection;
+    this.title = json.title;
 
     this.conditionRunner = null;
     if (json.choices && json.choices.length > 0) {
@@ -134,7 +142,10 @@ class Question {
       // 3. re-generate question order number
       this.collection.regenerateNumbers();
 
-      // 4. triggers
+      // 4. re-generate question title
+      this.collection.resetTitle();
+
+      // 5. triggers
       this.collection.triggers
         .filter(v => v.name === this.json.name && !v.isOnNextPage)
         .forEach(trigger => trigger.check(value));
@@ -161,6 +172,21 @@ class Question {
         this.value = null;
       }
     }
+  }
+
+  @action.bound resetTitle() {
+    const results = this.collection.results;
+    const defaultTitle = this.json.title || this.json.name;
+    const matches = defaultTitle.match(/{.+?}/g);
+    let processedTitle = defaultTitle;
+    if (matches) {
+      matches.forEach((match:string) => {
+        const valueName = match.replace('{', '').replace('}', '');
+        const varValue = getResponseValue(results, valueName) || match;
+        processedTitle = processedTitle.replace(match, varValue);
+      })
+    }
+    this.title = processedTitle;
   }
 
   @action.bound setError(error) {
@@ -243,6 +269,10 @@ export default class Model {
   @action.bound resetVisible() {
     Object.keys(this.questions).forEach(name => this.questions[name].resetVisible());
     this.pages.forEach(page => page.resetVisible());
+  }
+
+  @action.bound resetTitle() {
+    Object.keys(this.questions).forEach(name => this.questions[name].resetTitle());
   }
 
   @computed get prevPageIndex() {

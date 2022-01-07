@@ -118,6 +118,7 @@ let QuestionWrapper = class QuestionWrapper extends React.Component {
             const build = this.typeBuilderMap[json.type];
             const content = build(question);
             const { title = null, name, showTitle = true, } = json;
+            const renderedTitle = question.title || title;
             const { number = null, } = question;
             if (!question.visible) {
                 return null;
@@ -126,7 +127,7 @@ let QuestionWrapper = class QuestionWrapper extends React.Component {
         {showTitle && question.json.type !== 'html' &&
                 <View style={[styles.title, isPreview && styles.previewTitle]}>
             <Text style={[styles.titleText, isPreview && styles.previewTitleText]}>
-              {number ? `${number}.` : ''} {title || name}
+              {number ? `${number}.` : ''} {renderedTitle || name}
             </Text>
           </View>}
         {question.error &&

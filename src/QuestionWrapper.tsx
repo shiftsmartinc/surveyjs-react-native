@@ -192,6 +192,7 @@ export default class QuestionWrapper extends React.Component<any> {
       name,
       showTitle = true,
     } = json;
+    const renderedTitle = question.title || title;
     const {
       number = null,
     } = question;
@@ -203,7 +204,7 @@ export default class QuestionWrapper extends React.Component<any> {
         {showTitle && question.json.type !== 'html' &&
           <View style={[styles.title, isPreview && styles.previewTitle]}>
             <Text style={[styles.titleText, isPreview && styles.previewTitleText]}>
-              {number ? `${number}.` : ''} {title || name}
+              {number ? `${number}.` : ''} {renderedTitle || name}
             </Text>
           </View>
         }

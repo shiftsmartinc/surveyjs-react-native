@@ -4,7 +4,7 @@ export default class QuestionValidator {
     private emailRegex;
     constructor(owner: any);
     validate(): boolean;
-    getValidators(): any;
+    getValidators(): any[];
     validateRequire: (value: any, validator: any) => any;
     validateNumber: (value: any, validator: any) => any;
     validateText: (value: any, validator: any) => any;
