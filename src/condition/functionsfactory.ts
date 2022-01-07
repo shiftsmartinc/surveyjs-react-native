@@ -1,11 +1,15 @@
-import { HashTable } from "./base";
+import { HashTable } from "./helpers";
 
 export class FunctionFactory {
   public static Instance: FunctionFactory = new FunctionFactory();
   private functionHash: HashTable<(params: any[]) => any> = {};
+  private isAsyncHash: HashTable<boolean> = {};
 
   public register(name: string, func: (params: any[]) => any) {
     this.functionHash[name] = func;
+  }
+  public isAsyncFunction(name: string): boolean {
+    return !!this.isAsyncHash[name];
   }
   public clear() {
     this.functionHash = {};
@@ -17,10 +21,23 @@ export class FunctionFactory {
     }
     return result.sort();
   }
-  public run(name: string, params: any[]): any {
+  public run(
+    name: string,
+    params: any[],
+    properties: HashTable<any> = null
+  ): any {
     var func = this.functionHash[name];
     if (!func) return null;
-    return func(params);
+    let classRunner = {
+      func: func,
+    };
+
+    if (properties) {
+      for (var key in properties) {
+        (<any>classRunner)[key] = properties[key];
+      }
+    }
+    return classRunner.func(params);
   }
 }
 

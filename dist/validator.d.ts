@@ -11,6 +11,7 @@ export default class QuestionValidator {
     validateAnswerCount: (value: any, validator: any) => any;
     validateRegex: (value: any, validator: any) => string;
     validateEmail: (value: any, validator: any) => string;
+    validateExpression: (_value: any, validator: any) => string;
     isNumber: (value: any) => boolean;
     isValueEmpty(value: any): boolean;
 }
