@@ -15,4 +15,7 @@ export declare class Helpers {
     static getNumberByIndex(index: number, startIndexStr: string): string;
     static isCharNotLetterAndDigit(ch: string): boolean;
     static isCharDigit(ch: string): boolean;
+    private static countDecimals;
+    static correctAfterPlusMinis(a: number, b: number, res: number): number;
+    static correctAfterMultiple(a: number, b: number, res: number): number;
 }
