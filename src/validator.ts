@@ -24,8 +24,24 @@ const stringFormat = (str, ...args) => {
   });
 };
 
-const getErrorStr = (templateName, errorArgs = [], errorText = null) => {
-  return errorText || stringFormat(errorTemplates[templateName], ...errorArgs);
+const formatStringWithResults = (str, results) => {
+  const defaultValue = str
+  const matches = defaultValue.match(/{.+?}/g);
+  let processedValue = defaultValue;
+  if (matches) {
+      matches.forEach((match) => {
+          const valueName = match.replace('{', '').replace('}', '');
+          const varValue = getResponseValue(results, valueName) || match;
+          processedValue = processedValue.replace(match, varValue);
+      });
+  }
+
+  return processedValue;
+}
+
+const getErrorStr = (templateName, errorArgs = [], errorText = null, results = {}) => {
+  const errorMsg = errorText ? formatStringWithResults(errorText, results) : stringFormat(errorTemplates[templateName], ...errorArgs);
+  return errorMsg;
 };
 
 const getResponseValue = (obj, desc: string) => {
@@ -175,7 +191,7 @@ export default class QuestionValidator {
      const operationResult = this.runCondition(consumer, left, right);
 
      if (operationResult) return null;
-     return getErrorStr('expressionError', [operator, right], validator.text);
+     return getErrorStr('expressionError', [operator, right], validator.text, this.owner.collection.results || {});
    } catch (error) {
      if (error instanceof SyntaxError) {
        return getErrorStr('syntaxError', [error.message]);
