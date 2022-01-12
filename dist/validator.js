@@ -20,8 +20,34 @@ const stringFormat = (str, ...args) => {
             : match;
     });
 };
-const getErrorStr = (templateName, errorArgs = [], errorText = null) => {
-    return errorText || stringFormat(errorTemplates[templateName], ...errorArgs);
+const formatStringWithResults = (str, results) => {
+    const defaultValue = str;
+    const matches = defaultValue.match(/{.+?}/g);
+    let processedValue = defaultValue;
+    if (matches) {
+        matches.forEach((match) => {
+            const valueName = match.replace('{', '').replace('}', '');
+            const varValue = getResponseValue(results, valueName) || match;
+            processedValue = processedValue.replace(match, varValue);
+        });
+    }
+    return processedValue;
+};
+const getErrorStr = (templateName, errorArgs = [], errorText = null, results = {}) => {
+    const errorMsg = errorText ? formatStringWithResults(errorText, results) : stringFormat(errorTemplates[templateName], ...errorArgs);
+    return errorMsg;
+};
+const getResponseValue = (obj, desc) => {
+    var arr = desc.split(".");
+    while (arr.length && (obj = obj[arr.shift()]))
+        ;
+    return obj;
+};
+const getValue = (value) => {
+    var val = parseFloat(value);
+    if (isNaN(val))
+        return value;
+    return val;
 };
 export default class QuestionValidator {
     constructor(owner) {
@@ -86,14 +112,12 @@ export default class QuestionValidator {
             if (!validator.expression)
                 return null;
             try {
-                const { consumer, left, right, operator } = parse(validator.expression);
-                const question = this.owner.collection.questions[left.value];
-                if (!question)
-                    return null;
-                const operationResult = consumer(question.value, right.correctValue);
+                const res = parse(validator.expression);
+                const { consumer, left, right, operator } = res;
+                const operationResult = this.runCondition(consumer, left, right);
                 if (operationResult)
                     return null;
-                return getErrorStr('expressionError', [operator, right], validator.text);
+                return getErrorStr('expressionError', [operator, right], validator.text, this.owner.collection.results || {});
             }
             catch (error) {
                 if (error instanceof SyntaxError) {
@@ -164,5 +188,36 @@ export default class QuestionValidator {
             value = value.trim();
         }
         return !value && value !== 0 && value !== false;
+    }
+    runCondition(consumer, left, right) {
+        let leftValue = left;
+        let rightValue = right;
+        if (left.consumer) {
+            leftValue = this.runCondition(left.consumer, left.left, left.right);
+        }
+        if (right.consumer) {
+            rightValue = this.runCondition(right.consumer, right.left, right.right);
+        }
+        let rightRawValue = rightValue.correctValue || rightValue;
+        if (rightValue.variableName) {
+            const rightQuestionName = rightValue.value.split('.').shift();
+            const rightQuestion = this.owner.collection.questions[rightQuestionName];
+            if (!rightQuestion) {
+                return null;
+            }
+            rightRawValue = getResponseValue(this.owner.collection.results, rightValue.variableName);
+        }
+        let leftRawValue = leftValue.correctValue || leftValue;
+        if (leftValue.value) {
+            const leftQuestionName = leftValue.value.split('.').shift();
+            const leftQuestion = this.owner.collection.questions[leftQuestionName];
+            if (!leftQuestion)
+                return null;
+            if (leftValue.variableName) {
+                leftRawValue = getResponseValue(this.owner.collection.results, leftValue.variableName);
+            }
+        }
+        const operationResult = consumer(getValue(leftRawValue), getValue(rightRawValue));
+        return operationResult;
     }
 }

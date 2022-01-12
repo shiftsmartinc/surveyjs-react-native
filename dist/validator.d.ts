@@ -14,4 +14,5 @@ export default class QuestionValidator {
     validateExpression: (_value: any, validator: any) => string;
     isNumber: (value: any) => boolean;
     isValueEmpty(value: any): boolean;
+    runCondition(consumer: any, left: any, right: any): any;
 }
