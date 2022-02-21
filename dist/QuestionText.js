@@ -169,7 +169,7 @@ let QuestionText = class QuestionText extends React.Component {
         </Modal>);
         }
         return (<>
-        <TextInput style={[styles.input, isMultiline && { height: 19 * rows }]} multiline={isMultiline} placeholder={placeholder} value={value} onChangeText={onChange} numberOfLines={Number(rows)} placeholderTextColor="#4471a0" underlineColorAndroid={'transparent'} keyboardType={this.getKeyboardType()} editable={!isPreview}/>
+        <TextInput style={[styles.input, isMultiline && { height: 19 * rows }]} multiline={isMultiline} placeholder={placeholder} value={value} onChangeText={onChange} numberOfLines={Number(rows)} placeholderTextColor="#4471a0" underlineColorAndroid={'transparent'} keyboardType={this.getKeyboardType()} editable={!isPreview} onFocus={this.openAutocompleteModal}/>
         {autoCompleteContent}
       </>);
     }

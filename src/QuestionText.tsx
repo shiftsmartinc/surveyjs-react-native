@@ -105,7 +105,9 @@ export interface Props {
   inputType?: string;
   rows?: number;
   value: string;
-  onChange(value);
+  onChange(value: string): Function;
+  autoComplete?: string;
+  dataList?: [string];
 }
 
 @inject((store: any) => ({
@@ -202,6 +204,7 @@ export default class QuestionText extends React.Component<Props> {
           underlineColorAndroid={'transparent'}
           keyboardType={this.getKeyboardType()}
           editable={!isPreview}
+          onFocus={this.openAutocompleteModal}
         />
         {autoCompleteContent}
       </>

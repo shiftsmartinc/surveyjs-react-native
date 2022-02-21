@@ -5,7 +5,9 @@ export interface Props {
     inputType?: string;
     rows?: number;
     value: string;
-    onChange(value: any): any;
+    onChange(value: string): Function;
+    autoComplete?: string;
+    dataList?: [string];
 }
 export default class QuestionText extends React.Component<Props> {
     getKeyboardType: () => "default" | "email-address" | "numeric";
