@@ -102,6 +102,8 @@ class MyWebView extends React.Component<any, any> {
         automaticallyAdjustContentInsets={true}
         {...this.props}
         style={[styles.container, this.props.style, { height }]}
+        androidHardwareAccelerationDisabled={
+          !!'https://github.com/react-native-webview/react-native-webview/issues/811'}
       />
     )
   }
