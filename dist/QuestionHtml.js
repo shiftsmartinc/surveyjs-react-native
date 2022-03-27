@@ -49,7 +49,7 @@ class MyWebView extends React.Component {
     }
     render() {
         const height = this.props.autoHeight ? this.state.webViewHeight : this.props.defaultHeight;
-        return (<WebView injectedJavaScript={injectedScript} scrollEnabled={this.props.scrollEnabled || false} onNavigationStateChange={this._onNavigationStateChange} onMessage={this._onMessage} javaScriptEnabled={true} automaticallyAdjustContentInsets={true} {...this.props} style={[styles.container, this.props.style, { height }]}/>);
+        return (<WebView injectedJavaScript={injectedScript} scrollEnabled={this.props.scrollEnabled || false} onNavigationStateChange={this._onNavigationStateChange} onMessage={this._onMessage} javaScriptEnabled={true} automaticallyAdjustContentInsets={true} {...this.props} style={[styles.container, this.props.style, { height }]} androidHardwareAccelerationDisabled={!!'https://github.com/react-native-webview/react-native-webview/issues/811'}/>);
     }
 }
 MyWebView.defaultProps = {
