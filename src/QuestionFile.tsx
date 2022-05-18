@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Text, Image, Alert } from 'react-native';
-import * as ImagePicker from 'react-native-image-picker';
+import * as ImagePicker from 'react-native-image-crop-picker';
 import TouchableWithFeedback from './TouchableWithFeedback';
 
 const styles = StyleSheet.create({
@@ -50,22 +50,16 @@ export interface Props {
 }
 
 export default class QuestionFile extends React.Component<Props> {
-  openPicker = (method: 'launchCamera' | 'launchImageLibrary') => {
+  openPicker = async (method: 'openCamera' | 'openPicker') => {
     const { storeDataAsText = false, isVideo, maxSize, onChange } = this.props;
-    ImagePicker[method]({
-      includeBase64: storeDataAsText,
-      mediaType: isVideo ? 'video' : 'photo',
-      quality: 0.5,
-      videoQuality: 'low',
-      }, (response) => {
-      if (response.errorCode) {
-        Alert.alert( 'Error', response.errorMessage || response.errorCode, [{ text: 'OK' }]);
-        return;
-      }
-      if (response.didCancel) {
-        return;
-      }
-      if (maxSize && response.fileSize > maxSize) {
+    const imageAction = ImagePicker[method];
+    try {
+      const response = await imageAction({
+        includeBase64: storeDataAsText,
+        mediaType: isVideo ? 'video' : 'photo',
+        compressImageQuality: 0.5,
+      });
+      if (maxSize && response.size > maxSize) {
         Alert.alert(
           'FileSize',
           'Too Large FileSize',
@@ -75,7 +69,19 @@ export default class QuestionFile extends React.Component<Props> {
       }
       const value = storeDataAsText ? response.base64 : response;
       onChange(value);
-    });
+    } catch (error) {
+        if (error.code === 'E_PICKER_CANCELLED') {
+          return;
+        }
+        if (error.code === 'E_PICKER_CANNOT_RUN_CAMERA_ON_SIMULATOR') {
+          Alert.alert('Cannot open camera on simulator');
+          return;
+        }
+        if (error.code === 'E_NO_LIBRARY_PERMISSION') {
+          Alert.alert('Grant permissions to images');
+        }
+        Alert.alert( 'Error', error.message || error.code, [{ text: 'OK' }]);
+    }
   }
   render() {
     const { value, onChange } = this.props;
@@ -97,10 +103,10 @@ export default class QuestionFile extends React.Component<Props> {
           )
           : (
             <View style={styles.buttons}>
-              <TouchableWithFeedback style={styles.button} onPress={() => this.openPicker('launchImageLibrary')}>
+              <TouchableWithFeedback style={styles.button} onPress={() => this.openPicker('openPicker')}>
                 <Text style={styles.buttonText}>Upload from Camera Roll</Text>
               </TouchableWithFeedback>
-              <TouchableWithFeedback style={styles.button} onPress={() => this.openPicker('launchCamera')}>
+              <TouchableWithFeedback style={styles.button} onPress={() => this.openPicker('openCamera')}>
                 <Text style={styles.buttonText}>Capture Now</Text>
               </TouchableWithFeedback>
             </View>

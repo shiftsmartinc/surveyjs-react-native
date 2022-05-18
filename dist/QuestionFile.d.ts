@@ -10,6 +10,6 @@ export interface Props {
     onChange(value: any, comment?: any): any;
 }
 export default class QuestionFile extends React.Component<Props> {
-    openPicker: (method: "launchCamera" | "launchImageLibrary") => void;
+    openPicker: (method: "openCamera" | "openPicker") => Promise<void>;
     render(): JSX.Element;
 }
