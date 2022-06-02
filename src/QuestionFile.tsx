@@ -45,7 +45,7 @@ export interface Props {
   imageWidth?: number;
   maxSize?: number;
   storeDataAsText?: boolean;
-  value?: string;
+  value?: any;
   onChange(value, comment?);
 }
 
@@ -90,9 +90,12 @@ export default class QuestionFile extends React.Component<Props> {
         {!value &&
           <Image style={styles.image} source={require('./images/file-placeholder.png')} />
         }
-        {value &&
+        {value && value.path && (
+          <Image style={styles.image} source={{ uri: value.path }} />
+        )}
+        {typeof value === 'string' && (
           <Image style={styles.image} source={{ uri: value }} />
-        }
+        )}
         {value
           ? (
             <View style={styles.buttons}>

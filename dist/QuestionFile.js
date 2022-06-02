@@ -74,8 +74,8 @@ export default class QuestionFile extends React.Component {
         return (<View style={styles.container}>
         {!value &&
             <Image style={styles.image} source={require('./images/file-placeholder.png')}/>}
-        {value &&
-            <Image style={styles.image} source={{ uri: value }}/>}
+        {value && value.path && (<Image style={styles.image} source={{ uri: value.path }}/>)}
+        {typeof value === 'string' && (<Image style={styles.image} source={{ uri: value }}/>)}
         {value
             ? (<View style={styles.buttons}>
               <TouchableWithFeedback style={styles.button} onPress={() => onChange(null)}>
