@@ -10,6 +10,7 @@ const styles = StyleSheet.create({
 
 export interface Props {
   html: string;
+  isPreview?: boolean;
 }
 
 const injectedStyles = `
@@ -111,6 +112,9 @@ class MyWebView extends React.Component<any, any> {
 
 export default class QuestionHtml extends React.Component<Props> {
   render() {
+    if (this.props.isPreview) {
+      return null;
+    }
     return (
       <MyWebView
         source={{

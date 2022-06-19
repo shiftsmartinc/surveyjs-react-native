@@ -57,6 +57,9 @@ MyWebView.defaultProps = {
 };
 export default class QuestionHtml extends React.Component {
     render() {
+        if (this.props.isPreview) {
+            return null;
+        }
         return (<MyWebView source={{
             html: `${injectedMeta}${injectedStyles}${this.props.html}`,
         }} defaultHeight={1} startInLoadingState={true} scrollEnabled={false}/>);

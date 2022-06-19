@@ -50,12 +50,13 @@ const styles = StyleSheet.create({
   },
 });
 
-const commonBuilderCreator = Component => question =>
+const commonBuilderCreator = Component => (question, isPreview) =>
   <Component
     {...question.json}
     value={question.value}
     comment={question.comment}
     onChange={question.setValue}
+    isPreview={isPreview}
   />;
 
 const choiceBuilderCreator = Component => (question) => {
@@ -186,7 +187,7 @@ export default class QuestionWrapper extends React.Component<any> {
     const { isPreview } = this.props;
     const json = question.json || question;
     const build = this.typeBuilderMap[json.type];
-    const content = build(question);
+    const content = build(question, isPreview);
     const {
       title = null,
       name,

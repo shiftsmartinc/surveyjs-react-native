@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
         paddingVertical: 16,
     },
 });
-const commonBuilderCreator = Component => question => <Component {...question.json} value={question.value} comment={question.comment} onChange={question.setValue}/>;
+const commonBuilderCreator = Component => (question, isPreview) => <Component {...question.json} value={question.value} comment={question.comment} onChange={question.setValue} isPreview={isPreview}/>;
 const choiceBuilderCreator = Component => (question) => {
     const json = question.json;
     const choices = (question.choices || json.choices).map(v => typeof v === 'string' ? { value: v, text: v } : v);
@@ -116,7 +116,7 @@ let QuestionWrapper = class QuestionWrapper extends React.Component {
             const { isPreview } = this.props;
             const json = question.json || question;
             const build = this.typeBuilderMap[json.type];
-            const content = build(question);
+            const content = build(question, isPreview);
             const { title = null, name, showTitle = true, } = json;
             const renderedTitle = question.title || title;
             const { number = null, } = question;
