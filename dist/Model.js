@@ -230,7 +230,7 @@ export default class Model {
         this.questions = {};
         this.curPageIndex = 0;
         this.isComplete = false;
-        this.pages = observable.array[];
+        this.pages = observable.array([]);
         this.triggers = [];
         this.originalNumber = 0;
         this.questionNamesInOrder = [];

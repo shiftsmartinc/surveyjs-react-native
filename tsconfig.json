@@ -14,7 +14,6 @@
     "noFallthroughCasesInSwitch": true,
     "removeComments": true,
     "declaration": true,
-    "useDefineForClassFields": true,
     },
   "include": [
     "src/**/*"

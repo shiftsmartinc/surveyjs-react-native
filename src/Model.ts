@@ -205,7 +205,7 @@ export default class Model {
   @observable curPageIndex = 0;
   @observable isComplete = false;
 
-  pages = observable.array[];
+  pages = observable.array([]);
 
   triggers: Array<SurveyTrigger> = [];
 

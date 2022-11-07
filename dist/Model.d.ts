@@ -3,7 +3,7 @@ export default class Model {
     questions: {};
     curPageIndex: number;
     isComplete: boolean;
-    pages: any;
+    pages: import("mobx").IObservableArray<any>;
     triggers: Array<SurveyTrigger>;
     apis: any;
     isPreview: boolean;
@@ -20,7 +20,7 @@ export default class Model {
     resetVisible(): void;
     resetTitle(): void;
     readonly prevPageIndex: any;
-    readonly nextPageIndex: any;
+    readonly nextPageIndex: number;
     readonly currentPageProps: {
         name: any;
         questions: any;
