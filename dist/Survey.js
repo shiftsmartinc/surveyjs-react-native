@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
 });
 let Survey = class Survey extends React.Component {
     render() {
+        console.log('some terst');
         const { isComplete, isPreview, nextPageIndex, nextPage } = this.props;
         if (isComplete) {
             return (<View style={styles.results}>
