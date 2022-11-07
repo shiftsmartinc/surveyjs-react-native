@@ -48,7 +48,6 @@ const styles = StyleSheet.create({
 @observer
 export default class Survey extends React.Component<any> {
   render() {
-    console.log('some ters1t')
     const { isComplete, isPreview, nextPageIndex, nextPage } = this.props;
     if (isComplete) {
       return (
