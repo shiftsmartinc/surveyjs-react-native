@@ -8,5 +8,5 @@ export interface Props {
 export default class QuestionBoolean extends React.Component<Props, any> {
     constructor(props: any);
     handleChecked: (checked: any) => void;
-    render(): JSX.Element;
+    render(): any;
 }

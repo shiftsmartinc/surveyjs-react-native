@@ -10,7 +10,7 @@ export interface Props {
     dataList?: [string];
 }
 export default class QuestionText extends React.Component<Props> {
-    getKeyboardType: () => "default" | "email-address" | "numeric";
+    getKeyboardType: () => "numeric" | "email-address" | "default";
     state: {
         autocompleteModalVisible: boolean;
     };
@@ -18,6 +18,6 @@ export default class QuestionText extends React.Component<Props> {
     closeAutocompleteModal: () => void;
     renderAutoCompleteItem: ({ item }: {
         item: any;
-    }) => JSX.Element;
-    render(): JSX.Element;
+    }) => any;
+    render(): any;
 }

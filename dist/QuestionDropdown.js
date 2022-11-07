@@ -96,15 +96,6 @@ const DEFAULT_OPTION_CAPTION = 'Select an Answer';
 export default class QuestionDropdown extends React.Component {
     constructor(props) {
         super(props);
-        this.handleCommentChange = (comment) => {
-            this.props.onChange(this.props.value, comment);
-        };
-        this.openModal = () => {
-            this.setState({ modalVisible: true });
-        };
-        this.closeModal = () => {
-            this.setState({ modalVisible: false });
-        };
         const options = [
             ...props.choices,
         ];
@@ -119,6 +110,15 @@ export default class QuestionDropdown extends React.Component {
             modalVisible: false,
         };
     }
+    handleCommentChange = (comment) => {
+        this.props.onChange(this.props.value, comment);
+    };
+    openModal = () => {
+        this.setState({ modalVisible: true });
+    };
+    closeModal = () => {
+        this.setState({ modalVisible: false });
+    };
     render() {
         const { otherText = DEFAULT_OTHER_TEXT, optionsCaption = DEFAULT_OPTION_CAPTION, value, comment, hasOther, onChange } = this.props;
         const { options, modalVisible } = this.state;
@@ -129,7 +129,7 @@ export default class QuestionDropdown extends React.Component {
           <Image style={styles.rightArrow} source={require('./images/right-arrow-grey.png')}/>
         </TouchableWithFeedback>
         {value === OTHER_VALUE &&
-            <QuestionText value={comment} onChange={this.handleCommentChange} placeholder={otherText}/>}
+                <QuestionText value={comment} onChange={this.handleCommentChange} placeholder={otherText}/>}
         <Modal visible={modalVisible} onRequestClose={this.closeModal}>
           <View style={styles.modal}>
             <View style={styles.modalContainer}>

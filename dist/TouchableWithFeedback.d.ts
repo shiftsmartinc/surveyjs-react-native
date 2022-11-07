@@ -6,6 +6,6 @@ interface Props extends TouchableWithoutFeedbackProps {
     style?: StyleProp<ViewStyle>;
 }
 export default class TouchableWithFeedback extends React.Component<Props> {
-    render(): JSX.Element;
+    render(): any;
 }
 export {};

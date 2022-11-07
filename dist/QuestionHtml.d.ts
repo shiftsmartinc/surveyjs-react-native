@@ -4,5 +4,5 @@ export interface Props {
     isPreview?: boolean;
 }
 export default class QuestionHtml extends React.Component<Props> {
-    render(): JSX.Element;
+    render(): any;
 }

@@ -6,5 +6,5 @@ export interface Props {
 }
 export default class Factory extends React.PureComponent<Props> {
     private model;
-    render(): JSX.Element;
+    render(): any;
 }

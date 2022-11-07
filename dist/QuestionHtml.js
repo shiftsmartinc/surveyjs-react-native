@@ -20,11 +20,14 @@ const injectedStyles = `
 const injectedMeta = '<meta name="viewport" content="width=device-width, initial-scale=1" />';
 const injectedScript = 'window.ReactNativeWebView.postMessage(document.body.scrollHeight)';
 class MyWebView extends React.Component {
+    state = {
+        webViewHeight: Number
+    };
+    static defaultProps = {
+        autoHeight: true,
+    };
     constructor(props) {
         super(props);
-        this.state = {
-            webViewHeight: Number
-        };
         this.state = {
             webViewHeight: this.props.defaultHeight
         };
@@ -52,16 +55,13 @@ class MyWebView extends React.Component {
         return (<WebView injectedJavaScript={injectedScript} scrollEnabled={this.props.scrollEnabled || false} onNavigationStateChange={this._onNavigationStateChange} onMessage={this._onMessage} javaScriptEnabled={true} automaticallyAdjustContentInsets={true} {...this.props} style={[styles.container, this.props.style, { height }]} androidHardwareAccelerationDisabled={!!'https://github.com/react-native-webview/react-native-webview/issues/811'}/>);
     }
 }
-MyWebView.defaultProps = {
-    autoHeight: true,
-};
 export default class QuestionHtml extends React.Component {
     render() {
         if (this.props.isPreview) {
             return null;
         }
         return (<MyWebView source={{
-            html: `${injectedMeta}${injectedStyles}${this.props.html}`,
-        }} defaultHeight={1} startInLoadingState={true} scrollEnabled={false}/>);
+                html: `${injectedMeta}${injectedStyles}${this.props.html}`,
+            }} defaultHeight={1} startInLoadingState={true} scrollEnabled={false}/>);
     }
 }

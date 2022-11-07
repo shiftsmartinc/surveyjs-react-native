@@ -104,39 +104,36 @@ const styles = StyleSheet.create({
     }
 });
 let QuestionText = class QuestionText extends React.Component {
-    constructor() {
-        super(...arguments);
-        this.getKeyboardType = () => {
-            const { inputType = 'text' } = this.props;
-            switch (inputType) {
-                case 'number':
-                    return 'numeric';
-                case 'email':
-                    return 'email-address';
-                default:
-                    return 'default';
-            }
-        };
-        this.state = {
-            autocompleteModalVisible: false,
-        };
-        this.openAutocompleteModal = () => {
-            const { autoComplete = null, dataList = [] } = this.props;
-            if (!!autoComplete && !!dataList) {
-                this.setState({ autocompleteModalVisible: true });
-            }
-        };
-        this.closeAutocompleteModal = () => {
-            this.setState({ autocompleteModalVisible: false });
-        };
-        this.renderAutoCompleteItem = ({ item }) => (<TouchableWithFeedback style={styles.autoCompleteItem} onPress={() => {
+    getKeyboardType = () => {
+        const { inputType = 'text' } = this.props;
+        switch (inputType) {
+            case 'number':
+                return 'numeric';
+            case 'email':
+                return 'email-address';
+            default:
+                return 'default';
+        }
+    };
+    state = {
+        autocompleteModalVisible: false,
+    };
+    openAutocompleteModal = () => {
+        const { autoComplete = null, dataList = [] } = this.props;
+        if (!!autoComplete && !!dataList) {
+            this.setState({ autocompleteModalVisible: true });
+        }
+    };
+    closeAutocompleteModal = () => {
+        this.setState({ autocompleteModalVisible: false });
+    };
+    renderAutoCompleteItem = ({ item }) => (<TouchableWithFeedback style={styles.autoCompleteItem} onPress={() => {
             const { onChange } = this.props;
             onChange(item.text);
             this.closeAutocompleteModal();
         }}>
       <Text style={styles.autoCompleteItemText}>{item.text}</Text>
     </TouchableWithFeedback>);
-    }
     render() {
         const { autocompleteModalVisible } = this.state;
         const { isPreview, placeholder, value, onChange, rows = 1, autoComplete = null, dataList = [] } = this.props;

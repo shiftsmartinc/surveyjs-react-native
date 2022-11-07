@@ -13,5 +13,5 @@ export default class QuestionDropdown extends React.Component<Props, any> {
     handleCommentChange: (comment: any) => void;
     openModal: () => void;
     closeModal: () => void;
-    render(): JSX.Element;
+    render(): any;
 }

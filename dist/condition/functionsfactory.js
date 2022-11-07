@@ -1,8 +1,7 @@
 export class FunctionFactory {
-    constructor() {
-        this.functionHash = {};
-        this.isAsyncHash = {};
-    }
+    static Instance = new FunctionFactory();
+    functionHash = {};
+    isAsyncHash = {};
     register(name, func) {
         this.functionHash[name] = func;
     }
@@ -34,7 +33,6 @@ export class FunctionFactory {
         return classRunner.func(params);
     }
 }
-FunctionFactory.Instance = new FunctionFactory();
 function sum(params) {
     var res = 0;
     for (var i = 0; i < params.length; i++) {

@@ -67,10 +67,10 @@ let SurveyNavigation = class SurveyNavigation extends React.Component {
         return [
             <View key="navigation" style={styles.container}>
         {prevPageIndex !== -1
-                ? (<TouchableWithFeedback onPress={prevPage} style={styles.button}>
+                    ? (<TouchableWithFeedback onPress={prevPage} style={styles.button}>
               <Text style={styles.buttonText}>&lt;</Text>
             </TouchableWithFeedback>)
-                : <View style={styles.placeholder}/>}
+                    : <View style={styles.placeholder}/>}
         <Text style={styles.title}>
           Page <Text style={styles.bold}>{curPageIndex + 1}</Text> of <Text style={styles.bold}>{pages.length}</Text>
       </Text>

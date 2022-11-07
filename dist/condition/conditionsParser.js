@@ -1,5 +1,12 @@
 import { Condition, ConditionNode, Operand, FunctionOperand } from "./conditions";
 export class ConditionsParser {
+    static constants = ["true", "false"];
+    text;
+    root;
+    expressionNodes;
+    node;
+    at;
+    length;
     parse(text, root) {
         this.text = text;
         this.root = root;
@@ -316,4 +323,3 @@ export class ConditionsParser {
         }
     }
 }
-ConditionsParser.constants = ["true", "false"];

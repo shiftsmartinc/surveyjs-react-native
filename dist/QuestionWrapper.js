@@ -86,9 +86,7 @@ const ratingBuilder = question => {
 };
 const commentBuilder = question => (<QuestionText {...question.json} value={question.value} comment={question.comment} onChange={question.setValue}/>);
 let QuestionWrapper = class QuestionWrapper extends React.Component {
-    constructor() {
-        super(...arguments);
-        this.panelBuilder = question => (<View>
+    panelBuilder = question => (<View>
       {question.json.elements.map((json) => {
             return this.renderQuestion({
                 type: json.type,
@@ -96,34 +94,34 @@ let QuestionWrapper = class QuestionWrapper extends React.Component {
             });
         })}
     </View>);
-        this.panelDynamicBuilder = json => (<QuestionPanelDynamic {...json} buildComponent={this.renderQuestion}/>);
-        this.multipleTextBuilder = question => (<QuestionMultipleText {...question.json} questions={question.questions} onChange={question.setValue}/>);
-        this.typeBuilderMap = {
-            text: commonBuilderCreator(QuestionTextWrapper),
-            checkbox: choiceBuilderCreator(QuestionCheckbox),
-            radiogroup: choiceBuilderCreator(QuestionRadiogroup),
-            dropdown: choiceBuilderCreator(QuestionDropdown),
-            comment: commentBuilder,
-            boolean: booleanBuilder,
-            rating: ratingBuilder,
-            multipletext: this.multipleTextBuilder,
-            panel: this.panelBuilder,
-            paneldynamic: this.panelDynamicBuilder,
-            html: commonBuilderCreator(QuestionHtml),
-            file: commonBuilderCreator(QuestionFile),
-        };
-        this.renderQuestion = (question) => {
-            const { isPreview } = this.props;
-            const json = question.json || question;
-            const build = this.typeBuilderMap[json.type];
-            const content = build(question, isPreview);
-            const { title = null, name, showTitle = true, } = json;
-            const renderedTitle = question.title || title;
-            const { number = null, } = question;
-            if (!question.visible) {
-                return null;
-            }
-            return (<View key={json.name} style={styles.container}>
+    panelDynamicBuilder = json => (<QuestionPanelDynamic {...json} buildComponent={this.renderQuestion}/>);
+    multipleTextBuilder = question => (<QuestionMultipleText {...question.json} questions={question.questions} onChange={question.setValue}/>);
+    typeBuilderMap = {
+        text: commonBuilderCreator(QuestionTextWrapper),
+        checkbox: choiceBuilderCreator(QuestionCheckbox),
+        radiogroup: choiceBuilderCreator(QuestionRadiogroup),
+        dropdown: choiceBuilderCreator(QuestionDropdown),
+        comment: commentBuilder,
+        boolean: booleanBuilder,
+        rating: ratingBuilder,
+        multipletext: this.multipleTextBuilder,
+        panel: this.panelBuilder,
+        paneldynamic: this.panelDynamicBuilder,
+        html: commonBuilderCreator(QuestionHtml),
+        file: commonBuilderCreator(QuestionFile),
+    };
+    renderQuestion = (question) => {
+        const { isPreview } = this.props;
+        const json = question.json || question;
+        const build = this.typeBuilderMap[json.type];
+        const content = build(question, isPreview);
+        const { title = null, name, showTitle = true, } = json;
+        const renderedTitle = question.title || title;
+        const { number = null, } = question;
+        if (!question.visible) {
+            return null;
+        }
+        return (<View key={json.name} style={styles.container}>
         {showTitle && question.json.type !== 'html' &&
                 <View style={[styles.title, isPreview && styles.previewTitle]}>
             <Text style={[styles.titleText, isPreview && styles.previewTitleText]}>
@@ -140,8 +138,7 @@ let QuestionWrapper = class QuestionWrapper extends React.Component {
         {question.json.hasComment &&
                 <QuestionText value={question.comment} onChange={question.setComment}/>}
       </View>);
-        };
-    }
+    };
     render() {
         return this.renderQuestion(this.props.question);
     }

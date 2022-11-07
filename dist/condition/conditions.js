@@ -2,6 +2,7 @@ import { ConditionsParser } from './conditionsParser';
 import { FunctionFactory } from "./functionsfactory";
 import { ProcessValue } from "./conditionProcessValue";
 export class Operand {
+    origionalValue;
     constructor(origionalValue) {
         this.origionalValue = origionalValue;
     }
@@ -54,10 +55,11 @@ export class Operand {
     }
 }
 export class FunctionOperand extends Operand {
+    origionalValue;
+    parameters = new Array();
     constructor(origionalValue) {
         super(origionalValue);
         this.origionalValue = origionalValue;
-        this.parameters = new Array();
     }
     getValue(processValue) {
         var paramValues = [];
@@ -77,11 +79,7 @@ export class FunctionOperand extends Operand {
     }
 }
 export class Condition {
-    constructor() {
-        this.opValue = "equal";
-        this.leftValue = null;
-        this.rightValue = null;
-    }
+    static operatorsValue = null;
     static get operators() {
         if (Condition.operatorsValue != null)
             return Condition.operatorsValue;
@@ -153,6 +151,9 @@ export class Condition {
         };
         return Condition.operatorsValue;
     }
+    opValue = "equal";
+    leftValue = null;
+    rightValue = null;
     get left() { return this.leftValue; }
     set left(val) { this.leftValue = val; }
     get right() { return this.rightValue; }
@@ -181,12 +182,10 @@ export class Condition {
         return Condition.operators[this.operator](leftValue, rightValue);
     }
 }
-Condition.operatorsValue = null;
 export class ConditionNode {
-    constructor() {
-        this.connectiveValue = "and";
-        this.children = [];
-    }
+    connectiveValue = "and";
+    children = [];
+    constructor() { }
     get connective() { return this.connectiveValue; }
     set connective(value) {
         if (!value)
@@ -207,6 +206,9 @@ export class ConditionNode {
     }
 }
 export class ConditionRunner {
+    expressionValue;
+    processValue;
+    root;
     constructor(expression) {
         this.root = new ConditionNode();
         this.expression = expression;

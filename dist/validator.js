@@ -50,85 +50,10 @@ const getValue = (value) => {
     return val;
 };
 export default class QuestionValidator {
+    owner;
+    methodMap = {};
+    emailRegex = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
     constructor(owner) {
-        this.methodMap = {};
-        this.emailRegex = /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-        this.validateRequire = (value, validator) => {
-            if (this.isValueEmpty(value)) {
-                return getErrorStr('requiredError', [], validator.text);
-            }
-            return null;
-        };
-        this.validateNumber = (value, validator) => {
-            if (!this.isNumber(value)) {
-                return getErrorStr('numericError', [], validator.text);
-            }
-            const floatValue = parseFloat(value);
-            if (validator.minValue !== null && validator.minValue > floatValue) {
-                return getErrorStr('numericMin', [validator.minValue], validator.text);
-            }
-            if (validator.maxValue !== null && validator.maxValue < floatValue) {
-                return getErrorStr('numericMax', [validator.maxValue], validator.text);
-            }
-            return (typeof floatValue === 'number') ? null : getErrorStr('numericError');
-        };
-        this.validateText = (value, validator) => {
-            if (validator.minLength > 0 && value.length < validator.minLength) {
-                return getErrorStr('textMinLength', [validator.minLength], validator.text);
-            }
-            if (validator.maxLength > 0 && value.length > validator.maxLength) {
-                return getErrorStr('textMaxLength', [validator.maxLength], validator.text);
-            }
-            return null;
-        };
-        this.validateAnswerCount = (value, validator) => {
-            if (value == null || value.constructor != Array)
-                return null;
-            var count = value.length;
-            if (validator.minCount && count < validator.minCount) {
-                return getErrorStr('minSelectError', [validator.minCount], validator.text);
-            }
-            if (validator.maxCount && count > validator.maxCount) {
-                return getErrorStr('maxSelectError', [validator.maxCount], validator.text);
-            }
-            return null;
-        };
-        this.validateRegex = (value, validator) => {
-            if (!validator.regex || !value)
-                return null;
-            var re = new RegExp(validator.regex);
-            if (re.test(value))
-                return null;
-            return getErrorStr('', [], validator.text);
-        };
-        this.validateEmail = (value, validator) => {
-            if (!value)
-                return null;
-            if (this.emailRegex.test(value))
-                return null;
-            return getErrorStr('invalidEmail', [], validator.text);
-        };
-        this.validateExpression = (_value, validator) => {
-            if (!validator.expression)
-                return null;
-            try {
-                const res = parse(validator.expression);
-                const { consumer, left, right, operator } = res;
-                const operationResult = this.runCondition(consumer, left, right);
-                if (operationResult)
-                    return null;
-                return getErrorStr('expressionError', [operator, right], validator.text, this.owner.collection.results || {});
-            }
-            catch (error) {
-                if (error instanceof SyntaxError) {
-                    return getErrorStr('syntaxError', [error.message]);
-                }
-                return getErrorStr('unknownError', [error.message]);
-            }
-        };
-        this.isNumber = (value) => {
-            return !isNaN(parseFloat(value)) && isFinite(value);
-        };
         this.owner = owner;
         this.methodMap = {
             required: this.validateRequire,
@@ -181,6 +106,82 @@ export default class QuestionValidator {
         }
         return [...additionalValidators, ...originalValidators];
     }
+    validateRequire = (value, validator) => {
+        if (this.isValueEmpty(value)) {
+            return getErrorStr('requiredError', [], validator.text);
+        }
+        return null;
+    };
+    validateNumber = (value, validator) => {
+        if (!this.isNumber(value)) {
+            return getErrorStr('numericError', [], validator.text);
+        }
+        const floatValue = parseFloat(value);
+        if (validator.minValue !== null && validator.minValue > floatValue) {
+            return getErrorStr('numericMin', [validator.minValue], validator.text);
+        }
+        if (validator.maxValue !== null && validator.maxValue < floatValue) {
+            return getErrorStr('numericMax', [validator.maxValue], validator.text);
+        }
+        return (typeof floatValue === 'number') ? null : getErrorStr('numericError');
+    };
+    validateText = (value, validator) => {
+        if (validator.minLength > 0 && value.length < validator.minLength) {
+            return getErrorStr('textMinLength', [validator.minLength], validator.text);
+        }
+        if (validator.maxLength > 0 && value.length > validator.maxLength) {
+            return getErrorStr('textMaxLength', [validator.maxLength], validator.text);
+        }
+        return null;
+    };
+    validateAnswerCount = (value, validator) => {
+        if (value == null || value.constructor != Array)
+            return null;
+        var count = value.length;
+        if (validator.minCount && count < validator.minCount) {
+            return getErrorStr('minSelectError', [validator.minCount], validator.text);
+        }
+        if (validator.maxCount && count > validator.maxCount) {
+            return getErrorStr('maxSelectError', [validator.maxCount], validator.text);
+        }
+        return null;
+    };
+    validateRegex = (value, validator) => {
+        if (!validator.regex || !value)
+            return null;
+        var re = new RegExp(validator.regex);
+        if (re.test(value))
+            return null;
+        return getErrorStr('', [], validator.text);
+    };
+    validateEmail = (value, validator) => {
+        if (!value)
+            return null;
+        if (this.emailRegex.test(value))
+            return null;
+        return getErrorStr('invalidEmail', [], validator.text);
+    };
+    validateExpression = (_value, validator) => {
+        if (!validator.expression)
+            return null;
+        try {
+            const res = parse(validator.expression);
+            const { consumer, left, right, operator } = res;
+            const operationResult = this.runCondition(consumer, left, right);
+            if (operationResult)
+                return null;
+            return getErrorStr('expressionError', [operator, right], validator.text, this.owner.collection.results || {});
+        }
+        catch (error) {
+            if (error instanceof SyntaxError) {
+                return getErrorStr('syntaxError', [error.message]);
+            }
+            return getErrorStr('unknownError', [error.message]);
+        }
+    };
+    isNumber = (value) => {
+        return !isNaN(parseFloat(value)) && isFinite(value);
+    };
     isValueEmpty(value) {
         if (Array.isArray(value) && value.length === 0)
             return true;

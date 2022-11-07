@@ -10,5 +10,5 @@ export interface Props {
 }
 export default class QuestionRadioItem extends React.Component<Props> {
     handlePress: () => void;
-    render(): JSX.Element;
+    render(): any;
 }

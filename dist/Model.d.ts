@@ -19,14 +19,14 @@ export default class Model {
     prevPage(): void;
     resetVisible(): void;
     resetTitle(): void;
-    readonly prevPageIndex: any;
-    readonly nextPageIndex: number;
-    readonly currentPageProps: {
+    get prevPageIndex(): any;
+    get nextPageIndex(): number;
+    get currentPageProps(): {
         name: any;
         questions: any;
     };
-    readonly conditionValues: {};
-    readonly results: {};
+    get conditionValues(): {};
+    get results(): {};
     onComplete: () => void;
     parseQuestion: (json: any, questionNames: any) => void;
     initPages: (pagesJson: any) => void;

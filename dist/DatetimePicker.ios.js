@@ -87,12 +87,9 @@ const styles = StyleSheet.create({
     },
 });
 export default class DatetimePicker extends React.PureComponent {
-    constructor() {
-        super(...arguments);
-        this.state = {
-            date: new Date(),
-        };
-    }
+    state = {
+        date: new Date(),
+    };
     getTitle() {
         const { mode } = this.props;
         if (mode === 'date') {

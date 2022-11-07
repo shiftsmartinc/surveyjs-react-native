@@ -8,5 +8,5 @@ export interface Props {
 }
 export default class QuestionRate extends React.Component<Props> {
     onItemChecked: (value: any) => void;
-    render(): JSX.Element;
+    render(): any;
 }
