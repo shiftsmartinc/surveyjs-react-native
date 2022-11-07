@@ -11,5 +11,5 @@ export interface Props {
 }
 export default class CheckBoxItem extends React.Component<Props> {
     handlePress: () => void;
-    render(): any;
+    render(): JSX.Element;
 }

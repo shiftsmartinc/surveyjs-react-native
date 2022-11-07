@@ -3,5 +3,5 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 export default class SurveyPage extends React.Component<any> {
     scrollView: KeyboardAwareScrollView;
     componentDidUpdate(prevProps: any): void;
-    render(): any;
+    render(): JSX.Element;
 }

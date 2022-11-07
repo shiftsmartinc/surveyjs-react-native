@@ -3,12 +3,11 @@ export interface HashTable<T> {
 }
 export declare class Trigger {
     static operatorsValue: HashTable<Function>;
-    static get operators(): HashTable<Function>;
+    static readonly operators: HashTable<Function>;
     private opValue;
     value: any;
     getType(): string;
-    get operator(): string;
-    set operator(value: string);
+    operator: string;
     check(value: any): void;
     protected onSuccess(): void;
     protected onFailure(): void;
@@ -23,7 +22,7 @@ export declare class SurveyTrigger extends Trigger {
     protected owner: any;
     constructor(json: any);
     setOwner(owner: ISurveyTriggerOwner): void;
-    get isOnNextPage(): boolean;
+    readonly isOnNextPage: boolean;
 }
 export declare class SurveyTriggerVisible extends SurveyTrigger {
     pages: string[];
@@ -39,7 +38,7 @@ export declare class SurveyTriggerVisible extends SurveyTrigger {
 export declare class SurveyTriggerComplete extends SurveyTrigger {
     constructor(json: any);
     getType(): string;
-    get isOnNextPage(): boolean;
+    readonly isOnNextPage: boolean;
     protected onSuccess(): void;
 }
 export declare class SurveyTriggerSetValue extends SurveyTrigger {

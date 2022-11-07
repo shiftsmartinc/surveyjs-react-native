@@ -27,21 +27,24 @@ const styles = StyleSheet.create({
     },
 });
 export default class QuestionTextDatetime extends React.Component {
-    state = {
-        isDateTimePickerVisible: false,
-        value: null,
-    };
-    openPicker = () => {
-        this.setState({ isDateTimePickerVisible: true });
-    };
-    closePicker = () => {
-        this.setState({ isDateTimePickerVisible: false });
-    };
-    onConfirm = (date) => {
-        this.setState({ value: date });
-        this.props.onChange(date);
-        this.closePicker();
-    };
+    constructor() {
+        super(...arguments);
+        this.state = {
+            isDateTimePickerVisible: false,
+            value: null,
+        };
+        this.openPicker = () => {
+            this.setState({ isDateTimePickerVisible: true });
+        };
+        this.closePicker = () => {
+            this.setState({ isDateTimePickerVisible: false });
+        };
+        this.onConfirm = (date) => {
+            this.setState({ value: date });
+            this.props.onChange(date);
+            this.closePicker();
+        };
+    }
     getPlaceholder() {
         const { inputType } = this.props;
         if (inputType === 'date') {
@@ -68,7 +71,7 @@ export default class QuestionTextDatetime extends React.Component {
         return (<View>
         <TouchableWithFeedback style={styles.caption} onPress={this.openPicker}>
           {(inputType === 'datetime' || inputType === 'datetimte-local') &&
-                <Image style={{ width: 36, height: 38 }} source={require('./images/date-time.png')}/>}
+            <Image style={{ width: 36, height: 38 }} source={require('./images/date-time.png')}/>}
           {inputType === 'date' && <Image style={{ width: 32, height: 33 }} source={require('./images/date.png')}/>}
           {inputType === 'time' && <Image style={{ width: 30, height: 30 }} source={require('./images/time.png')}/>}
           <Text style={styles.captionText}>{value ? this.getFormatedValue(value) : placeholder}</Text>

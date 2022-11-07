@@ -20,12 +20,12 @@ export declare class BinaryOperand extends Operand {
     private isArithmeticValue;
     constructor(operatorName: string, left?: any, right?: any, isArithmeticOp?: boolean);
     getType(): string;
-    get isArithmetic(): boolean;
-    get isConjunction(): boolean;
-    get conjunction(): string;
-    get operator(): string;
-    get leftOperand(): any;
-    get rightOperand(): any;
+    readonly isArithmetic: boolean;
+    readonly isConjunction: boolean;
+    readonly conjunction: string;
+    readonly operator: string;
+    readonly leftOperand: any;
+    readonly rightOperand: any;
     protected isContentEqual(op: Operand): boolean;
     private evaluateParam;
     evaluate(processValue?: ProcessValue): any;
@@ -40,8 +40,8 @@ export declare class UnaryOperand extends Operand {
     private operatorName;
     private consumer;
     constructor(expressionValue: Operand, operatorName: string);
-    get operator(): string;
-    get expression(): Operand;
+    readonly operator: string;
+    readonly expression: Operand;
     getType(): string;
     toString(func?: (op: Operand) => string): string;
     protected isContentEqual(op: Operand): boolean;
@@ -65,7 +65,7 @@ export declare class Const extends Operand {
     constructor(value: any);
     getType(): string;
     toString(func?: (op: Operand) => string): string;
-    get correctValue(): any;
+    readonly correctValue: any;
     evaluate(): any;
     setVariables(variables: Array<string>): void;
     protected getCorrectValue(value: any): any;
@@ -81,7 +81,7 @@ export declare class Variable extends Const {
     constructor(variableName: string);
     getType(): string;
     toString(func?: (op: Operand) => string): string;
-    get variable(): string;
+    readonly variable: string;
     evaluate(processValue?: ProcessValue): any;
     setVariables(variables: Array<string>): void;
     protected getCorrectValue(value: any): any;
@@ -100,7 +100,7 @@ export declare class FunctionOperand extends Operand {
     private evaluateCore;
     toString(func?: (op: Operand) => string): string;
     setVariables(variables: Array<string>): void;
-    get isReady(): boolean;
+    readonly isReady: boolean;
     hasFunction(): boolean;
     hasAsyncFunction(): boolean;
     addToAsyncList(list: Array<FunctionOperand>): void;

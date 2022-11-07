@@ -19,16 +19,13 @@ export declare class FunctionOperand extends Operand {
 }
 export declare class Condition {
     static operatorsValue: HashTable<Function>;
-    static get operators(): HashTable<Function>;
+    static readonly operators: HashTable<Function>;
     private opValue;
     private leftValue;
     private rightValue;
-    get left(): Operand;
-    set left(val: Operand);
-    get right(): Operand;
-    set right(val: Operand);
-    get operator(): string;
-    set operator(value: string);
+    left: Operand;
+    right: Operand;
+    operator: string;
     perform(left?: any, right?: any, processValue?: ProcessValue): boolean;
     performExplicit(left: any, right: any, processValue: ProcessValue): boolean;
 }
@@ -36,9 +33,8 @@ export declare class ConditionNode {
     private connectiveValue;
     children: Array<any>;
     constructor();
-    get connective(): string;
-    set connective(value: string);
-    get isEmpty(): boolean;
+    connective: string;
+    readonly isEmpty: boolean;
     clear(): void;
 }
 export declare class ConditionRunner {
@@ -46,8 +42,7 @@ export declare class ConditionRunner {
     private processValue;
     private root;
     constructor(expression: string);
-    get expression(): string;
-    set expression(value: string);
+    expression: string;
     run(values: HashTable<any>): boolean;
     private runNode;
     private runNodeCondition;

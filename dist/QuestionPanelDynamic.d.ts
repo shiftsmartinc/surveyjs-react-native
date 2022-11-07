@@ -20,6 +20,6 @@ export default class QuestionPanelDynamic extends React.Component<Props, any> {
     onPanelRemove: (key: any) => void;
     onNewPanel: () => void;
     generatePanelKey: () => string;
-    renderPanel(key: any): any;
-    render(): any;
+    renderPanel(key: any): JSX.Element;
+    render(): JSX.Element;
 }

@@ -1,8 +1,9 @@
 import { Helpers } from './helpers';
 export class ProcessValue {
-    values = null;
-    properties = null;
-    constructor() { }
+    constructor() {
+        this.values = null;
+        this.properties = null;
+    }
     getFirstName(text) {
         if (!text)
             return text;

@@ -5,6 +5,6 @@ export interface Props {
     onChange(value: any): any;
 }
 export default class QuestionMultipleText extends React.Component<Props> {
-    renderItem: (question: any, idx: any) => any;
-    render(): any;
+    renderItem: (question: any, idx: any) => JSX.Element;
+    render(): JSX.Element;
 }

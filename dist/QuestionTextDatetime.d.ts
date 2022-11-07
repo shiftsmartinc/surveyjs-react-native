@@ -14,6 +14,6 @@ export default class QuestionTextDatetime extends React.Component<Props> {
     closePicker: () => void;
     onConfirm: (date: any) => void;
     getPlaceholder(): "Select Date" | "Select Time" | "Select Date & Time";
-    getFormatedValue(value: any): any;
-    render(): any;
+    getFormatedValue(value: any): string;
+    render(): JSX.Element;
 }

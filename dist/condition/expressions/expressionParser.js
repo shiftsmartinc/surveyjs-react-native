@@ -78,11 +78,6 @@ export class SyntaxError extends Error {
         }
         return "Expected " + describeExpected(expected) + " but " + describeFound(found) + " found.";
     }
-    message;
-    expected;
-    found;
-    location;
-    name;
     constructor(message, expected, found, location) {
         super();
         this.message = message;

@@ -65,25 +65,28 @@ const styles = StyleSheet.create({
     },
 });
 let CheckBoxItem = class CheckBoxItem extends React.Component {
-    handlePress = () => {
-        const checked = !this.props.checked;
-        if (this.props.onChange) {
-            this.props.onChange(checked, this.props.value);
-        }
-    };
+    constructor() {
+        super(...arguments);
+        this.handlePress = () => {
+            const checked = !this.props.checked;
+            if (this.props.onChange) {
+                this.props.onChange(checked, this.props.value);
+            }
+        };
+    }
     render() {
         const { isPreview, label, text, value, checked, pristine } = this.props;
         return (<TouchableWithFeedback style={[styles.container, checked && styles.containerChecked]} onPress={this.handlePress}>
         {label &&
-                <View style={[styles.label, checked && styles.labelChecked]}>
+            <View style={[styles.label, checked && styles.labelChecked]}>
             <Text style={styles.labelText}>{label}</Text>
           </View>}
         <Text style={[styles.text, checked && styles.textChecked]}>{text || value}</Text>
         {!isPreview && <Image style={styles.checkbox} source={pristine
-                    ? require('./images/radio-checked.png')
-                    : checked
-                        ? require('./images/checkbox-checked.png')
-                        : require('./images/check.png')}/>}
+            ? require('./images/radio-checked.png')
+            : checked
+                ? require('./images/checkbox-checked.png')
+                : require('./images/check.png')}/>}
       </TouchableWithFeedback>);
     }
 };

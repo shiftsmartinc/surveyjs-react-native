@@ -1,4 +1,4 @@
-import { observable, action, computed, toJS } from 'mobx';
+import { observable, action, computed, toJS, makeObservable } from 'mobx';
 import { getTriggerType, SurveyTrigger } from './trigger';
 import moment from 'moment';
 import { ConditionRunner } from './condition/conditions';
@@ -52,6 +52,7 @@ class Page {
       this.conditionRunner = new ConditionRunner('');
       this.conditionRunner.expression = json.visibleIf;
     }
+    makeObservable(this);
   }
 
   @action.bound setVisible(visible) {
@@ -115,6 +116,7 @@ class Question {
       this.conditionRunner = new ConditionRunner('');
       this.conditionRunner.expression = json.visibleIf;
     }
+    makeObservable(this);
   }
 
   @action.bound validate() {
@@ -203,7 +205,7 @@ export default class Model {
   @observable curPageIndex = 0;
   @observable isComplete = false;
 
-  pages = [];
+  pages = observable.array[];
 
   triggers: Array<SurveyTrigger> = [];
 
@@ -226,6 +228,7 @@ export default class Model {
     this.apis = apis;
     this.isPreview = isPreview;
     this.initStoreFromJson(json);
+    makeObservable(this);
   }
 
   initStoreFromJson(json) {
@@ -285,7 +288,8 @@ export default class Model {
     return this.pages.findIndex(v => v.visible && v.pageIndex > this.curPageIndex);
   }
 
-  @computed get currentPageProps() {
+  @computed get currentPageProps() {  
+  
     const page = this.pages.find(v => v.pageIndex === this.curPageIndex);
 
     const pageProps = {
