@@ -13,8 +13,8 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "removeComments": true,
-    "declaration": true
-  },
+    "declaration": true,
+    },
   "include": [
     "src/**/*"
   ]

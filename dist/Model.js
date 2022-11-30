@@ -4,7 +4,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-import { observable, action, computed, toJS } from 'mobx';
+import { observable, action, computed, toJS, makeObservable } from 'mobx';
 import { getTriggerType } from './trigger';
 import moment from 'moment';
 import { ConditionRunner } from './condition/conditions';
@@ -47,6 +47,7 @@ class Page {
             this.conditionRunner = new ConditionRunner('');
             this.conditionRunner.expression = json.visibleIf;
         }
+        makeObservable(this);
     }
     setVisible(visible) {
         this._visible = visible;
@@ -108,6 +109,7 @@ class Question {
             this.conditionRunner = new ConditionRunner('');
             this.conditionRunner.expression = json.visibleIf;
         }
+        makeObservable(this);
     }
     validate() {
         if (this.value && typeof this.value === 'string') {
@@ -228,7 +230,7 @@ export default class Model {
         this.questions = {};
         this.curPageIndex = 0;
         this.isComplete = false;
-        this.pages = [];
+        this.pages = observable.array([]);
         this.triggers = [];
         this.originalNumber = 0;
         this.questionNamesInOrder = [];
@@ -300,6 +302,7 @@ export default class Model {
         this.apis = apis;
         this.isPreview = isPreview;
         this.initStoreFromJson(json);
+        makeObservable(this);
     }
     initStoreFromJson(json) {
         this.initPages(json.pages);

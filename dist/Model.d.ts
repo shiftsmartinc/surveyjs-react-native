@@ -3,7 +3,7 @@ export default class Model {
     questions: {};
     curPageIndex: number;
     isComplete: boolean;
-    pages: any[];
+    pages: import("mobx").IObservableArray<any>;
     triggers: Array<SurveyTrigger>;
     apis: any;
     isPreview: boolean;
