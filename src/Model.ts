@@ -1,4 +1,4 @@
-import { observable, action, computed, toJS } from 'mobx';
+import { observable, action, computed, toJS, makeObservable } from 'mobx';
 import { getTriggerType, SurveyTrigger } from './trigger';
 import moment from 'moment';
 import { ConditionRunner } from './condition/conditions';
@@ -40,6 +40,7 @@ class Page {
   conditionRunner;
 
   constructor(json, collection, pageIndex, questionNames) {
+    makeObservable(this);
     this.json = json;
     this.collection = collection
     this.pageIndex = pageIndex;
@@ -90,6 +91,7 @@ class Question {
   page;
 
   constructor(json, originalNumber?, collection?) {
+    makeObservable(this);
     this.json = json;
     this.visible = json.visible != null ? json.visible : true;
     this.originalNumber = originalNumber;
@@ -216,6 +218,7 @@ export default class Model {
   questionNamesInOrder = [];
 
   constructor({ json, apis, isPreview = false }) {
+    makeObservable(this);
     if (isPreview) {
       json.pages = [{
         name: 'Preview',
@@ -360,16 +363,6 @@ export default class Model {
         new Question(itemjson)
       );
     }
-
-
-    // this.questions[question.name] = {
-    //   json: question,
-    //   visible: question.visible,
-    //   value: null,
-    //   originalNumber: this.originalNumber++,
-    //   comment: null,
-    //   error: null,
-    // };
   };
 
   initPages = (pagesJson) => {
@@ -430,11 +423,5 @@ export default class Model {
     if (!isVariable) {
       this.questions[name].setValue(value);
     }
-    // if (isVariable) {
-    //   this.setVariable(name, value);
-    // } else {
-    //   this.setValue(name, value);
-    // }
   }
-
-}
+};
