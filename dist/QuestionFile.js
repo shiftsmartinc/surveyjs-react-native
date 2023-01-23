@@ -46,6 +46,7 @@ export default class QuestionFile extends React.Component {
                     includeBase64: storeDataAsText,
                     mediaType: isVideo ? 'video' : 'photo',
                     compressImageQuality: 0.5,
+                    includeExif: true,
                 });
                 if (maxSize && response.size > maxSize) {
                     Alert.alert('FileSize', 'Too Large FileSize', [{ text: 'OK' }]);
