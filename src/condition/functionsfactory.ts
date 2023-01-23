@@ -29,7 +29,7 @@ export class FunctionFactory {
     var func = this.functionHash[name];
     if (!func) return null;
     let classRunner = {
-      func: func,
+      func: func
     };
 
     if (properties) {
@@ -48,6 +48,7 @@ function sum(params: any[]): any {
   }
   return res;
 }
+
 FunctionFactory.Instance.register("sum", sum);
 
 function age(params: any[]): any {
@@ -57,4 +58,5 @@ function age(params: any[]): any {
   var ageDate = new Date(ageDifMs); // miliseconds from epoch
   return Math.abs(ageDate.getUTCFullYear() - 1970);
 }
+
 FunctionFactory.Instance.register("age", age);

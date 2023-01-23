@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dimensions, StyleSheet, Modal, Image, View, Text } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker'
+import DateTimePicker from '@react-native-community/datetimepicker';
 import TouchableWithFeedback from './TouchableWithFeedback';
 
 const { height } = Dimensions.get('window');

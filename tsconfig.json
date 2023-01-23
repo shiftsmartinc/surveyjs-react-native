@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "lib": ["dom", "esnext"],
+    "target": "ESNext",
+    "lib": ["DOM", "ESNext"],
     "jsx": "react-native",
     "moduleResolution": "node",
     "experimentalDecorators": true,
@@ -15,7 +15,5 @@
     "removeComments": true,
     "declaration": true
   },
-  "include": [
-    "src/**/*"
-  ]
+  "include": ["src/**/*"]
 }

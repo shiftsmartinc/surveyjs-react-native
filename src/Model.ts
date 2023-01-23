@@ -1,23 +1,23 @@
-import { observable, action, computed, toJS } from 'mobx';
-import { getTriggerType, SurveyTrigger } from './trigger';
-import moment from 'moment';
-import { ConditionRunner } from './condition/conditions';
-import QuestionValidator from './validator';
-import { isValueEmpty } from './utils';
+import { observable, action, computed, toJS, makeObservable } from "mobx";
+import { getTriggerType, SurveyTrigger } from "./trigger";
+import moment from "moment";
+import { ConditionRunner } from "./condition/conditions";
+import QuestionValidator from "./validator";
+import { isValueEmpty } from "./utils";
 
 const getResponseValue = (obj: any, desc: string) => {
-    var arr = desc.split(".");
-    while(arr.length && (obj = obj[arr.shift()]));
-    return obj;
-}
+  var arr = desc.split(".");
+  while (arr.length && (obj = obj[arr.shift()]));
+  return obj;
+};
 
 const sortArray = (array: Array<string>, mult: number) => {
-  return array.sort(function(a, b) {
+  return array.sort(function (a, b) {
     if (a < b) return -1 * mult;
     if (a > b) return 1 * mult;
     return 0;
-  })
-}
+  });
+};
 
 const randomizeArray = (array: Array<string>) => {
   for (var i = array.length - 1; i > 0; i--) {
@@ -27,7 +27,7 @@ const randomizeArray = (array: Array<string>) => {
     array[j] = temp;
   }
   return array;
-}
+};
 
 class Page {
   collection;
@@ -40,8 +40,9 @@ class Page {
   conditionRunner;
 
   constructor(json, collection, pageIndex, questionNames) {
+    makeObservable(this);
     this.json = json;
-    this.collection = collection
+    this.collection = collection;
     this.pageIndex = pageIndex;
     this.questionNames = questionNames;
     this.name = json.name;
@@ -49,7 +50,7 @@ class Page {
 
     this.conditionRunner = null;
     if (json.visibleIf) {
-      this.conditionRunner = new ConditionRunner('');
+      this.conditionRunner = new ConditionRunner("");
       this.conditionRunner.expression = json.visibleIf;
     }
   }
@@ -66,8 +67,8 @@ class Page {
   }
 
   @computed get visible() {
-    const questionVisible = this.questionNames.some(name =>
-      this.collection.questions[name].visible
+    const questionVisible = this.questionNames.some(
+      (name) => this.collection.questions[name].visible
     );
     return this._visible && questionVisible;
   }
@@ -81,7 +82,7 @@ class Question {
   @observable number;
   @observable questions = [];
   @observable choices = [];
-  @observable title = '';
+  @observable title = "";
 
   originalNumber;
   json;
@@ -90,6 +91,7 @@ class Question {
   page;
 
   constructor(json, originalNumber?, collection?) {
+    makeObservable(this);
     this.json = json;
     this.visible = json.visible != null ? json.visible : true;
     this.originalNumber = originalNumber;
@@ -98,7 +100,7 @@ class Question {
 
     this.conditionRunner = null;
     if (json.choices && json.choices.length > 0) {
-      const clonedChoices = json.choices.map(c => c);
+      const clonedChoices = json.choices.map((c) => c);
       this.choices = clonedChoices;
       if (json.choicesOrder && json.choicesOrder !== "none") {
         let order = json.choicesOrder.toLowerCase();
@@ -112,13 +114,13 @@ class Question {
       }
     }
     if (json.visibleIf) {
-      this.conditionRunner = new ConditionRunner('');
+      this.conditionRunner = new ConditionRunner("");
       this.conditionRunner.expression = json.visibleIf;
     }
   }
 
   @action.bound validate() {
-    if(this.value && typeof this.value === 'string') {
+    if (this.value && typeof this.value === "string") {
       this.value = this.value.trim();
     }
     const questionValidator = new QuestionValidator(this);
@@ -130,7 +132,7 @@ class Question {
   }
 
   @action.bound setValue(value, comment = null) {
-    this.value = value && value.uri || value;
+    this.value = (value && value.uri) || value;
     if (comment != null) {
       this.comment = comment;
     }
@@ -147,10 +149,14 @@ class Question {
 
       // 5. triggers
       this.collection.triggers
-        .filter(v => v.name === this.json.name && !v.isOnNextPage)
-        .forEach(trigger => trigger.check(value));
+        .filter((v) => v.name === this.json.name && !v.isOnNextPage)
+        .forEach((trigger) => trigger.check(value));
 
-      if (this.json.type === 'file' && this.collection.apis.onUpload && value !== null) {
+      if (
+        this.json.type === "file" &&
+        this.collection.apis.onUpload &&
+        value !== null
+      ) {
         this.collection.apis.onUpload(value, this);
       }
     }
@@ -180,11 +186,11 @@ class Question {
     const matches = defaultTitle.match(/{.+?}/g);
     let processedTitle = defaultTitle;
     if (matches) {
-      matches.forEach((match:string) => {
-        const valueName = match.replace('{', '').replace('}', '');
+      matches.forEach((match: string) => {
+        const valueName = match.replace("{", "").replace("}", "");
         const varValue = getResponseValue(results, valueName) || match;
         processedTitle = processedTitle.replace(match, varValue);
-      })
+      });
     }
     this.title = processedTitle;
   }
@@ -216,12 +222,18 @@ export default class Model {
   questionNamesInOrder = [];
 
   constructor({ json, apis, isPreview = false }) {
+    makeObservable(this);
     if (isPreview) {
-      json.pages = [{
-        name: 'Preview',
-        title: 'Preview',
-        elements: json.pages.reduce((prev, curr) => ([...prev, ...curr.elements]), []),
-      }];
+      json.pages = [
+        {
+          name: "Preview",
+          title: "Preview",
+          elements: json.pages.reduce(
+            (prev, curr) => [...prev, ...curr.elements],
+            []
+          )
+        }
+      ];
     }
     this.apis = apis;
     this.isPreview = isPreview;
@@ -235,20 +247,23 @@ export default class Model {
   }
 
   @action.bound nextPage() {
-
     // validator
     const isValidatorFailed = this.currentPageProps.questions.some(
-      question => !question.validate()
+      (question) => !question.validate()
     );
     if (isValidatorFailed) {
       return;
     }
 
     // checkOnPageTrigger
-    const pageTriggers = this.triggers.filter(v => v.isOnNextPage);
+    const pageTriggers = this.triggers.filter((v) => v.isOnNextPage);
     const curPageQuestionNames = this.pages[this.curPageIndex].questionNames;
-    const curPageTriggers = pageTriggers.filter(v => curPageQuestionNames.indexOf(v.name) !== -1);
-    curPageTriggers.forEach(trigger => trigger.check(this.questions[trigger.name].value));
+    const curPageTriggers = pageTriggers.filter(
+      (v) => curPageQuestionNames.indexOf(v.name) !== -1
+    );
+    curPageTriggers.forEach((trigger) =>
+      trigger.check(this.questions[trigger.name].value)
+    );
 
     // do next page
     if (this.nextPageIndex !== -1) {
@@ -267,36 +282,44 @@ export default class Model {
   }
 
   @action.bound resetVisible() {
-    Object.keys(this.questions).forEach(name => this.questions[name].resetVisible());
-    this.pages.forEach(page => page.resetVisible());
+    Object.keys(this.questions).forEach((name) =>
+      this.questions[name].resetVisible()
+    );
+    this.pages.forEach((page) => page.resetVisible());
   }
 
   @action.bound resetTitle() {
-    Object.keys(this.questions).forEach(name => this.questions[name].resetTitle());
+    Object.keys(this.questions).forEach((name) =>
+      this.questions[name].resetTitle()
+    );
   }
 
   @computed get prevPageIndex() {
     const reversedPages = this.pages.slice().reverse();
-    const page = reversedPages.find(v => v.visible && v.pageIndex < this.curPageIndex);
+    const page = reversedPages.find(
+      (v) => v.visible && v.pageIndex < this.curPageIndex
+    );
     return page ? page.pageIndex : -1;
   }
 
   @computed get nextPageIndex() {
-    return this.pages.findIndex(v => v.visible && v.pageIndex > this.curPageIndex);
+    return this.pages.findIndex(
+      (v) => v.visible && v.pageIndex > this.curPageIndex
+    );
   }
 
   @computed get currentPageProps() {
-    const page = this.pages.find(v => v.pageIndex === this.curPageIndex);
+    const page = this.pages.find((v) => v.pageIndex === this.curPageIndex);
 
     const pageProps = {
       name: page.name,
-      questions: page.questionNames.map(name => this.questions[name]),
+      questions: page.questionNames.map((name) => this.questions[name])
     };
     return pageProps;
   }
 
   @computed get conditionValues() {
-    const values = {}
+    const values = {};
     Object.keys(this.questions).forEach((name) => {
       values[name] = this.questions[name].value;
     });
@@ -305,26 +328,31 @@ export default class Model {
 
   @computed get results() {
     const values = {};
-    Object.keys(this.questions).forEach(name => {
+    Object.keys(this.questions).forEach((name) => {
       const question = this.questions[name];
       const value = question.value;
       if (!isValueEmpty(value)) {
         values[name] = value;
 
-        if (question.json.inputType === 'datetime' || question.json.inputType === 'datetime-local') {
+        if (
+          question.json.inputType === "datetime" ||
+          question.json.inputType === "datetime-local"
+        ) {
           values[name] = moment(value).format();
-        } else if (question.json.inputType === 'date') {
-          values[name] = moment(value).format('YYYY-MM-DD');
-        } else if (question.json.inputType === 'time') {
-          values[name] = moment(value).format('HH:mm');
+        } else if (question.json.inputType === "date") {
+          values[name] = moment(value).format("YYYY-MM-DD");
+        } else if (question.json.inputType === "time") {
+          values[name] = moment(value).format("HH:mm");
         }
       }
 
       // handle hasComment , hasOther
-      if (question.comment && (question.json.hasComment || question.json.hasOther)) {
+      if (
+        question.comment &&
+        (question.json.hasComment || question.json.hasOther)
+      ) {
         values[`${name}-Comment`] = question.comment;
       }
-
     });
     return values;
   }
@@ -334,33 +362,25 @@ export default class Model {
     if (this.apis.onComplete) {
       this.apis.onComplete(this.results);
     }
-  }
+  };
 
   parseQuestion = (json, questionNames) => {
-    if (json.type === 'panel') {
+    if (json.type === "panel") {
       json.showTitle = false;
       // question.elements.forEach(subQuestion => this.parseQuestion(subQuestion, questionNames));
     }
     questionNames.push(json.name);
     // question html is designed for display, do not add number to it.
-    if (json.type !== 'html' && json.type !== 'panel') {
+    if (json.type !== "html" && json.type !== "panel") {
       this.questionNamesInOrder.push(json.name);
     }
 
-
-    const question = new Question(
-      json,
-      this.originalNumber++,
-      this,
-    );
+    const question = new Question(json, this.originalNumber++, this);
     this.questions[json.name] = question;
 
-    if (json.type === 'multipletext') {
-      question.questions = json.items.map(itemjson =>
-        new Question(itemjson)
-      );
+    if (json.type === "multipletext") {
+      question.questions = json.items.map((itemjson) => new Question(itemjson));
     }
-
 
     // this.questions[question.name] = {
     //   json: question,
@@ -375,25 +395,22 @@ export default class Model {
   initPages = (pagesJson) => {
     this.pages = pagesJson.map((page, pageIndex) => {
       const questionNames = [];
-      (page.elements || page.questions || []).forEach(question => this.parseQuestion(question, questionNames));
+      (page.elements || page.questions || []).forEach((question) =>
+        this.parseQuestion(question, questionNames)
+      );
       // return {
       //   pageIndex,
       //   questionNames,
       //   name: page.name,
       // };
-      const pageStore = new Page(
-        page,
-        this,
-        pageIndex,
-        questionNames,
-      );
+      const pageStore = new Page(page, this, pageIndex, questionNames);
 
       questionNames.forEach((name) => {
         this.questions[name].setPage(pageStore);
-      })
+      });
       return pageStore;
-    })
-  }
+    });
+  };
 
   regenerateNumbers = () => {
     let count = 1;
@@ -403,27 +420,27 @@ export default class Model {
         question.number = count++;
       }
     });
-  }
+  };
 
   initTriggers = (triggersJson = []) => {
     const owner = {
       doComplete: this.onComplete,
       getObjects: this.triggerGetObjects,
-      setTriggerValue: this.setTriggerValue,
+      setTriggerValue: this.setTriggerValue
     };
-    this.triggers = triggersJson.map(json => {
+    this.triggers = triggersJson.map((json) => {
       let TriggerType = getTriggerType(json);
       const trigger = new TriggerType(json);
       trigger.setOwner(owner);
       return trigger;
     });
-  }
+  };
 
   triggerGetObjects = (pageNames, questionNames) => {
-    const pages = this.pages.filter(v => pageNames.indexOf(v.name) !== -1);
-    const questions = questionNames.map(v => this.questions[v]);
+    const pages = this.pages.filter((v) => pageNames.indexOf(v.name) !== -1);
+    const questions = questionNames.map((v) => this.questions[v]);
     return [...pages, ...questions];
-  }
+  };
 
   @action.bound setTriggerValue(name: string, value: any, isVariable: boolean) {
     if (!name) return;
@@ -436,5 +453,4 @@ export default class Model {
     //   this.setValue(name, value);
     // }
   }
-
 }

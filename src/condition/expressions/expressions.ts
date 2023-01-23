@@ -3,7 +3,7 @@ import { FunctionFactory } from "../functionsfactory";
 import { ProcessValue } from "../conditionProcessValue";
 
 export abstract class Operand {
-  public toString(func: (op: Operand) => string = undefined): string {
+  public toString(_func: (op: Operand) => string = undefined): string {
     return "";
   }
   public abstract getType(): string;
@@ -15,7 +15,7 @@ export abstract class Operand {
   public hasAsyncFunction() {
     return false;
   }
-  public addToAsyncList(list: Array<FunctionOperand>): void {}
+  public addToAsyncList(_list: Array<FunctionOperand>): void {}
   public isEqual(op: Operand): boolean {
     return !!op && op.getType() === this.getType() && this.isContentEqual(op);
   }
@@ -245,7 +245,7 @@ export class Const extends Operand {
     return this.getCorrectValue(this.value);
   }
 
-  public setVariables(variables: Array<string>) {}
+  public setVariables(_variables: Array<string>) {}
   protected getCorrectValue(value: any): any {
     if (!value || typeof value != "string") return value;
     if (this.isBooleanValue(value)) return value.toLowerCase() === "true";
