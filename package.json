@@ -12,7 +12,7 @@
     "@types/react": "^16.14.0",
     "@types/react-native": "^0.63.35",
     "mobx": "^6.7.0",
-    "mobx-react": "^5.4.3",
+    "mobx-react": "^7.6.0",
     "react": "^16.13.1",
     "react-native": "^0.63.5",
     "react-native-image-crop-picker": "^0.37.3",
