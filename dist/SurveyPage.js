@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
     },
 });
 let SurveyPage = class SurveyPage extends React.Component {
+    scrollView;
     componentDidUpdate(prevProps) {
         if (this.props.curPageIndex !== prevProps.curPageIndex) {
             requestAnimationFrame(() => {

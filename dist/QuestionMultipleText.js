@@ -32,18 +32,16 @@ const styles = StyleSheet.create({
     },
 });
 let QuestionMultipleText = class QuestionMultipleText extends React.Component {
-    constructor() {
-        super(...arguments);
-        this.renderItem = (question, idx) => {
-            const item = question.json;
-            const isFirst = idx === 0;
-            const onSubChange = (value) => {
-                question.setValue(value);
-                const multiValue = {};
-                this.props.questions.forEach(subQuestion => multiValue[subQuestion.json.name] = subQuestion.value);
-                this.props.onChange(multiValue);
-            };
-            return (<View key={item.name} style={[styles.item, isFirst && styles.itemFirst]}>
+    renderItem = (question, idx) => {
+        const item = question.json;
+        const isFirst = idx === 0;
+        const onSubChange = (value) => {
+            question.setValue(value);
+            const multiValue = {};
+            this.props.questions.forEach(subQuestion => multiValue[subQuestion.json.name] = subQuestion.value);
+            this.props.onChange(multiValue);
+        };
+        return (<View key={item.name} style={[styles.item, isFirst && styles.itemFirst]}>
         <Text style={styles.itemLabel}>
           {item.isRequired && '*'}
           {item.title || item.name}
@@ -52,8 +50,7 @@ let QuestionMultipleText = class QuestionMultipleText extends React.Component {
           <QuestionTextWrapper {...item} value={question.value} onChange={onSubChange}/>
         </View>
       </View>);
-        };
-    }
+    };
     render() {
         return (<View>
         {this.props.questions.map(this.renderItem)}

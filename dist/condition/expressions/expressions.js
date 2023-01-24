@@ -2,7 +2,7 @@ import { Helpers } from "../helpers";
 import { FunctionFactory } from "../functionsfactory";
 import { ProcessValue } from "../conditionProcessValue";
 export class Operand {
-    toString(func = undefined) {
+    toString(_func = undefined) {
         return "";
     }
     hasFunction() {
@@ -11,7 +11,7 @@ export class Operand {
     hasAsyncFunction() {
         return false;
     }
-    addToAsyncList(list) { }
+    addToAsyncList(_list) { }
     isEqual(op) {
         return !!op && op.getType() === this.getType() && this.isContentEqual(op);
     }
@@ -20,6 +20,11 @@ export class Operand {
     }
 }
 export class BinaryOperand extends Operand {
+    operatorName;
+    left;
+    right;
+    consumer;
+    isArithmeticValue;
     constructor(operatorName, left = null, right = null, isArithmeticOp = false) {
         super();
         this.operatorName = operatorName;
@@ -105,6 +110,9 @@ export class BinaryOperand extends Operand {
     }
 }
 export class UnaryOperand extends Operand {
+    expressionValue;
+    operatorName;
+    consumer;
     constructor(expressionValue, operatorName) {
         super();
         this.expressionValue = expressionValue;
@@ -146,6 +154,7 @@ export class UnaryOperand extends Operand {
     }
 }
 export class ArrayOperand extends Operand {
+    values;
     constructor(values) {
         super();
         this.values = values;
@@ -198,6 +207,7 @@ export class ArrayOperand extends Operand {
     }
 }
 export class Const extends Operand {
+    value;
     constructor(value) {
         super();
         this.value = value;
@@ -219,7 +229,7 @@ export class Const extends Operand {
     evaluate() {
         return this.getCorrectValue(this.value);
     }
-    setVariables(variables) { }
+    setVariables(_variables) { }
     getCorrectValue(value) {
         if (!value || typeof value != "string")
             return value;
@@ -251,11 +261,13 @@ export class Const extends Operand {
     }
 }
 export class Variable extends Const {
+    variableName;
+    static DisableConversionChar = "#";
+    valueInfo = {};
+    useValueAsItIs = false;
     constructor(variableName) {
         super(variableName);
         this.variableName = variableName;
-        this.valueInfo = {};
-        this.useValueAsItIs = false;
         if (!!this.variableName &&
             this.variableName.length > 1 &&
             this.variableName[0] === Variable.DisableConversionChar) {
@@ -298,8 +310,12 @@ export class Variable extends Const {
         return vOp.variable == this.variable;
     }
 }
-Variable.DisableConversionChar = "#";
 export class FunctionOperand extends Operand {
+    originalValue;
+    parameters;
+    isReadyValue;
+    asynResult;
+    onAsyncReady;
     constructor(originalValue, parameters) {
         super();
         this.originalValue = originalValue;
@@ -412,6 +428,152 @@ export class OperandMaker {
         }
         return res;
     }
+    static unaryFunctions = {
+        empty: function (value) {
+            return Helpers.isValueEmpty(value);
+        },
+        notempty: function (value) {
+            return !OperandMaker.unaryFunctions.empty(value);
+        },
+        negate: function (value) {
+            return !value;
+        },
+    };
+    static binaryFunctions = {
+        arithmeticOp(operatorName) {
+            return function (a, b) {
+                if (Helpers.isValueEmpty(a) && !OperandMaker.isSpaceString(a)) {
+                    a = typeof b === "string" ? "" : 0;
+                }
+                if (Helpers.isValueEmpty(b) && !OperandMaker.isSpaceString(b)) {
+                    b = typeof a === "string" ? "" : 0;
+                }
+                let consumer = OperandMaker.binaryFunctions[operatorName];
+                return consumer == null ? null : consumer.call(this, a, b);
+            };
+        },
+        and: function (a, b) {
+            return a && b;
+        },
+        or: function (a, b) {
+            return a || b;
+        },
+        plus: function (a, b) {
+            return Helpers.correctAfterPlusMinis(a, b, a + b);
+        },
+        minus: function (a, b) {
+            return Helpers.correctAfterPlusMinis(a, b, a - b);
+        },
+        mul: function (a, b) {
+            return Helpers.correctAfterMultiple(a, b, a * b);
+        },
+        div: function (a, b) {
+            if (!b)
+                return null;
+            return a / b;
+        },
+        mod: function (a, b) {
+            if (!b)
+                return null;
+            return a % b;
+        },
+        power: function (a, b) {
+            return Math.pow(a, b);
+        },
+        greater: function (left, right) {
+            if (left == null || right == null)
+                return false;
+            return left > right;
+        },
+        less: function (left, right) {
+            if (left == null || right == null)
+                return false;
+            return left < right;
+        },
+        greaterorequal: function (left, right) {
+            if (OperandMaker.binaryFunctions.equal(left, right))
+                return true;
+            return OperandMaker.binaryFunctions.greater(left, right);
+        },
+        lessorequal: function (left, right) {
+            if (OperandMaker.binaryFunctions.equal(left, right))
+                return true;
+            return OperandMaker.binaryFunctions.less(left, right);
+        },
+        equal: function (left, right) {
+            return OperandMaker.isTwoValueEquals(left, right);
+        },
+        notequal: function (left, right) {
+            return !OperandMaker.binaryFunctions.equal(left, right);
+        },
+        contains: function (left, right) {
+            return OperandMaker.binaryFunctions.containsCore(left, right, true);
+        },
+        notcontains: function (left, right) {
+            if (!left && !Helpers.isValueEmpty(right))
+                return true;
+            return OperandMaker.binaryFunctions.containsCore(left, right, false);
+        },
+        anyof: function (left, right) {
+            if (Helpers.isValueEmpty(left) && Helpers.isValueEmpty(right))
+                return true;
+            if (Helpers.isValueEmpty(left) ||
+                (!Array.isArray(left) && left.length === 0))
+                return false;
+            if (Helpers.isValueEmpty(right))
+                return true;
+            if (!Array.isArray(left))
+                return OperandMaker.binaryFunctions.contains(right, left);
+            if (!Array.isArray(right))
+                return OperandMaker.binaryFunctions.contains(left, right);
+            for (var i = 0; i < right.length; i++) {
+                if (OperandMaker.binaryFunctions.contains(left, right[i]))
+                    return true;
+            }
+            return false;
+        },
+        allof: function (left, right) {
+            if (!left && !Helpers.isValueEmpty(right))
+                return false;
+            if (!Array.isArray(right))
+                return OperandMaker.binaryFunctions.contains(left, right);
+            for (var i = 0; i < right.length; i++) {
+                if (!OperandMaker.binaryFunctions.contains(left, right[i]))
+                    return false;
+            }
+            return true;
+        },
+        containsCore: function (left, right, isContains) {
+            if (!left && left !== 0 && left !== false)
+                return false;
+            if (!left.length) {
+                left = left.toString();
+                if (typeof right === "string" || right instanceof String) {
+                    left = left.toUpperCase();
+                    right = right.toUpperCase();
+                }
+            }
+            if (typeof left === "string" || left instanceof String) {
+                if (!right)
+                    return false;
+                right = right.toString();
+                var found = left.indexOf(right) > -1;
+                return isContains ? found : !found;
+            }
+            var rightArray = Array.isArray(right) ? right : [right];
+            for (var rIndex = 0; rIndex < rightArray.length; rIndex++) {
+                var i = 0;
+                right = rightArray[rIndex];
+                for (; i < left.length; i++) {
+                    if (OperandMaker.isTwoValueEquals(left[i], right))
+                        break;
+                }
+                if (i == left.length)
+                    return !isContains;
+            }
+            return isContains;
+        },
+    };
     static isTwoValueEquals(x, y) {
         if (x === "undefined")
             x = undefined;
@@ -423,167 +585,21 @@ export class OperandMaker {
         let opStr = OperandMaker.signs[operatorName];
         return opStr == null ? operatorName : opStr;
     }
+    static signs = {
+        less: "<",
+        lessorequal: "<=",
+        greater: ">",
+        greaterorequal: ">=",
+        equal: "==",
+        notequal: "!=",
+        plus: "+",
+        minus: "-",
+        mul: "*",
+        div: "/",
+        and: "and",
+        or: "or",
+        power: "^",
+        mod: "%",
+        negate: "!",
+    };
 }
-OperandMaker.unaryFunctions = {
-    empty: function (value) {
-        return Helpers.isValueEmpty(value);
-    },
-    notempty: function (value) {
-        return !OperandMaker.unaryFunctions.empty(value);
-    },
-    negate: function (value) {
-        return !value;
-    },
-};
-OperandMaker.binaryFunctions = {
-    arithmeticOp(operatorName) {
-        return function (a, b) {
-            if (Helpers.isValueEmpty(a) && !OperandMaker.isSpaceString(a)) {
-                a = typeof b === "string" ? "" : 0;
-            }
-            if (Helpers.isValueEmpty(b) && !OperandMaker.isSpaceString(b)) {
-                b = typeof a === "string" ? "" : 0;
-            }
-            let consumer = OperandMaker.binaryFunctions[operatorName];
-            return consumer == null ? null : consumer.call(this, a, b);
-        };
-    },
-    and: function (a, b) {
-        return a && b;
-    },
-    or: function (a, b) {
-        return a || b;
-    },
-    plus: function (a, b) {
-        return Helpers.correctAfterPlusMinis(a, b, a + b);
-    },
-    minus: function (a, b) {
-        return Helpers.correctAfterPlusMinis(a, b, a - b);
-    },
-    mul: function (a, b) {
-        return Helpers.correctAfterMultiple(a, b, a * b);
-    },
-    div: function (a, b) {
-        if (!b)
-            return null;
-        return a / b;
-    },
-    mod: function (a, b) {
-        if (!b)
-            return null;
-        return a % b;
-    },
-    power: function (a, b) {
-        return Math.pow(a, b);
-    },
-    greater: function (left, right) {
-        if (left == null || right == null)
-            return false;
-        return left > right;
-    },
-    less: function (left, right) {
-        if (left == null || right == null)
-            return false;
-        return left < right;
-    },
-    greaterorequal: function (left, right) {
-        if (OperandMaker.binaryFunctions.equal(left, right))
-            return true;
-        return OperandMaker.binaryFunctions.greater(left, right);
-    },
-    lessorequal: function (left, right) {
-        if (OperandMaker.binaryFunctions.equal(left, right))
-            return true;
-        return OperandMaker.binaryFunctions.less(left, right);
-    },
-    equal: function (left, right) {
-        return OperandMaker.isTwoValueEquals(left, right);
-    },
-    notequal: function (left, right) {
-        return !OperandMaker.binaryFunctions.equal(left, right);
-    },
-    contains: function (left, right) {
-        return OperandMaker.binaryFunctions.containsCore(left, right, true);
-    },
-    notcontains: function (left, right) {
-        if (!left && !Helpers.isValueEmpty(right))
-            return true;
-        return OperandMaker.binaryFunctions.containsCore(left, right, false);
-    },
-    anyof: function (left, right) {
-        if (Helpers.isValueEmpty(left) && Helpers.isValueEmpty(right))
-            return true;
-        if (Helpers.isValueEmpty(left) ||
-            (!Array.isArray(left) && left.length === 0))
-            return false;
-        if (Helpers.isValueEmpty(right))
-            return true;
-        if (!Array.isArray(left))
-            return OperandMaker.binaryFunctions.contains(right, left);
-        if (!Array.isArray(right))
-            return OperandMaker.binaryFunctions.contains(left, right);
-        for (var i = 0; i < right.length; i++) {
-            if (OperandMaker.binaryFunctions.contains(left, right[i]))
-                return true;
-        }
-        return false;
-    },
-    allof: function (left, right) {
-        if (!left && !Helpers.isValueEmpty(right))
-            return false;
-        if (!Array.isArray(right))
-            return OperandMaker.binaryFunctions.contains(left, right);
-        for (var i = 0; i < right.length; i++) {
-            if (!OperandMaker.binaryFunctions.contains(left, right[i]))
-                return false;
-        }
-        return true;
-    },
-    containsCore: function (left, right, isContains) {
-        if (!left && left !== 0 && left !== false)
-            return false;
-        if (!left.length) {
-            left = left.toString();
-            if (typeof right === "string" || right instanceof String) {
-                left = left.toUpperCase();
-                right = right.toUpperCase();
-            }
-        }
-        if (typeof left === "string" || left instanceof String) {
-            if (!right)
-                return false;
-            right = right.toString();
-            var found = left.indexOf(right) > -1;
-            return isContains ? found : !found;
-        }
-        var rightArray = Array.isArray(right) ? right : [right];
-        for (var rIndex = 0; rIndex < rightArray.length; rIndex++) {
-            var i = 0;
-            right = rightArray[rIndex];
-            for (; i < left.length; i++) {
-                if (OperandMaker.isTwoValueEquals(left[i], right))
-                    break;
-            }
-            if (i == left.length)
-                return !isContains;
-        }
-        return isContains;
-    },
-};
-OperandMaker.signs = {
-    less: "<",
-    lessorequal: "<=",
-    greater: ">",
-    greaterorequal: ">=",
-    equal: "==",
-    notequal: "!=",
-    plus: "+",
-    minus: "-",
-    mul: "*",
-    div: "/",
-    and: "and",
-    or: "or",
-    power: "^",
-    mod: "%",
-    negate: "!",
-};

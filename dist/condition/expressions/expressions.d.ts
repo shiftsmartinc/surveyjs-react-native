@@ -1,13 +1,13 @@
 import { HashTable } from "../helpers";
 import { ProcessValue } from "../conditionProcessValue";
 export declare abstract class Operand {
-    toString(func?: (op: Operand) => string): string;
+    toString(_func?: (op: Operand) => string): string;
     abstract getType(): string;
     abstract evaluate(processValue?: ProcessValue): any;
     abstract setVariables(variables: Array<string>): any;
     hasFunction(): boolean;
     hasAsyncFunction(): boolean;
-    addToAsyncList(list: Array<FunctionOperand>): void;
+    addToAsyncList(_list: Array<FunctionOperand>): void;
     isEqual(op: Operand): boolean;
     protected abstract isContentEqual(op: Operand): boolean;
     protected areOperatorsEquals(op1: Operand, op2: Operand): boolean;
@@ -20,12 +20,12 @@ export declare class BinaryOperand extends Operand {
     private isArithmeticValue;
     constructor(operatorName: string, left?: any, right?: any, isArithmeticOp?: boolean);
     getType(): string;
-    readonly isArithmetic: boolean;
-    readonly isConjunction: boolean;
-    readonly conjunction: string;
-    readonly operator: string;
-    readonly leftOperand: any;
-    readonly rightOperand: any;
+    get isArithmetic(): boolean;
+    get isConjunction(): boolean;
+    get conjunction(): string;
+    get operator(): string;
+    get leftOperand(): any;
+    get rightOperand(): any;
     protected isContentEqual(op: Operand): boolean;
     private evaluateParam;
     evaluate(processValue?: ProcessValue): any;
@@ -40,8 +40,8 @@ export declare class UnaryOperand extends Operand {
     private operatorName;
     private consumer;
     constructor(expressionValue: Operand, operatorName: string);
-    readonly operator: string;
-    readonly expression: Operand;
+    get operator(): string;
+    get expression(): Operand;
     getType(): string;
     toString(func?: (op: Operand) => string): string;
     protected isContentEqual(op: Operand): boolean;
@@ -65,9 +65,9 @@ export declare class Const extends Operand {
     constructor(value: any);
     getType(): string;
     toString(func?: (op: Operand) => string): string;
-    readonly correctValue: any;
+    get correctValue(): any;
     evaluate(): any;
-    setVariables(variables: Array<string>): void;
+    setVariables(_variables: Array<string>): void;
     protected getCorrectValue(value: any): any;
     protected isContentEqual(op: Operand): boolean;
     private isQuote;
@@ -81,7 +81,7 @@ export declare class Variable extends Const {
     constructor(variableName: string);
     getType(): string;
     toString(func?: (op: Operand) => string): string;
-    readonly variable: string;
+    get variable(): string;
     evaluate(processValue?: ProcessValue): any;
     setVariables(variables: Array<string>): void;
     protected getCorrectValue(value: any): any;
@@ -100,7 +100,7 @@ export declare class FunctionOperand extends Operand {
     private evaluateCore;
     toString(func?: (op: Operand) => string): string;
     setVariables(variables: Array<string>): void;
-    readonly isReady: boolean;
+    get isReady(): boolean;
     hasFunction(): boolean;
     hasAsyncFunction(): boolean;
     addToAsyncList(list: Array<FunctionOperand>): void;

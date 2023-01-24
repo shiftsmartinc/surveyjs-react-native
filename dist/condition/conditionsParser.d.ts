@@ -17,7 +17,7 @@ export declare class ConditionsParser {
     private readConditions;
     private readCondition;
     private readExpression;
-    private readonly ch;
+    private get ch();
     private skip;
     private isSpace;
     private isQuotes;

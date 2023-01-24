@@ -1,7 +1,5 @@
 export class Trigger {
-    constructor() {
-        this.opValue = "equal";
-    }
+    static operatorsValue = null;
     static get operators() {
         if (Trigger.operatorsValue != null)
             return Trigger.operatorsValue;
@@ -19,6 +17,8 @@ export class Trigger {
         };
         return Trigger.operatorsValue;
     }
+    opValue = "equal";
+    value;
     getType() { return "triggerbase"; }
     get operator() { return this.opValue; }
     set operator(value) {
@@ -40,11 +40,11 @@ export class Trigger {
     onSuccess() { }
     onFailure() { }
 }
-Trigger.operatorsValue = null;
 export class SurveyTrigger extends Trigger {
+    name;
+    owner = null;
     constructor(json) {
         super();
-        this.owner = null;
         this.name = json.name;
         this.operator = json.operator;
         this.value = json.value;
@@ -55,10 +55,10 @@ export class SurveyTrigger extends Trigger {
     get isOnNextPage() { return false; }
 }
 export class SurveyTriggerVisible extends SurveyTrigger {
+    pages = [];
+    questions = [];
     constructor(json) {
         super(json);
-        this.pages = [];
-        this.questions = [];
     }
     getType() { return "visibletrigger"; }
     onSuccess() { this.onTrigger(this.onItemSuccess); }
@@ -84,6 +84,9 @@ export class SurveyTriggerComplete extends SurveyTrigger {
         this.owner.doComplete(); }
 }
 export class SurveyTriggerSetValue extends SurveyTrigger {
+    setToName;
+    setValue;
+    isVariable;
     constructor(json) {
         super(json);
         this.setToName = json.setToName;
