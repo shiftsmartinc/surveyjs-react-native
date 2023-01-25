@@ -4,8 +4,9 @@
   "private": true,
   "main": "dist/index.js",
   "scripts": {
-    "watch": "tsc -w --inlineSourceMap --inlineSources --pretty --outDir example/node_modules/surveyjs-react-native/dist",
-    "build": "tsc --outDir dist"
+    "build": "tsc --outDir dist",
+    "dev": "tsc -w --outDir dist",
+    "watch": "tsc -w --inlineSourceMap --inlineSources --pretty --outDir example/node_modules/surveyjs-react-native/dist"
   },
   "devDependencies": {
     "@react-native-community/datetimepicker": "^3.0.9",

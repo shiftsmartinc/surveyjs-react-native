@@ -1,4 +1,4 @@
-import { SurveyTrigger } from "./trigger";
+import { SurveyTrigger } from './trigger';
 export default class Model {
     questions: {};
     curPageIndex: number;

@@ -4,12 +4,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-import { observable, action, computed, toJS, makeObservable } from "mobx";
-import { getTriggerType } from "./trigger";
-import moment from "moment";
-import { ConditionRunner } from "./condition/conditions";
-import QuestionValidator from "./validator";
-import { isValueEmpty } from "./utils";
+import { observable, action, computed, toJS, makeObservable } from 'mobx';
+import { getTriggerType } from './trigger';
+import moment from 'moment';
+import { ConditionRunner } from './condition/conditions';
+import QuestionValidator from './validator';
+import { isValueEmpty } from './utils';
 const getResponseValue = (obj, desc) => {
     var arr = desc.split(".");
     while (arr.length && (obj = obj[arr.shift()]))
@@ -52,7 +52,7 @@ class Page {
         this._visible = json.visible != null ? json.visible : true;
         this.conditionRunner = null;
         if (json.visibleIf) {
-            this.conditionRunner = new ConditionRunner("");
+            this.conditionRunner = new ConditionRunner('');
             this.conditionRunner.expression = json.visibleIf;
         }
     }
@@ -66,13 +66,16 @@ class Page {
         }
     }
     get visible() {
-        const questionVisible = this.questionNames.some((name) => this.collection.questions[name].visible);
+        const questionVisible = this.questionNames.some(name => this.collection.questions[name].visible);
         return this._visible && questionVisible;
     }
 }
 __decorate([
     observable
 ], Page.prototype, "_visible", void 0);
+__decorate([
+    observable
+], Page.prototype, "json", void 0);
 __decorate([
     action.bound
 ], Page.prototype, "setVisible", null);
@@ -90,9 +93,9 @@ class Question {
     number;
     questions = [];
     choices = [];
-    title = "";
-    originalNumber;
+    title = '';
     json;
+    originalNumber;
     collection;
     conditionRunner;
     page;
@@ -105,7 +108,7 @@ class Question {
         this.title = json.title;
         this.conditionRunner = null;
         if (json.choices && json.choices.length > 0) {
-            const clonedChoices = json.choices.map((c) => c);
+            const clonedChoices = json.choices.map(c => c);
             this.choices = clonedChoices;
             if (json.choicesOrder && json.choicesOrder !== "none") {
                 let order = json.choicesOrder.toLowerCase();
@@ -121,12 +124,12 @@ class Question {
             }
         }
         if (json.visibleIf) {
-            this.conditionRunner = new ConditionRunner("");
+            this.conditionRunner = new ConditionRunner('');
             this.conditionRunner.expression = json.visibleIf;
         }
     }
     validate() {
-        if (this.value && typeof this.value === "string") {
+        if (this.value && typeof this.value === 'string') {
             this.value = this.value.trim();
         }
         const questionValidator = new QuestionValidator(this);
@@ -136,7 +139,7 @@ class Question {
         return toJS(this.value);
     }
     setValue(value, comment = null) {
-        this.value = (value && value.uri) || value;
+        this.value = value && value.uri || value;
         if (comment != null) {
             this.comment = comment;
         }
@@ -145,11 +148,9 @@ class Question {
             this.collection.regenerateNumbers();
             this.collection.resetTitle();
             this.collection.triggers
-                .filter((v) => v.name === this.json.name && !v.isOnNextPage)
-                .forEach((trigger) => trigger.check(value));
-            if (this.json.type === "file" &&
-                this.collection.apis.onUpload &&
-                value !== null) {
+                .filter(v => v.name === this.json.name && !v.isOnNextPage)
+                .forEach(trigger => trigger.check(value));
+            if (this.json.type === 'file' && this.collection.apis.onUpload && value !== null) {
                 this.collection.apis.onUpload(value, this);
             }
         }
@@ -176,7 +177,7 @@ class Question {
         let processedTitle = defaultTitle;
         if (matches) {
             matches.forEach((match) => {
-                const valueName = match.replace("{", "").replace("}", "");
+                const valueName = match.replace('{', '').replace('}', '');
                 const varValue = getResponseValue(results, valueName) || match;
                 processedTitle = processedTitle.replace(match, varValue);
             });
@@ -214,6 +215,9 @@ __decorate([
 __decorate([
     observable
 ], Question.prototype, "title", void 0);
+__decorate([
+    observable
+], Question.prototype, "json", void 0);
 __decorate([
     action.bound
 ], Question.prototype, "validate", null);
@@ -254,13 +258,11 @@ export default class Model {
     constructor({ json, apis, isPreview = false }) {
         makeObservable(this);
         if (isPreview) {
-            json.pages = [
-                {
-                    name: "Preview",
-                    title: "Preview",
-                    elements: json.pages.reduce((prev, curr) => [...prev, ...curr.elements], [])
-                }
-            ];
+            json.pages = [{
+                    name: 'Preview',
+                    title: 'Preview',
+                    elements: json.pages.reduce((prev, curr) => ([...prev, ...curr.elements]), []),
+                }];
         }
         this.apis = apis;
         this.isPreview = isPreview;
@@ -272,14 +274,14 @@ export default class Model {
         this.regenerateNumbers();
     }
     nextPage() {
-        const isValidatorFailed = this.currentPageProps.questions.some((question) => !question.validate());
+        const isValidatorFailed = this.currentPageProps.questions.some(question => !question.validate());
         if (isValidatorFailed) {
             return;
         }
-        const pageTriggers = this.triggers.filter((v) => v.isOnNextPage);
+        const pageTriggers = this.triggers.filter(v => v.isOnNextPage);
         const curPageQuestionNames = this.pages[this.curPageIndex].questionNames;
-        const curPageTriggers = pageTriggers.filter((v) => curPageQuestionNames.indexOf(v.name) !== -1);
-        curPageTriggers.forEach((trigger) => trigger.check(this.questions[trigger.name].value));
+        const curPageTriggers = pageTriggers.filter(v => curPageQuestionNames.indexOf(v.name) !== -1);
+        curPageTriggers.forEach(trigger => trigger.check(this.questions[trigger.name].value));
         if (this.nextPageIndex !== -1) {
             this.curPageIndex = this.nextPageIndex;
         }
@@ -293,25 +295,25 @@ export default class Model {
         }
     }
     resetVisible() {
-        Object.keys(this.questions).forEach((name) => this.questions[name].resetVisible());
-        this.pages.forEach((page) => page.resetVisible());
+        Object.keys(this.questions).forEach(name => this.questions[name].resetVisible());
+        this.pages.forEach(page => page.resetVisible());
     }
     resetTitle() {
-        Object.keys(this.questions).forEach((name) => this.questions[name].resetTitle());
+        Object.keys(this.questions).forEach(name => this.questions[name].resetTitle());
     }
     get prevPageIndex() {
         const reversedPages = this.pages.slice().reverse();
-        const page = reversedPages.find((v) => v.visible && v.pageIndex < this.curPageIndex);
+        const page = reversedPages.find(v => v.visible && v.pageIndex < this.curPageIndex);
         return page ? page.pageIndex : -1;
     }
     get nextPageIndex() {
-        return this.pages.findIndex((v) => v.visible && v.pageIndex > this.curPageIndex);
+        return this.pages.findIndex(v => v.visible && v.pageIndex > this.curPageIndex);
     }
     get currentPageProps() {
-        const page = this.pages.find((v) => v.pageIndex === this.curPageIndex);
+        const page = this.pages.find(v => v.pageIndex === this.curPageIndex);
         const pageProps = {
             name: page.name,
-            questions: page.questionNames.map((name) => this.questions[name])
+            questions: page.questionNames.map(name => this.questions[name]),
         };
         return pageProps;
     }
@@ -324,24 +326,22 @@ export default class Model {
     }
     get results() {
         const values = {};
-        Object.keys(this.questions).forEach((name) => {
+        Object.keys(this.questions).forEach(name => {
             const question = this.questions[name];
             const value = question.value;
             if (!isValueEmpty(value)) {
                 values[name] = value;
-                if (question.json.inputType === "datetime" ||
-                    question.json.inputType === "datetime-local") {
+                if (question.json.inputType === 'datetime' || question.json.inputType === 'datetime-local') {
                     values[name] = moment(value).format();
                 }
-                else if (question.json.inputType === "date") {
-                    values[name] = moment(value).format("YYYY-MM-DD");
+                else if (question.json.inputType === 'date') {
+                    values[name] = moment(value).format('YYYY-MM-DD');
                 }
-                else if (question.json.inputType === "time") {
-                    values[name] = moment(value).format("HH:mm");
+                else if (question.json.inputType === 'time') {
+                    values[name] = moment(value).format('HH:mm');
                 }
             }
-            if (question.comment &&
-                (question.json.hasComment || question.json.hasOther)) {
+            if (question.comment && (question.json.hasComment || question.json.hasOther)) {
                 values[`${name}-Comment`] = question.comment;
             }
         });
@@ -354,23 +354,23 @@ export default class Model {
         }
     };
     parseQuestion = (json, questionNames) => {
-        if (json.type === "panel") {
+        if (json.type === 'panel') {
             json.showTitle = false;
         }
         questionNames.push(json.name);
-        if (json.type !== "html" && json.type !== "panel") {
+        if (json.type !== 'html' && json.type !== 'panel') {
             this.questionNamesInOrder.push(json.name);
         }
         const question = new Question(json, this.originalNumber++, this);
         this.questions[json.name] = question;
-        if (json.type === "multipletext") {
-            question.questions = json.items.map((itemjson) => new Question(itemjson));
+        if (json.type === 'multipletext') {
+            question.questions = json.items.map(itemjson => new Question(itemjson));
         }
     };
     initPages = (pagesJson) => {
         this.pages = pagesJson.map((page, pageIndex) => {
             const questionNames = [];
-            (page.elements || page.questions || []).forEach((question) => this.parseQuestion(question, questionNames));
+            (page.elements || page.questions || []).forEach(question => this.parseQuestion(question, questionNames));
             const pageStore = new Page(page, this, pageIndex, questionNames);
             questionNames.forEach((name) => {
                 this.questions[name].setPage(pageStore);
@@ -391,9 +391,9 @@ export default class Model {
         const owner = {
             doComplete: this.onComplete,
             getObjects: this.triggerGetObjects,
-            setTriggerValue: this.setTriggerValue
+            setTriggerValue: this.setTriggerValue,
         };
-        this.triggers = triggersJson.map((json) => {
+        this.triggers = triggersJson.map(json => {
             let TriggerType = getTriggerType(json);
             const trigger = new TriggerType(json);
             trigger.setOwner(owner);
@@ -401,8 +401,8 @@ export default class Model {
         });
     };
     triggerGetObjects = (pageNames, questionNames) => {
-        const pages = this.pages.filter((v) => pageNames.indexOf(v.name) !== -1);
-        const questions = questionNames.map((v) => this.questions[v]);
+        const pages = this.pages.filter(v => pageNames.indexOf(v.name) !== -1);
+        const questions = questionNames.map(v => this.questions[v]);
         return [...pages, ...questions];
     };
     setTriggerValue(name, value, isVariable) {

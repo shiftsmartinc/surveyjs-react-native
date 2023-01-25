@@ -111,7 +111,7 @@ export default class QuestionDropdown extends React.Component {
         };
     }
     handleCommentChange = (comment) => {
-        return this.props.onChange(this.props.value, comment);
+        this.props.onChange(this.props.value, comment);
     };
     openModal = () => {
         this.setState({ modalVisible: true });
