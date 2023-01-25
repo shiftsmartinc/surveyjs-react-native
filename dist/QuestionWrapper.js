@@ -91,7 +91,7 @@ let QuestionWrapper = class QuestionWrapper extends React.PureComponent {
             return this.renderQuestion({
                 type: json.type,
                 json: json,
-            });
+            }, json.visible);
         })}
     </View>);
     panelDynamicBuilder = json => (<QuestionPanelDynamic {...json} buildComponent={this.renderQuestion}/>);
@@ -110,7 +110,7 @@ let QuestionWrapper = class QuestionWrapper extends React.PureComponent {
         html: commonBuilderCreator(QuestionHtml),
         file: commonBuilderCreator(QuestionFile),
     };
-    renderQuestion = (question) => {
+    renderQuestion = (question, visible) => {
         const { isPreview } = this.props;
         const json = question.json || question;
         const build = this.typeBuilderMap[json.type];
@@ -118,7 +118,7 @@ let QuestionWrapper = class QuestionWrapper extends React.PureComponent {
         const { title = null, name, showTitle = true, } = json;
         const renderedTitle = question.title || title;
         const { number = null, } = question;
-        if (!question.visible) {
+        if (!visible) {
             return null;
         }
         return (<View key={json.name} style={styles.container}>
@@ -140,7 +140,7 @@ let QuestionWrapper = class QuestionWrapper extends React.PureComponent {
       </View>);
     };
     render() {
-        return this.renderQuestion(this.props.question);
+        return this.renderQuestion(this.props.question, this.props.visible);
     }
 };
 QuestionWrapper = __decorate([

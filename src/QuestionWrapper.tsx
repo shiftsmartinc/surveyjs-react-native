@@ -151,7 +151,7 @@ export default class QuestionWrapper extends React.PureComponent<any> {
         return this.renderQuestion({
           type: json.type,
           json: json,
-        })
+        }, json.visible)
       })}
     </View>
   )
