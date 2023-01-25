@@ -183,7 +183,7 @@ export default class QuestionWrapper extends React.PureComponent<any> {
     html: commonBuilderCreator(QuestionHtml),
     file: commonBuilderCreator(QuestionFile),
   };
-  renderQuestion = (question) => {
+  renderQuestion = (question, visible) => {
     const { isPreview } = this.props;
     const json = question.json || question;
     const build = this.typeBuilderMap[json.type];
@@ -197,7 +197,7 @@ export default class QuestionWrapper extends React.PureComponent<any> {
     const {
       number = null,
     } = question;
-    if (!question.visible) {
+    if (!visible) {
       return null;
     }
     return (
@@ -227,6 +227,6 @@ export default class QuestionWrapper extends React.PureComponent<any> {
     );
   }
   render() {
-    return this.renderQuestion(this.props.question);
+    return this.renderQuestion(this.props.question, this.props.visible);
   }
 }
