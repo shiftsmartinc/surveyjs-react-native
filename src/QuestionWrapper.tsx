@@ -144,7 +144,7 @@ const commentBuilder = question => (
   isPreview: store.model.isPreview,
 }))
 @observer
-export default class QuestionWrapper extends React.Component<any> {
+export default class QuestionWrapper extends React.PureComponent<any> {
   panelBuilder = question => (
     <View>
       {question.json.elements.map((json) => {
