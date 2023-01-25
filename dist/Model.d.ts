@@ -21,7 +21,10 @@ export default class Model {
     resetTitle(): void;
     get prevPageIndex(): any;
     get nextPageIndex(): number;
-    get currentPage(): any;
+    get currentPageProps(): {
+        name: any;
+        questions: any;
+    };
     get conditionValues(): {};
     get results(): {};
     onComplete: () => void;
