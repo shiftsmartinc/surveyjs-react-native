@@ -16,8 +16,9 @@ const styles = StyleSheet.create({
 });
 
 @inject((store: any) => ({
-  currentPageProps: store.model.currentPageProps,
+  currentPage: store.model.currentPage,
   curPageIndex: store.model.curPageIndex,
+  questions: store.model.questions,
 }))
 @observer
 export default class SurveyPage extends React.Component<any> {
@@ -29,8 +30,9 @@ export default class SurveyPage extends React.Component<any> {
       });
     }
   }
+
   render() {
-    const { currentPageProps } = this.props;
+    const { questions, currentPage } = this.props;
     return (
       <KeyboardAwareScrollView
         ref={(ref) => { this.scrollView = ref; }}
@@ -39,9 +41,12 @@ export default class SurveyPage extends React.Component<any> {
         showsVerticalScrollIndicator={false}
         enableOnAndroid
       >
-        {currentPageProps.questions.map(question =>
-          <QuestionWrapper key={question.json.name} question={question} visible={question.visible} />
-        )}
+        {currentPage.questionNames.map(questionName => {
+          const question = questions[questionName];
+          return (
+            <QuestionWrapper key={question.json.name} question={question} visible={question.visible} />
+          );
+        })}
       </KeyboardAwareScrollView>
     );
   }

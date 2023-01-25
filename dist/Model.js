@@ -10,6 +10,7 @@ import moment from "moment";
 import { ConditionRunner } from "./condition/conditions";
 import QuestionValidator from "./validator";
 import { isValueEmpty } from "./utils";
+import Page from './Page';
 const getResponseValue = (obj, desc) => {
     var arr = desc.split(".");
     while (arr.length && (obj = obj[arr.shift()]))
@@ -34,54 +35,6 @@ const randomizeArray = (array) => {
     }
     return array;
 };
-class Page {
-    collection;
-    name;
-    _visible;
-    json;
-    questionNames;
-    pageIndex;
-    conditionRunner;
-    constructor(json, collection, pageIndex, questionNames) {
-        makeObservable(this);
-        this.json = json;
-        this.collection = collection;
-        this.pageIndex = pageIndex;
-        this.questionNames = questionNames;
-        this.name = json.name;
-        this._visible = json.visible != null ? json.visible : true;
-        this.conditionRunner = null;
-        if (json.visibleIf) {
-            this.conditionRunner = new ConditionRunner("");
-            this.conditionRunner.expression = json.visibleIf;
-        }
-    }
-    setVisible(visible) {
-        this._visible = visible;
-    }
-    resetVisible() {
-        if (this.conditionRunner) {
-            const visible = this.conditionRunner.run(this.collection.conditionValues);
-            this._visible = visible;
-        }
-    }
-    get visible() {
-        const questionVisible = this.questionNames.some((name) => this.collection.questions[name].visible);
-        return this._visible && questionVisible;
-    }
-}
-__decorate([
-    observable
-], Page.prototype, "_visible", void 0);
-__decorate([
-    action.bound
-], Page.prototype, "setVisible", null);
-__decorate([
-    action.bound
-], Page.prototype, "resetVisible", null);
-__decorate([
-    computed
-], Page.prototype, "visible", null);
 class Question {
     visible;
     value = null;
@@ -272,7 +225,8 @@ export default class Model {
         this.regenerateNumbers();
     }
     nextPage() {
-        const isValidatorFailed = this.currentPageProps.questions.some((question) => !question.validate());
+        const currentQuestions = this.currentPage.questionsNames.map((questionName) => this.questions[questionName]);
+        const isValidatorFailed = currentQuestions.some((question) => !question.validate());
         if (isValidatorFailed) {
             return;
         }
@@ -307,13 +261,9 @@ export default class Model {
     get nextPageIndex() {
         return this.pages.findIndex((v) => v.visible && v.pageIndex > this.curPageIndex);
     }
-    get currentPageProps() {
+    get currentPage() {
         const page = this.pages.find((v) => v.pageIndex === this.curPageIndex);
-        const pageProps = {
-            name: page.name,
-            questions: page.questionNames.map((name) => this.questions[name])
-        };
-        return pageProps;
+        return page;
     }
     get conditionValues() {
         const values = {};
@@ -442,7 +392,7 @@ __decorate([
 ], Model.prototype, "nextPageIndex", null);
 __decorate([
     computed
-], Model.prototype, "currentPageProps", null);
+], Model.prototype, "currentPage", null);
 __decorate([
     computed
 ], Model.prototype, "conditionValues", null);

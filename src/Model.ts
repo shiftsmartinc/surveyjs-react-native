@@ -4,6 +4,7 @@ import moment from "moment";
 import { ConditionRunner } from "./condition/conditions";
 import QuestionValidator from "./validator";
 import { isValueEmpty } from "./utils";
+import Page from './Page';
 
 const getResponseValue = (obj: any, desc: string) => {
   var arr = desc.split(".");
@@ -29,50 +30,7 @@ const randomizeArray = (array: Array<string>) => {
   return array;
 };
 
-class Page {
-  collection;
-  name;
-  @observable _visible;
-  json;
-  questionNames;
-  pageIndex;
 
-  conditionRunner;
-
-  constructor(json, collection, pageIndex, questionNames) {
-    makeObservable(this);
-    this.json = json;
-    this.collection = collection;
-    this.pageIndex = pageIndex;
-    this.questionNames = questionNames;
-    this.name = json.name;
-    this._visible = json.visible != null ? json.visible : true;
-
-    this.conditionRunner = null;
-    if (json.visibleIf) {
-      this.conditionRunner = new ConditionRunner("");
-      this.conditionRunner.expression = json.visibleIf;
-    }
-  }
-
-  @action.bound setVisible(visible) {
-    this._visible = visible;
-  }
-
-  @action.bound resetVisible() {
-    if (this.conditionRunner) {
-      const visible = this.conditionRunner.run(this.collection.conditionValues);
-      this._visible = visible;
-    }
-  }
-
-  @computed get visible() {
-    const questionVisible = this.questionNames.some(
-      (name) => this.collection.questions[name].visible
-    );
-    return this._visible && questionVisible;
-  }
-}
 
 class Question {
   @observable visible;
@@ -248,7 +206,8 @@ export default class Model {
 
   @action.bound nextPage() {
     // validator
-    const isValidatorFailed = this.currentPageProps.questions.some(
+    const currentQuestions = this.currentPage.questionsNames.map((questionName) => this.questions[questionName]);
+    const isValidatorFailed = currentQuestions.some(
       (question) => !question.validate()
     );
     if (isValidatorFailed) {
@@ -308,15 +267,16 @@ export default class Model {
     );
   }
 
-  @computed get currentPageProps() {
+  @computed get currentPage() {
     const page = this.pages.find((v) => v.pageIndex === this.curPageIndex);
-
-    const pageProps = {
-      name: page.name,
-      questions: page.questionNames.map((name) => this.questions[name])
-    };
-    return pageProps;
+    return page;
   }
+
+  // @computed get currentPageQuestions() {
+  //   this.currentPage;
+  //   page.questionNames.map((name) => this.questions[name])
+
+  // }
 
   @computed get conditionValues() {
     const values = {};
