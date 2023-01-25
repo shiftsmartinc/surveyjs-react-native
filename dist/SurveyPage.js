@@ -31,7 +31,7 @@ let SurveyPage = class SurveyPage extends React.Component {
     render() {
         const { currentPageProps } = this.props;
         return (<KeyboardAwareScrollView ref={(ref) => { this.scrollView = ref; }} style={styles.container} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false} enableOnAndroid>
-        {currentPageProps.questions.map(question => <QuestionWrapper key={question.json.name} question={question}/>)}
+        {currentPageProps.questions.map(question => <QuestionWrapper key={question.json.name} question={question} visible={question.visible}/>)}
       </KeyboardAwareScrollView>);
     }
 };
