@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 import React from "react";
 import { StyleSheet } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { inject, observer } from "mobx-react";
+import { observer } from "mobx-react";
 import QuestionWrapper from "./QuestionWrapper";
 const styles = StyleSheet.create({
     container: {
@@ -30,7 +30,6 @@ let SurveyPage = class SurveyPage extends React.Component {
     }
     render() {
         const { currentPageProps } = this.props;
-        console.log("currentPageProps ->", currentPageProps);
         return (<KeyboardAwareScrollView ref={(ref) => {
                 this.scrollView = ref;
             }} style={styles.container} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false} enableOnAndroid>
@@ -39,10 +38,6 @@ let SurveyPage = class SurveyPage extends React.Component {
     }
 };
 SurveyPage = __decorate([
-    inject((store) => ({
-        currentPageProps: store.model.currentPageProps,
-        curPageIndex: store.model.curPageIndex
-    })),
     observer
 ], SurveyPage);
 export default SurveyPage;

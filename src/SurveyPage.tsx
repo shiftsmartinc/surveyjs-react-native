@@ -15,13 +15,15 @@ const styles = StyleSheet.create({
   }
 });
 
-@inject((store: any) => ({
-  currentPageProps: store.model.currentPageProps,
-  curPageIndex: store.model.curPageIndex
-}))
+// @inject((store: any) => ({
+//   currentPageProps: store.model.currentPageProps,
+//   curPageIndex: store.model.curPageIndex
+// }))
+
 @observer
 export default class SurveyPage extends React.Component<any> {
   scrollView: KeyboardAwareScrollView;
+
   componentDidUpdate(prevProps) {
     if (this.props.curPageIndex !== prevProps.curPageIndex) {
       requestAnimationFrame(() => {
@@ -29,9 +31,10 @@ export default class SurveyPage extends React.Component<any> {
       });
     }
   }
+
   render() {
     const { currentPageProps } = this.props;
-    console.log("currentPageProps ->", currentPageProps);
+    // console.log("currentPageProps ->", currentPageProps);
 
     return (
       <KeyboardAwareScrollView
