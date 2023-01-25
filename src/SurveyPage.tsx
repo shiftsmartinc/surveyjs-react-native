@@ -1,23 +1,23 @@
-import React from 'react';
-import { StyleSheet } from 'react-native'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { inject, observer } from 'mobx-react';
-import QuestionWrapper from './QuestionWrapper';
+import React from "react";
+import { StyleSheet } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { inject, observer } from "mobx-react";
+import QuestionWrapper from "./QuestionWrapper";
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 1
   },
   content: {
     flexGrow: 1,
     marginTop: 28,
-    paddingBottom: 28,
-  },
+    paddingBottom: 28
+  }
 });
 
 @inject((store: any) => ({
   currentPageProps: store.model.currentPageProps,
-  curPageIndex: store.model.curPageIndex,
+  curPageIndex: store.model.curPageIndex
 }))
 @observer
 export default class SurveyPage extends React.Component<any> {
@@ -31,17 +31,25 @@ export default class SurveyPage extends React.Component<any> {
   }
   render() {
     const { currentPageProps } = this.props;
+    console.log("currentPageProps ->", currentPageProps);
+
     return (
       <KeyboardAwareScrollView
-        ref={(ref) => { this.scrollView = ref; }}
+        ref={(ref) => {
+          this.scrollView = ref;
+        }}
         style={styles.container}
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
         enableOnAndroid
       >
-        {currentPageProps.questions.map(question =>
-          <QuestionWrapper key={question.json.name} question={question} />
-        )}
+        {currentPageProps.questions.map((question) => (
+          <QuestionWrapper
+            key={question.json.name}
+            question={question}
+            visible={question.visible}
+          />
+        ))}
       </KeyboardAwareScrollView>
     );
   }
