@@ -37,7 +37,7 @@ export default class SurveyPage extends React.Component<any> {
         ref={(ref) => { this.scrollView = ref; }}
         style={styles.container}
         contentContainerStyle={styles.content}
-        showsVerticalScrollIndicator={false}
+        showsVerticalScrollIndicator={true}
         enableOnAndroid
       >
         {currentQuestions.map(question =>
