@@ -1,10 +1,12 @@
 import React from 'react';
-export interface Props {
+export interface QuestionMultipleTextProps {
     items: Array<any>;
-    questions: Array<any>;
     onChange(value: any): any;
+    questions: Array<any>;
 }
-export default class QuestionMultipleText extends React.Component<Props> {
+declare class QuestionMultipleText extends React.Component<QuestionMultipleTextProps> {
     renderItem: (question: any, idx: any) => JSX.Element;
     render(): JSX.Element;
 }
+declare const _default: typeof QuestionMultipleText;
+export default _default;

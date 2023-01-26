@@ -1,22 +1,22 @@
-import React from "react";
-import { View } from "react-native";
-import CheckboxItem from "./QuestionCheckboxItem";
-import QuestionText from "./QuestionText";
+import React from 'react';
+import { View } from 'react-native';
+import CheckboxItem from './QuestionCheckboxItem';
+import QuestionText from './QuestionText';
 
 export interface QuestionCheckboxProps {
   choices: Array<any>;
-  hasOther?: boolean;
-  value: Array<string>;
   comment?: string;
-  otherText?: string;
+  hasOther?: boolean;
   onChange(value, comment?);
+  otherText?: string;
+  value: Array<string>;
 }
 
-const OTHER_VALUE = "other";
-const DEFAULT_OTHER_TEXT = "other (describe)";
 const ALPHABET = [...Array(26)].map((_e, i) =>
-  (i + 10).toString(36).toUpperCase()
+  (i + 10).toString(36).toUpperCase(),
 );
+const DEFAULT_OTHER_TEXT = 'other (describe)';
+const OTHER_VALUE = 'other';
 
 export default class QuestionCheckbox extends React.Component<QuestionCheckboxProps> {
   handleChoicesChange = (checked, value) => {
@@ -28,14 +28,16 @@ export default class QuestionCheckbox extends React.Component<QuestionCheckboxPr
     }
     this.props.onChange([...valueSet]);
   };
+
   handleCommentChange = (comment) => {
     this.props.onChange(this.props.value, comment);
   };
+
   render() {
     const {
       choices,
-      comment = "",
-      otherText = DEFAULT_OTHER_TEXT
+      comment = '',
+      otherText = DEFAULT_OTHER_TEXT,
     } = this.props;
     const value = this.props.value || [];
     const otherChecked = value.indexOf(OTHER_VALUE) !== -1;

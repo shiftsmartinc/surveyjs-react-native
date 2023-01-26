@@ -1,11 +1,12 @@
 import React, { ReactNode } from 'react';
 import { StyleProp, ViewStyle, TouchableWithoutFeedbackProps } from 'react-native';
-interface Props extends TouchableWithoutFeedbackProps {
+interface TouchableWithFeedbackProps extends TouchableWithoutFeedbackProps {
     isPreview?: boolean;
     children?: ReactNode;
     style?: StyleProp<ViewStyle>;
 }
-export default class TouchableWithFeedback extends React.Component<Props> {
+declare class TouchableWithFeedback extends React.Component<TouchableWithFeedbackProps> {
     render(): JSX.Element;
 }
-export {};
+declare const _default: typeof TouchableWithFeedback & import("mobx-react").IWrappedComponent<{}>;
+export default _default;

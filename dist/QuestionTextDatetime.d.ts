@@ -1,11 +1,15 @@
 import React from 'react';
-export interface Props {
+export interface QuestionTextDatetimeProps {
     placeholder?: string;
     inputType: string;
     value?: any;
     onChange(value: any): any;
 }
-export default class QuestionTextDatetime extends React.Component<Props> {
+export interface QuestionTextDatetimeState {
+    isDateTimePickerVisible: boolean;
+    value: any;
+}
+export default class QuestionTextDatetime extends React.Component<QuestionTextDatetimeProps, QuestionTextDatetimeState> {
     state: {
         isDateTimePickerVisible: boolean;
         value: any;

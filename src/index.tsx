@@ -1,15 +1,18 @@
 import React from 'react';
+import { configure } from 'mobx';
 import { Provider } from 'mobx-react';
 import Survey from './Survey';
 import Model from './Model';
 
-export interface Props {
-  json: any;
+export interface FactoryProps {
   apis: any;
   isPreview?: boolean;
+  json: any;
 }
 
-export default class Factory extends React.PureComponent<Props> {
+configure({ enforceActions: 'never' });
+
+export default class Factory extends React.PureComponent<FactoryProps> {
   private model = new Model(this.props);
 
   render() {
@@ -17,6 +20,6 @@ export default class Factory extends React.PureComponent<Props> {
       <Provider model={this.model}>
         <Survey />
       </Provider>
-    )
+    );
   }
 }

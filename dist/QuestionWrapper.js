@@ -1,9 +1,3 @@
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { inject, observer } from 'mobx-react';
@@ -54,14 +48,14 @@ const styles = StyleSheet.create({
         paddingVertical: 16,
     },
 });
-const commonBuilderCreator = Component => (question, isPreview) => <Component {...question.json} value={question.value} comment={question.comment} onChange={question.setValue} isPreview={isPreview}/>;
-const choiceBuilderCreator = Component => (question) => {
+const commonBuilderCreator = (Component) => (question, isPreview) => (<Component {...question.json} value={question.value} comment={question.comment} onChange={question.setValue} isPreview={isPreview}/>);
+const choiceBuilderCreator = (Component) => (question) => {
     const json = question.json;
-    const choices = (question.choices || json.choices).map(v => typeof v === 'string' ? { value: v, text: v } : v);
+    const choices = (question.choices || json.choices).map((v) => typeof v === 'string' ? { value: v, text: v } : v);
     return (<Component {...json} choices={choices} value={question.value} comment={question.comment} onChange={question.setValue}/>);
 };
-const booleanBuilder = question => {
-    const { json: { valueTrue = true, valueFalse = false, }, value, } = question;
+const booleanBuilder = (question) => {
+    const { json: { valueTrue = true, valueFalse = false }, value, } = question;
     const checked = value === valueTrue;
     const onChange = (checked) => {
         const value = checked ? valueTrue : valueFalse;
@@ -79,16 +73,14 @@ const generateRateValues = (min, max, step) => {
     }
     return rateValues;
 };
-const ratingBuilder = question => {
-    const { json: { rateValues = null, rateMax = 5, rateMin = 1, rateStep = 1, }, } = question;
+const ratingBuilder = (question) => {
+    const { json: { rateValues = null, rateMax = 5, rateMin = 1, rateStep = 1 }, } = question;
     const newRateValues = rateValues || generateRateValues(rateMin, rateMax, rateStep);
     return (<QuestionRate {...question.json} rateValues={newRateValues} value={question.value} comment={question.comment} onChange={question.setValue}/>);
 };
-const commentBuilder = question => (<QuestionText {...question.json} value={question.value} comment={question.comment} onChange={question.setValue}/>);
-let QuestionWrapper = class QuestionWrapper extends React.Component {
-    constructor() {
-        super(...arguments);
-        this.panelBuilder = question => (<View>
+const commentBuilder = (question) => (<QuestionText {...question.json} value={question.value} comment={question.comment} onChange={question.setValue}/>);
+class QuestionWrapper extends React.Component {
+    panelBuilder = (question) => (<View>
       {question.json.elements.map((json) => {
             return this.renderQuestion({
                 type: json.type,
@@ -96,60 +88,50 @@ let QuestionWrapper = class QuestionWrapper extends React.Component {
             });
         })}
     </View>);
-        this.panelDynamicBuilder = json => (<QuestionPanelDynamic {...json} buildComponent={this.renderQuestion}/>);
-        this.multipleTextBuilder = question => (<QuestionMultipleText {...question.json} questions={question.questions} onChange={question.setValue}/>);
-        this.typeBuilderMap = {
-            text: commonBuilderCreator(QuestionTextWrapper),
-            checkbox: choiceBuilderCreator(QuestionCheckbox),
-            radiogroup: choiceBuilderCreator(QuestionRadiogroup),
-            dropdown: choiceBuilderCreator(QuestionDropdown),
-            comment: commentBuilder,
-            boolean: booleanBuilder,
-            rating: ratingBuilder,
-            multipletext: this.multipleTextBuilder,
-            panel: this.panelBuilder,
-            paneldynamic: this.panelDynamicBuilder,
-            html: commonBuilderCreator(QuestionHtml),
-            file: commonBuilderCreator(QuestionFile),
-        };
-        this.renderQuestion = (question) => {
-            const { isPreview } = this.props;
-            const json = question.json || question;
-            const build = this.typeBuilderMap[json.type];
-            const content = build(question, isPreview);
-            const { title = null, name, showTitle = true, } = json;
-            const renderedTitle = question.title || title;
-            const { number = null, } = question;
-            if (!question.visible) {
-                return null;
-            }
-            return (<View key={json.name} style={styles.container}>
-        {showTitle && question.json.type !== 'html' &&
-                <View style={[styles.title, isPreview && styles.previewTitle]}>
+    panelDynamicBuilder = (json) => (<QuestionPanelDynamic {...json} buildComponent={this.renderQuestion}/>);
+    multipleTextBuilder = (question) => (<QuestionMultipleText {...question.json} questions={question.questions} onChange={question.setValue}/>);
+    typeBuilderMap = {
+        text: commonBuilderCreator(QuestionTextWrapper),
+        checkbox: choiceBuilderCreator(QuestionCheckbox),
+        radiogroup: choiceBuilderCreator(QuestionRadiogroup),
+        dropdown: choiceBuilderCreator(QuestionDropdown),
+        comment: commentBuilder,
+        boolean: booleanBuilder,
+        rating: ratingBuilder,
+        multipletext: this.multipleTextBuilder,
+        panel: this.panelBuilder,
+        paneldynamic: this.panelDynamicBuilder,
+        html: commonBuilderCreator(QuestionHtml),
+        file: commonBuilderCreator(QuestionFile),
+    };
+    renderQuestion = (question) => {
+        const { isPreview } = this.props;
+        const json = question.json || question;
+        const build = this.typeBuilderMap[json.type];
+        const content = build(question, isPreview);
+        const { title = null, name, showTitle = true } = json;
+        const renderedTitle = question.title || title;
+        const { number = null } = question;
+        if (!question.visible) {
+            return null;
+        }
+        return (<View key={json.name} style={styles.container}>
+        {showTitle && question.json.type !== 'html' && (<View style={[styles.title, isPreview && styles.previewTitle]}>
             <Text style={[styles.titleText, isPreview && styles.previewTitleText]}>
               {number ? `${number}.` : ''} {renderedTitle || name}
             </Text>
-          </View>}
-        {question.error &&
-                <View style={styles.error}>
+          </View>)}
+        {question.error && (<View style={styles.error}>
             <Text style={styles.errorText}>{question.error}</Text>
-          </View>}
-        <View style={styles.questionContent}>
-          {content}
-        </View>
-        {question.json.hasComment &&
-                <QuestionText value={question.comment} onChange={question.setComment}/>}
+          </View>)}
+        <View style={styles.questionContent}>{content}</View>
+        {question.json.hasComment && (<QuestionText value={question.comment} onChange={question.setComment}/>)}
       </View>);
-        };
-    }
+    };
     render() {
         return this.renderQuestion(this.props.question);
     }
-};
-QuestionWrapper = __decorate([
-    inject((store) => ({
-        isPreview: store.model.isPreview,
-    })),
-    observer
-], QuestionWrapper);
-export default QuestionWrapper;
+}
+export default inject((store) => ({
+    isPreview: store.model.isPreview,
+}))(observer(QuestionWrapper));

@@ -1,9 +1,3 @@
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
 import React from 'react';
 import { StyleSheet, SafeAreaView, View, Text } from 'react-native';
 import { inject, observer } from 'mobx-react';
@@ -43,7 +37,7 @@ const styles = StyleSheet.create({
         color: '#fff',
     },
 });
-let Survey = class Survey extends React.Component {
+class Survey extends React.Component {
     render() {
         const { isComplete, isPreview, nextPageIndex, nextPage } = this.props;
         if (isComplete) {
@@ -54,20 +48,17 @@ let Survey = class Survey extends React.Component {
         return (<SafeAreaView style={styles.container}>
         {!isPreview && <SurveyNavigation />}
         <SurveyPage />
-        {!isPreview &&
-            <TouchableWithFeedback style={styles.button} onPress={nextPage}>
-            <Text style={styles.buttonText}>{nextPageIndex !== -1 ? 'Next' : 'Complete'}</Text>
-          </TouchableWithFeedback>}
+        {!isPreview && (<TouchableWithFeedback style={styles.button} onPress={nextPage}>
+            <Text style={styles.buttonText}>
+              {nextPageIndex !== -1 ? 'Next' : 'Complete'}
+            </Text>
+          </TouchableWithFeedback>)}
       </SafeAreaView>);
     }
-};
-Survey = __decorate([
-    inject((store) => ({
-        isComplete: store.model.isComplete,
-        isPreview: store.model.isPreview,
-        nextPageIndex: store.model.nextPageIndex,
-        nextPage: store.model.nextPage,
-    })),
-    observer
-], Survey);
-export default Survey;
+}
+export default inject((store) => ({
+    isComplete: store.model.isComplete,
+    isPreview: store.model.isPreview,
+    nextPage: store.model.nextPage,
+    nextPageIndex: store.model.nextPageIndex,
+}))(observer(Survey));

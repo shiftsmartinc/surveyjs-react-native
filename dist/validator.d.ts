@@ -1,6 +1,6 @@
 export default class QuestionValidator {
     owner: any;
-    methodMap: {};
+    methodMap: any;
     private emailRegex;
     constructor(owner: any);
     validate(): boolean;

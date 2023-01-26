@@ -1,17 +1,15 @@
 import { HashTable } from './helpers';
 import { ConditionsParser } from './conditionsParser';
-import { FunctionFactory } from "./functionsfactory";
-import { ProcessValue } from "./conditionProcessValue";
-
+import { FunctionFactory } from './functionsfactory';
+import { ProcessValue } from './conditionProcessValue';
 
 export class Operand {
-  constructor(public origionalValue: any) {
-  }
+  constructor(public origionalValue: any) {}
   public getValue(processValue: ProcessValue) {
     var val = this.origionalValue;
     if (val === undefined || val === 'undefined') return null;
-    if (!val || (typeof val != "string")) return val;
-    if (this.isBoolean(val)) return val.toLowerCase() == "true";
+    if (!val || typeof val != 'string') return val;
+    if (this.isBoolean(val)) return val.toLowerCase() == 'true';
     val = this.removeQuotes(val);
     if (processValue) {
       var name = this.getValueName(val);
@@ -24,21 +22,27 @@ export class Operand {
   }
   public operandToString() {
     var val = this.origionalValue;
-    if (val && (!this.isNumeric(val) && !this.isBoolean(val))) val = "'" + val + "'";
+    if (val && !this.isNumeric(val) && !this.isBoolean(val))
+      val = "'" + val + "'";
     return val;
   }
   private removeQuotes(val: string): string {
     if (val.length > 0 && (val[0] == "'" || val[0] == '"')) val = val.substr(1);
     var len = val.length;
-    if (len > 0 && (val[len - 1] == "'" || val[len - 1] == '"')) val = val.substr(0, len - 1);
+    if (len > 0 && (val[len - 1] == "'" || val[len - 1] == '"'))
+      val = val.substr(0, len - 1);
     return val;
   }
   private getValueName(val: any) {
-    if (val.length < 3 || val[0] != '{' || val[val.length - 1] != '}') return null;
+    if (val.length < 3 || val[0] != '{' || val[val.length - 1] != '}')
+      return null;
     return val.substr(1, val.length - 2);
   }
   private isBoolean(value: string): boolean {
-    return value && (value.toLowerCase() === "true" || value.toLowerCase() === "false");
+    return (
+      value &&
+      (value.toLowerCase() === 'true' || value.toLowerCase() === 'false')
+    );
   }
   private isNumeric(value: string): boolean {
     var val = parseFloat(value);
@@ -59,9 +63,9 @@ export class FunctionOperand extends Operand {
     return FunctionFactory.Instance.run(this.origionalValue, paramValues);
   }
   public operandToString() {
-    var res = this.origionalValue + "("
+    var res = this.origionalValue + '(';
     for (var i = 0; i < this.parameters.length; i++) {
-      if (i > 0) res += ", ";
+      if (i > 0) res += ', ';
       res += this.parameters[i].operandToString();
     }
     return res;
@@ -78,20 +82,26 @@ export class Condition {
       },
       notempty: function (left) {
         if (left == null) return false;
-        return !(!left);
+        return !!left;
       },
       equal: function (left, right) {
-        if (left == null && right != null || left != null && right == null) return false;
+        if ((left == null && right != null) || (left != null && right == null))
+          return false;
         if (left == null && right == null) return true;
         return left == right;
       },
       notequal: function (left, right) {
-        if (left == null && right != null || left != null && right == null) return true;
+        if ((left == null && right != null) || (left != null && right == null))
+          return true;
         if (left == null && right == null) return false;
         return left != right;
       },
-      contains: function (left, right) { return (left != null) && left["indexOf"] && left.indexOf(right) > -1; },
-      notcontains: function (left, right) { return (left == null) || !left["indexOf"] || left.indexOf(right) == -1; },
+      contains: function (left, right) {
+        return left != null && left['indexOf'] && left.indexOf(right) > -1;
+      },
+      notcontains: function (left, right) {
+        return left == null || !left['indexOf'] || left.indexOf(right) == -1;
+      },
       greater: function (left, right) {
         if (left == null) return false;
         if (right == null) return true;
@@ -112,39 +122,57 @@ export class Condition {
         if (left == null) return true;
         return left <= right;
       },
-      anyof: function(left, right) {
+      anyof: function (left, right) {
         if (!left || !right) {
           return false;
         }
         if (!Array.isArray(left.slice()) || !Array.isArray(right.slice())) {
           return false;
         }
-        const found = left.some(r=> right.includes(r))
+        const found = left.some((r) => right.includes(r));
         return found;
-      }
+      },
     };
     return Condition.operatorsValue;
   }
-  private opValue: string = "equal";
+  private opValue: string = 'equal';
   private leftValue: Operand = null;
   private rightValue: Operand = null;
-  public get left(): Operand { return this.leftValue; }
-  public set left(val: Operand) { this.leftValue = val; }
-  public get right(): Operand { return this.rightValue; }
-  public set right(val: Operand) { this.rightValue = val; }
-  public get operator(): string { return this.opValue; }
+  public get left(): Operand {
+    return this.leftValue;
+  }
+  public set left(val: Operand) {
+    this.leftValue = val;
+  }
+  public get right(): Operand {
+    return this.rightValue;
+  }
+  public set right(val: Operand) {
+    this.rightValue = val;
+  }
+  public get operator(): string {
+    return this.opValue;
+  }
   public set operator(value: string) {
     if (!value) return;
     value = value.toLowerCase();
     if (!Condition.operators[value]) return;
     this.opValue = value;
   }
-  public perform(left: any = null, right: any = null, processValue: ProcessValue = null): boolean {
+  public perform(
+    left: any = null,
+    right: any = null,
+    processValue: ProcessValue = null,
+  ): boolean {
     if (!left) left = this.left;
     if (!right) right = this.right;
     return this.performExplicit(left, right, processValue);
   }
-  public performExplicit(left: any, right: any, processValue: ProcessValue): boolean {
+  public performExplicit(
+    left: any,
+    right: any,
+    processValue: ProcessValue,
+  ): boolean {
     var leftValue = left ? left.getValue(processValue) : null;
     if (!right && (leftValue === true || leftValue === false)) return leftValue;
     var rightValue = right ? right.getValue(processValue) : null;
@@ -152,22 +180,26 @@ export class Condition {
   }
 }
 export class ConditionNode {
-  private connectiveValue: string = "and";
+  private connectiveValue: string = 'and';
   public children: Array<any> = [];
-  public constructor() { }
-  public get connective(): string { return this.connectiveValue; }
+  public constructor() {}
+  public get connective(): string {
+    return this.connectiveValue;
+  }
   public set connective(value: string) {
     if (!value) return;
     value = value.toLowerCase();
-    if (value == "&" || value == "&&") value = "and";
-    if (value == "|" || value == "||") value = "or";
-    if (value != "and" && value != "or") return;
+    if (value == '&' || value == '&&') value = 'and';
+    if (value == '|' || value == '||') value = 'or';
+    if (value != 'and' && value != 'or') return;
     this.connectiveValue = value;
   }
-  public get isEmpty() { return this.children.length == 0; }
+  public get isEmpty() {
+    return this.children.length == 0;
+  }
   public clear() {
     this.children = [];
-    this.connective = "and";
+    this.connective = 'and';
   }
 }
 export class ConditionRunner {
@@ -179,7 +211,9 @@ export class ConditionRunner {
     this.expression = expression;
     this.processValue = new ProcessValue();
   }
-  public get expression(): string { return this.expressionValue; }
+  public get expression(): string {
+    return this.expressionValue;
+  }
   public set expression(value: string) {
     if (this.expression == value) return;
     this.expressionValue = value;
@@ -190,7 +224,7 @@ export class ConditionRunner {
     return this.runNode(this.root);
   }
   private runNode(node: ConditionNode): boolean {
-    var onFirstFail = node.connective == "and";
+    var onFirstFail = node.connective == 'and';
     for (var i = 0; i < node.children.length; i++) {
       var res = this.runNodeCondition(node.children[i]);
       if (!res && onFirstFail) return false;
@@ -199,11 +233,15 @@ export class ConditionRunner {
     return onFirstFail;
   }
   private runNodeCondition(value: any): boolean {
-    if (value["children"]) return this.runNode(value);
-    if (value["left"]) return this.runCondition(value);
+    if (value['children']) return this.runNode(value);
+    if (value['left']) return this.runCondition(value);
     return false;
   }
   private runCondition(condition: Condition): boolean {
-    return condition.performExplicit(condition.left, condition.right, this.processValue);
+    return condition.performExplicit(
+      condition.left,
+      condition.right,
+      this.processValue,
+    );
   }
 }

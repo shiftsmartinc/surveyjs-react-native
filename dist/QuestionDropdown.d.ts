@@ -1,15 +1,15 @@
 import React from 'react';
-export interface Props {
+export interface QuestionDropdownProps {
     choices: any;
-    hasOther?: boolean;
-    optionsCaption?: string;
-    value: string;
     comment?: string;
-    otherText?: string;
+    hasOther?: boolean;
     onChange(value: any, comment?: any): any;
+    optionsCaption?: string;
+    otherText?: string;
+    value: string;
 }
-export default class QuestionDropdown extends React.Component<Props, any> {
-    constructor(props: Props);
+export default class QuestionDropdown extends React.Component<QuestionDropdownProps, any> {
+    constructor(props: QuestionDropdownProps);
     handleCommentChange: (comment: any) => void;
     openModal: () => void;
     closeModal: () => void;

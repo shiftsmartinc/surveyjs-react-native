@@ -1,49 +1,49 @@
-import React from "react";
-import { StyleSheet, View, Text } from "react-native";
-import colors from "./colors";
-import TouchableWithFeedback from "./TouchableWithFeedback";
+import React from 'react';
+import { StyleSheet, View, Text } from 'react-native';
+import colors from './colors';
+import TouchableWithFeedback from './TouchableWithFeedback';
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
+    flexDirection: 'row',
     flexGrow: 0,
-    alignSelf: "center",
+    alignSelf: 'center',
     borderRadius: 5,
-    overflow: "hidden"
+    overflow: 'hidden',
   },
   rateItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     minWidth: 30,
     padding: 5,
     backgroundColor: colors.lightGray,
     borderRightWidth: 1,
-    borderRightColor: colors.extraLightGray
+    borderRightColor: colors.extraLightGray,
   },
   rateItemText: {
     marginLeft: 3,
     marginRight: 3,
-    fontWeight: "500",
-    color: colors.darkGray
+    fontWeight: '500',
+    color: colors.darkGray,
   },
   rateItemTextChecked: {
-    color: colors.white
+    color: colors.white,
   },
   lastRateItem: {
-    borderRightWidth: 0
+    borderRightWidth: 0,
   },
   checkedRateItem: {
-    backgroundColor: colors.primary
-  }
+    backgroundColor: colors.primary,
+  },
 });
 
 export interface QuestionRateProps {
-  rateValues: Array<any>;
-  minRateDescription?: string;
   maxRateDescription?: string;
-  value?: any;
+  minRateDescription?: string;
   onChange(value, comment?);
+  rateValues: Array<any>;
+  value?: any;
 }
 
 export default class QuestionRate extends React.Component<QuestionRateProps> {
@@ -54,9 +54,9 @@ export default class QuestionRate extends React.Component<QuestionRateProps> {
   render() {
     const {
       rateValues = [],
-      minRateDescription = "",
-      maxRateDescription = "",
-      value
+      minRateDescription = '',
+      maxRateDescription = '',
+      value,
     } = this.props;
 
     const itemsMaxIdx = rateValues.length - 1;
@@ -68,7 +68,7 @@ export default class QuestionRate extends React.Component<QuestionRateProps> {
           const checked = v.value === value;
           const textStyles = [
             styles.rateItemText,
-            checked ? styles.rateItemTextChecked : null
+            checked ? styles.rateItemTextChecked : null,
           ];
           return (
             <TouchableWithFeedback
@@ -79,7 +79,7 @@ export default class QuestionRate extends React.Component<QuestionRateProps> {
                 style={[
                   styles.rateItem,
                   isLast && styles.lastRateItem,
-                  checked && styles.checkedRateItem
+                  checked && styles.checkedRateItem,
                 ]}
               >
                 {isFirst && (

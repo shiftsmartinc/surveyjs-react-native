@@ -1,36 +1,36 @@
-import React from "react";
-import { StyleSheet, View, Text } from "react-native";
-import { observer } from "mobx-react";
-import QuestionTextWrapper from "./QuestionTextWrapper";
+import React from 'react';
+import { StyleSheet, View, Text } from 'react-native';
+import { observer } from 'mobx-react';
+import QuestionTextWrapper from './QuestionTextWrapper';
 
 const styles = StyleSheet.create({
   container: {},
   itemsContainer: {
-    flexDirection: "column"
+    flexDirection: 'column',
   },
   item: {
-    flexDirection: "row",
+    flexDirection: 'row',
     paddingHorizontal: 5,
     paddingVertical: 10,
     borderTopWidth: 1,
-    borderTopColor: "rgba(0, 0, 0, 0.1)",
-    alignItems: "center"
+    borderTopColor: 'rgba(0, 0, 0, 0.1)',
+    alignItems: 'center',
   },
   itemFirst: {
-    borderTopWidth: 0
+    borderTopWidth: 0,
   },
   itemLabel: {
-    flex: 0.25
+    flex: 0.25,
   },
   itemInput: {
-    flex: 0.75
-  }
+    flex: 0.75,
+  },
 });
 
 export interface QuestionMultipleTextProps {
   items: Array<any>;
-  questions: Array<any>;
   onChange(value);
+  questions: Array<any>;
 }
 
 class QuestionMultipleText extends React.Component<QuestionMultipleTextProps> {
@@ -41,7 +41,8 @@ class QuestionMultipleText extends React.Component<QuestionMultipleTextProps> {
       question.setValue(value);
       const multiValue = {};
       this.props.questions.forEach(
-        (subQuestion) => (multiValue[subQuestion.json.name] = subQuestion.value)
+        (subQuestion) =>
+          (multiValue[subQuestion.json.name] = subQuestion.value),
       );
       this.props.onChange(multiValue);
     };
@@ -49,7 +50,7 @@ class QuestionMultipleText extends React.Component<QuestionMultipleTextProps> {
     return (
       <View key={item.name} style={[styles.item, isFirst && styles.itemFirst]}>
         <Text style={styles.itemLabel}>
-          {item.isRequired && "*"}
+          {item.isRequired && '*'}
           {item.title || item.name}
         </Text>
         <View style={styles.itemInput}>

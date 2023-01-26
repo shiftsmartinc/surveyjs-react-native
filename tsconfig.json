@@ -4,18 +4,17 @@
     "lib": ["dom", "esnext"],
     "jsx": "react-native",
     "moduleResolution": "node",
-    "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
     "skipLibCheck": true,
     "noImplicitAny": false,
     "noUnusedLocals": false,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
+    "useDefineForClassFields": true,
     "noFallthroughCasesInSwitch": true,
     "removeComments": true,
     "declaration": true
   },
-  "include": [
-    "src/**/*"
-  ]
+  "include": ["src/**/*"]
 }

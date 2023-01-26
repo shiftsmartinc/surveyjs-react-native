@@ -1,5 +1,5 @@
 import { HashTable } from './helpers';
-import { ProcessValue } from "./conditionProcessValue";
+import { ProcessValue } from './conditionProcessValue';
 export declare class Operand {
     origionalValue: any;
     constructor(origionalValue: any);
@@ -19,13 +19,16 @@ export declare class FunctionOperand extends Operand {
 }
 export declare class Condition {
     static operatorsValue: HashTable<Function>;
-    static readonly operators: HashTable<Function>;
+    static get operators(): HashTable<Function>;
     private opValue;
     private leftValue;
     private rightValue;
-    left: Operand;
-    right: Operand;
-    operator: string;
+    get left(): Operand;
+    set left(val: Operand);
+    get right(): Operand;
+    set right(val: Operand);
+    get operator(): string;
+    set operator(value: string);
     perform(left?: any, right?: any, processValue?: ProcessValue): boolean;
     performExplicit(left: any, right: any, processValue: ProcessValue): boolean;
 }
@@ -33,8 +36,9 @@ export declare class ConditionNode {
     private connectiveValue;
     children: Array<any>;
     constructor();
-    connective: string;
-    readonly isEmpty: boolean;
+    get connective(): string;
+    set connective(value: string);
+    get isEmpty(): boolean;
     clear(): void;
 }
 export declare class ConditionRunner {
@@ -42,7 +46,8 @@ export declare class ConditionRunner {
     private processValue;
     private root;
     constructor(expression: string);
-    expression: string;
+    get expression(): string;
+    set expression(value: string);
     run(values: HashTable<any>): boolean;
     private runNode;
     private runNodeCondition;

@@ -3,35 +3,40 @@ import { View } from 'react-native';
 import RadioItem from './QuestionRadioItem';
 import QuestionText from './QuestionText';
 
-export interface Props {
+export interface QuestionRadiogroupProps {
   choices: Array<any>;
+  comment?: string;
   hasOther?: boolean;
   onChange(value, comment?);
-  value: string;
-  comment?: string;
   otherText?: string;
+  value: string;
 }
 
 const OTHER_VALUE = 'other';
 const DEFAULT_OTHER_TEXT = 'other (describe)';
-const ALPHABET = [...Array(26)].map((_e, i) => (i + 10).toString(36).toUpperCase());
+const ALPHABET = [...Array(26)].map((_e, i) =>
+  (i + 10).toString(36).toUpperCase(),
+);
 
-export default class QuestionRadiogroup extends React.Component<Props> {
+export default class QuestionRadiogroup extends React.Component<QuestionRadiogroupProps> {
   handleChoicesChange = (value) => {
     this.props.onChange(value);
-  }
+  };
+
   handleTextInputChange = (comment) => {
     this.props.onChange(this.props.value, comment);
-  }
+  };
+
   render() {
-    const {
-      otherText = DEFAULT_OTHER_TEXT,
-      choices = [],
-    } = this.props;
-    const generatedChoices = choices.length > 26 ? choices : choices.map((c, i) => ({ ...c, label: ALPHABET[i] }));
+    const { otherText = DEFAULT_OTHER_TEXT, choices = [] } = this.props;
+    const generatedChoices =
+      choices.length > 26
+        ? choices
+        : choices.map((c, i) => ({ ...c, label: ALPHABET[i] }));
+
     return (
       <View>
-        {generatedChoices.map(v =>
+        {generatedChoices.map((v) => (
           <RadioItem
             key={v.value}
             label={v.label}
@@ -40,9 +45,8 @@ export default class QuestionRadiogroup extends React.Component<Props> {
             checked={this.props.value === v.value}
             onChange={this.handleChoicesChange}
           />
-        )}
-        {
-          this.props.hasOther &&
+        ))}
+        {this.props.hasOther && (
           <View>
             <RadioItem
               value={OTHER_VALUE}
@@ -50,15 +54,16 @@ export default class QuestionRadiogroup extends React.Component<Props> {
               checked={this.props.value === OTHER_VALUE}
               onChange={this.handleChoicesChange}
             />
-            {this.props.value === OTHER_VALUE &&
+            {this.props.value === OTHER_VALUE && (
               <QuestionText
                 onChange={this.handleTextInputChange}
                 value={this.props.comment}
                 placeholder={otherText}
-              />}
+              />
+            )}
           </View>
-        }
+        )}
       </View>
-    )
+    );
   }
 }

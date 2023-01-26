@@ -1,9 +1,3 @@
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
 import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { inject, observer } from 'mobx-react';
@@ -64,33 +58,28 @@ const styles = StyleSheet.create({
         height: 23,
     },
 });
-let QuestionRadioItem = class QuestionRadioItem extends React.Component {
-    constructor() {
-        super(...arguments);
-        this.handlePress = () => {
-            const checked = !this.props.checked;
-            if (checked && this.props.onChange) {
-                this.props.onChange(this.props.value);
-            }
-        };
-    }
+class QuestionRadioItem extends React.Component {
+    handlePress = () => {
+        const checked = !this.props.checked;
+        if (checked && this.props.onChange) {
+            this.props.onChange(this.props.value);
+        }
+    };
     render() {
         const { isPreview, label, text, value, checked } = this.props;
         return (<TouchableWithFeedback style={[styles.container, checked && styles.containerChecked]} onPress={this.handlePress}>
-        {label &&
-            <View style={[styles.label, checked && styles.labelChecked]}>
+        {label && (<View style={[styles.label, checked && styles.labelChecked]}>
             <Text style={styles.labelText}>{label}</Text>
-          </View>}
-        <Text style={[styles.text, checked && styles.textChecked]}>{text || value}</Text>
-        {!isPreview &&
-            <Image style={styles.radio} source={checked ? require('./images/radio-checked.png') : require('./images/check.png')}/>}
+          </View>)}
+        <Text style={[styles.text, checked && styles.textChecked]}>
+          {text || value}
+        </Text>
+        {!isPreview && (<Image style={styles.radio} source={checked
+                    ? require('./images/radio-checked.png')
+                    : require('./images/check.png')}/>)}
       </TouchableWithFeedback>);
     }
-};
-QuestionRadioItem = __decorate([
-    inject((store) => ({
-        isPreview: store.model.isPreview,
-    })),
-    observer
-], QuestionRadioItem);
-export default QuestionRadioItem;
+}
+export default inject((store) => ({
+    isPreview: store.model.isPreview,
+}))(observer(QuestionRadioItem));

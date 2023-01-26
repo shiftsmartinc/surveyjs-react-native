@@ -1,11 +1,5 @@
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
 import React from 'react';
-import { StyleSheet, TextInput, Text, View, Modal, Image, FlatList } from 'react-native';
+import { StyleSheet, TextInput, Text, View, Modal, Image, FlatList, } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import TouchableWithFeedback from './TouchableWithFeedback';
 const styles = StyleSheet.create({
@@ -101,50 +95,47 @@ const styles = StyleSheet.create({
     autoCompleteItemText: {
         fontSize: 15,
         color: '#4471a0',
-    }
+    },
 });
-let QuestionText = class QuestionText extends React.Component {
-    constructor() {
-        super(...arguments);
-        this.getKeyboardType = () => {
-            const { inputType = 'text' } = this.props;
-            switch (inputType) {
-                case 'number':
-                    return 'numeric';
-                case 'email':
-                    return 'email-address';
-                default:
-                    return 'default';
-            }
-        };
-        this.state = {
-            autocompleteModalVisible: false,
-        };
-        this.openAutocompleteModal = () => {
-            const { autoComplete = null, dataList = [] } = this.props;
-            if (!!autoComplete && !!dataList) {
-                this.setState({ autocompleteModalVisible: true });
-            }
-        };
-        this.closeAutocompleteModal = () => {
-            this.setState({ autocompleteModalVisible: false });
-        };
-        this.renderAutoCompleteItem = ({ item }) => (<TouchableWithFeedback style={styles.autoCompleteItem} onPress={() => {
+class QuestionText extends React.Component {
+    state = {
+        autocompleteModalVisible: false,
+    };
+    getKeyboardType = () => {
+        const { inputType = 'text' } = this.props;
+        switch (inputType) {
+            case 'number':
+                return 'numeric';
+            case 'email':
+                return 'email-address';
+            default:
+                return 'default';
+        }
+    };
+    openAutocompleteModal = () => {
+        const { autoComplete = null, dataList = [] } = this.props;
+        if (!!autoComplete && !!dataList) {
+            this.setState({ autocompleteModalVisible: true });
+        }
+    };
+    closeAutocompleteModal = () => {
+        this.setState({ autocompleteModalVisible: false });
+    };
+    renderAutoCompleteItem = ({ item }) => (<TouchableWithFeedback style={styles.autoCompleteItem} onPress={() => {
             const { onChange } = this.props;
             onChange(item.text);
             this.closeAutocompleteModal();
         }}>
       <Text style={styles.autoCompleteItemText}>{item.text}</Text>
     </TouchableWithFeedback>);
-    }
     render() {
         const { autocompleteModalVisible } = this.state;
-        const { isPreview, placeholder, value, onChange, rows = 1, autoComplete = null, dataList = [] } = this.props;
+        const { isPreview, placeholder, value, onChange, rows = 1, autoComplete = null, dataList = [], } = this.props;
         const isMultiline = rows > 1;
         let autoCompleteContent;
         if (!!autoComplete && !!dataList) {
-            const autoCompleteData = dataList.map(text => ({ text, id: text }));
-            const filteredAutocompleteOptions = autoCompleteData.filter(item => {
+            const autoCompleteData = dataList.map((text) => ({ text, id: text }));
+            const filteredAutocompleteOptions = autoCompleteData.filter((item) => {
                 const regex = new RegExp(value, 'i');
                 return regex.test(item.text);
             });
@@ -157,10 +148,9 @@ let QuestionText = class QuestionText extends React.Component {
                 </TouchableWithFeedback>
                 <Text style={styles.modalHeaderText}>Select an Answer</Text>
               </View>
-              <View style={styles.modalContent}>
-              </View>
+              <View style={styles.modalContent}></View>
               <TextInput style={[styles.input, { marginBottom: 10 }]} placeholder="Start typing to see choices" value={value} onChangeText={onChange} placeholderTextColor="#4471a0" underlineColorAndroid={'transparent'}/>
-                <FlatList data={!!value ? filteredAutocompleteOptions : []} renderItem={this.renderAutoCompleteItem} keyExtractor={item => item.id}/>
+              <FlatList data={!!value ? filteredAutocompleteOptions : []} renderItem={this.renderAutoCompleteItem} keyExtractor={(item) => item.id}/>
               <TouchableWithFeedback style={styles.button} onPress={this.closeAutocompleteModal}>
                 <Text style={styles.buttonText}>Done</Text>
               </TouchableWithFeedback>
@@ -173,11 +163,7 @@ let QuestionText = class QuestionText extends React.Component {
         {autoCompleteContent}
       </>);
     }
-};
-QuestionText = __decorate([
-    inject((store) => ({
-        isPreview: store.model.isPreview,
-    })),
-    observer
-], QuestionText);
-export default QuestionText;
+}
+export default inject((store) => ({
+    isPreview: store.model.isPreview,
+}))(observer(QuestionText));
