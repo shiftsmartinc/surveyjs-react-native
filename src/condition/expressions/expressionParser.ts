@@ -392,29 +392,29 @@ function peg$parse(input: string, options?: IParseOptions) {
     return input.substring(peg$savedPos, peg$currPos);
   }
 
-  // function location(): IFileRange {
-  //   return peg$computeLocation(peg$savedPos, peg$currPos);
-  // }
+  function location(): IFileRange {
+    return peg$computeLocation(peg$savedPos, peg$currPos);
+  }
 
-  // function expected(description: string, location1?: IFileRange) {
-  //   location1 = location1 !== undefined
-  //     ? location1
-  //     : peg$computeLocation(peg$savedPos, peg$currPos);
+  function expected(description: string, location1?: IFileRange) {
+    location1 = location1 !== undefined
+      ? location1
+      : peg$computeLocation(peg$savedPos, peg$currPos);
 
-  //   throw peg$buildStructuredError(
-  //     [peg$otherExpectation(description)],
-  //     input.substring(peg$savedPos, peg$currPos),
-  //     location1
-  //   );
-  // }
+    throw peg$buildStructuredError(
+      [peg$otherExpectation(description)],
+      input.substring(peg$savedPos, peg$currPos),
+      location1
+    );
+  }
 
-  // function error(message: string, location1?: IFileRange) {
-  //   location1 = location1 !== undefined
-  //     ? location1
-  //     : peg$computeLocation(peg$savedPos, peg$currPos);
+  function error(message: string, location1?: IFileRange) {
+    location1 = location1 !== undefined
+      ? location1
+      : peg$computeLocation(peg$savedPos, peg$currPos);
 
-  //   throw peg$buildSimpleError(message, location1);
-  // }
+    throw peg$buildSimpleError(message, location1);
+  }
 
   function peg$literalExpectation(text1: string, ignoreCase: boolean): ILiteralExpectation {
     return { type: "literal", text: text1, ignoreCase: ignoreCase };
@@ -424,9 +424,9 @@ function peg$parse(input: string, options?: IParseOptions) {
     return { type: "class", parts: parts, inverted: inverted, ignoreCase: ignoreCase };
   }
 
-  // function peg$anyExpectation(): IAnyExpectation {
-  //   return { type: "any" };
-  // }
+  function peg$anyExpectation(): IAnyExpectation {
+    return { type: "any" };
+  }
 
   function peg$endExpectation(): IEndExpectation {
     return { type: "end" };
@@ -500,9 +500,9 @@ function peg$parse(input: string, options?: IParseOptions) {
     peg$maxFailExpected.push(expected1);
   }
 
-  // function peg$buildSimpleError(message: string, location1: IFileRange) {
-  //   return new SyntaxError(message, [], "", location1);
-  // }
+  function peg$buildSimpleError(message: string, location1: IFileRange) {
+    return new SyntaxError(message, [], "", location1);
+  }
 
   function peg$buildStructuredError(expected1: Expectation[], found: string | null, location1: IFileRange) {
     return new SyntaxError(
