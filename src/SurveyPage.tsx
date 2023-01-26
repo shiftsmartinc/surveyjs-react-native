@@ -40,7 +40,7 @@ export default class SurveyPage extends React.Component<any> {
         showsVerticalScrollIndicator={false}
         enableOnAndroid
       >
-        {currentQuestions.questions.map(question =>
+        {currentQuestions.map(question =>
           <QuestionWrapper key={question.json.name} question={question} visible={question.visible} />
         )}
       </KeyboardAwareScrollView>
