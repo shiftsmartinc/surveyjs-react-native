@@ -161,7 +161,7 @@ class Question {
       ) {
         this.collection.apis.onUpload(value, this);
       }
-      this.collection.rerenderSurveyPage.set(this.collection.rerenderSurveyPage);
+      this.collection.rerenderSurveyPage = !this.collection.rerenderSurveyPage;
     }
   }
 
