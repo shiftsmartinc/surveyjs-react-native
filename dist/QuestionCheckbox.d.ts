@@ -9,6 +9,6 @@ export interface Props {
 }
 export default class QuestionCheckbox extends React.Component<Props> {
     handleChoicesChange: (checked: any, value: any) => void;
-    handleCommentChange: (comment: string) => Function;
+    handleCommentChange: (comment: any) => void;
     render(): JSX.Element;
 }

@@ -144,14 +144,14 @@ const commentBuilder = question => (
   isPreview: store.model.isPreview,
 }))
 @observer
-export default class QuestionWrapper extends React.PureComponent<any> {
+export default class QuestionWrapper extends React.Component<any> {
   panelBuilder = question => (
     <View>
       {question.json.elements.map((json) => {
         return this.renderQuestion({
           type: json.type,
           json: json,
-        }, json.visible)
+        })
       })}
     </View>
   )
@@ -183,7 +183,7 @@ export default class QuestionWrapper extends React.PureComponent<any> {
     html: commonBuilderCreator(QuestionHtml),
     file: commonBuilderCreator(QuestionFile),
   };
-  renderQuestion = (question, visible) => {
+  renderQuestion = (question) => {
     const { isPreview } = this.props;
     const json = question.json || question;
     const build = this.typeBuilderMap[json.type];
@@ -197,7 +197,7 @@ export default class QuestionWrapper extends React.PureComponent<any> {
     const {
       number = null,
     } = question;
-    if (!visible) {
+    if (!question.visible) {
       return null;
     }
     return (
@@ -227,6 +227,6 @@ export default class QuestionWrapper extends React.PureComponent<any> {
     );
   }
   render() {
-    return this.renderQuestion(this.props.question, this.props.visible);
+    return this.renderQuestion(this.props.question);
   }
 }

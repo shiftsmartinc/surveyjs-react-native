@@ -20,7 +20,7 @@ export default class QuestionRadiogroup extends React.Component<Props> {
   handleChoicesChange = (value) => {
     this.props.onChange(value);
   }
-  handleTextInputChange = (comment: string): Function => {
+  handleTextInputChange = (comment) => {
     return this.props.onChange(this.props.value, comment);
   }
   render() {

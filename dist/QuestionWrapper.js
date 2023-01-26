@@ -85,13 +85,13 @@ const ratingBuilder = question => {
     return (<QuestionRate {...question.json} rateValues={newRateValues} value={question.value} comment={question.comment} onChange={question.setValue}/>);
 };
 const commentBuilder = question => (<QuestionText {...question.json} value={question.value} comment={question.comment} onChange={question.setValue}/>);
-let QuestionWrapper = class QuestionWrapper extends React.PureComponent {
+let QuestionWrapper = class QuestionWrapper extends React.Component {
     panelBuilder = question => (<View>
       {question.json.elements.map((json) => {
             return this.renderQuestion({
                 type: json.type,
                 json: json,
-            }, json.visible);
+            });
         })}
     </View>);
     panelDynamicBuilder = json => (<QuestionPanelDynamic {...json} buildComponent={this.renderQuestion}/>);
@@ -110,7 +110,7 @@ let QuestionWrapper = class QuestionWrapper extends React.PureComponent {
         html: commonBuilderCreator(QuestionHtml),
         file: commonBuilderCreator(QuestionFile),
     };
-    renderQuestion = (question, visible) => {
+    renderQuestion = (question) => {
         const { isPreview } = this.props;
         const json = question.json || question;
         const build = this.typeBuilderMap[json.type];
@@ -118,7 +118,7 @@ let QuestionWrapper = class QuestionWrapper extends React.PureComponent {
         const { title = null, name, showTitle = true, } = json;
         const renderedTitle = question.title || title;
         const { number = null, } = question;
-        if (!visible) {
+        if (!question.visible) {
             return null;
         }
         return (<View key={json.name} style={styles.container}>
@@ -140,7 +140,7 @@ let QuestionWrapper = class QuestionWrapper extends React.PureComponent {
       </View>);
     };
     render() {
-        return this.renderQuestion(this.props.question, this.props.visible);
+        return this.renderQuestion(this.props.question);
     }
 };
 QuestionWrapper = __decorate([
