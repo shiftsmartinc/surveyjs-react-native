@@ -80,7 +80,7 @@ export class ConditionsParser {
     var expRes = this.readExpression();
     if (expRes < 0) return false;
     if (expRes == 1) return true;
-    var left = this.readString();
+    var left = this.readString() as string;
     if (!left) return false;
     if (this.isConstant(left)) {
       var c = new Condition();
@@ -95,7 +95,7 @@ export class ConditionsParser {
     c.left = this.createOperand(left, params);
     c.operator = op;
     if (!this.isNoRightOperation(op)) {
-      var right = this.readString();
+      var right = this.readString() as string;
       if (!right) return false;
       params = this.readParameters();
       c.right = this.createOperand(right, params);
@@ -203,7 +203,7 @@ export class ConditionsParser {
     var params = [];
     while (this.at < this.length && !this.isCloseBracket(this.ch)) {
       this.at++;
-      var str = this.readString();
+      var str = this.readString() as string;
       if (str) {
         var newParams = this.readParameters();
         params.push(this.createOperand(str, newParams));
@@ -221,7 +221,7 @@ export class ConditionsParser {
     return ConditionsParser.constants.indexOf(str) > -1;
   }
   private readOperator(): string {
-    var op = this.readString();
+    var op = this.readString() as string;
     if (!op) return null;
     op = op.toLowerCase();
     if (op == '>') op = "greater";
@@ -236,7 +236,7 @@ export class ConditionsParser {
     return op;
   }
   private readConnective(): string {
-    var con = this.readString();
+    var con = this.readString() as string;
     if (!con) return null;
     con = con.toLowerCase();
     if (con == "&" || con == "&&") con = "and";

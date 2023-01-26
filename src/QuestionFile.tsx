@@ -67,7 +67,7 @@ export default class QuestionFile extends React.Component<Props> {
         );
         return;
       }
-      const value = storeDataAsText ? response.base64 : response;
+      const value = storeDataAsText ? (response as any).base64 : response;
       onChange(value);
     } catch (error) {
         if (error.code === 'E_PICKER_CANCELLED') {

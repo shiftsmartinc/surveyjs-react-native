@@ -105,7 +105,7 @@ export interface Props {
   inputType?: string;
   rows?: number;
   value: string;
-  onChange(value: string): Function;
+  onChange(value: string): void;
   autoComplete?: string;
   dataList?: [string];
 }
