@@ -211,6 +211,7 @@ export default class Model {
   @observable questions = {};
   @observable curPageIndex = 0;
   @observable isComplete = false;
+  // TODO: don't do this [not proud about it] but it works for now [refactor]
   @observable rerenderSurveyPage = false;
 
   pages = [];
