@@ -10,7 +10,7 @@ export interface Props {
 }
 export default class QuestionDropdown extends React.Component<Props, any> {
     constructor(props: Props);
-    handleCommentChange: (comment: any) => any;
+    handleCommentChange: (comment: any) => void;
     openModal: () => void;
     closeModal: () => void;
     render(): JSX.Element;
