@@ -39,14 +39,7 @@ const styles = StyleSheet.create({
   },
 });
 
-@inject((store: any) => ({
-  isComplete: store.model.isComplete,
-  isPreview: store.model.isPreview,
-  nextPageIndex: store.model.nextPageIndex,
-  nextPage: store.model.nextPage,
-}))
-@observer
-export default class Survey extends React.Component<any> {
+class Survey extends React.Component {
   render() {
     const { isComplete, isPreview, nextPageIndex, nextPage } = this.props;
     if (isComplete) {
@@ -69,3 +62,10 @@ export default class Survey extends React.Component<any> {
     );
   }
 }
+
+export default inject((store: any) => ({
+  isComplete: store.model.isComplete,
+  isPreview: store.model.isPreview,
+  nextPageIndex: store.model.nextPageIndex,
+  nextPage: store.model.nextPage,
+}))(observer(Survey));

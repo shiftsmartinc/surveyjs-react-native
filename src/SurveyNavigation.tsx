@@ -66,15 +66,7 @@ export interface Props {
   pages?: Array<any>;
 }
 
-@inject((store: any) => ({
-  prevPage: store.model.prevPage,
-  nextPage: store.model.nextPage,
-  prevPageIndex: store.model.prevPageIndex,
-  curPageIndex: store.model.curPageIndex,
-  pages: store.model.pages,
-}))
-@observer
-export default class SurveyNavigation extends React.Component<Props> {
+class SurveyNavigation extends React.Component {
   render() {
     const {
       prevPage,
@@ -110,3 +102,11 @@ export default class SurveyNavigation extends React.Component<Props> {
     ];
   }
 }
+
+export default inject((store: any) => ({
+  prevPage: store.model.prevPage,
+  nextPage: store.model.nextPage,
+  prevPageIndex: store.model.prevPageIndex,
+  curPageIndex: store.model.curPageIndex,
+  pages: store.model.pages,
+}))(observer(SurveyNavigation));

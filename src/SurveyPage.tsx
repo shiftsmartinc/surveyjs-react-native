@@ -15,12 +15,7 @@ const styles = StyleSheet.create({
   },
 });
 
-@inject((store: any) => ({
-  currentPageProps: store.model.currentPageProps,
-  curPageIndex: store.model.curPageIndex,
-}))
-@observer
-export default class SurveyPage extends React.Component<any> {
+class SurveyPage extends React.Component {
   scrollView: KeyboardAwareScrollView;
   componentDidUpdate(prevProps) {
     if (this.props.curPageIndex !== prevProps.curPageIndex) {
@@ -46,3 +41,8 @@ export default class SurveyPage extends React.Component<any> {
     );
   }
 }
+
+export default inject((store: any) => ({
+  currentPageProps: store.model.currentPageProps,
+  curPageIndex: store.model.curPageIndex,
+}))(observer(SurveyPage));

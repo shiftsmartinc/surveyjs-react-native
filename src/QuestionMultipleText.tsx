@@ -34,8 +34,7 @@ export interface Props {
   onChange(value);
 }
 
-@observer
-export default class QuestionMultipleText extends React.Component<Props> {
+class QuestionMultipleText extends React.Component {
   renderItem = (question, idx) => {
     const item = question.json;
     const isFirst = idx === 0;
@@ -75,3 +74,5 @@ export default class QuestionMultipleText extends React.Component<Props> {
     );
   }
 }
+
+export default observer(QuestionMultipleText);

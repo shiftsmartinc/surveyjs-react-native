@@ -70,11 +70,7 @@ export interface Props {
   onChange?: (string) => void;
 }
 
-@inject((store: any) => ({
-  isPreview: store.model.isPreview,
-}))
-@observer
-export default class QuestionRadioItem extends React.Component<Props> {
+class QuestionRadioItem extends React.Component {
   handlePress = () => {
     const checked = !this.props.checked;
     if (checked && this.props.onChange) {
@@ -99,3 +95,7 @@ export default class QuestionRadioItem extends React.Component<Props> {
     );
   }
 }
+
+export default inject((store: any) => ({
+  isPreview: store.model.isPreview,
+}))(observer(QuestionRadioItem));

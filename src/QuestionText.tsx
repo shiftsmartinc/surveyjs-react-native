@@ -110,11 +110,7 @@ export interface Props {
   dataList?: [string];
 }
 
-@inject((store: any) => ({
-  isPreview: store.model.isPreview,
-}))
-@observer
-export default class QuestionText extends React.Component<Props> {
+class QuestionText extends React.Component {
   getKeyboardType = () => {
     const { inputType = 'text' } = this.props;
     switch(inputType) {
@@ -211,3 +207,7 @@ export default class QuestionText extends React.Component<Props> {
     );
   }
 }
+
+export default inject((store: any) => ({
+  isPreview: store.model.isPreview,
+}))(observer(QuestionText));

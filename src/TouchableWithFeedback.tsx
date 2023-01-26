@@ -8,11 +8,7 @@ interface Props extends TouchableWithoutFeedbackProps {
   style?: StyleProp<ViewStyle>;
 }
 
-@inject((store: any) => ({
-  isPreview: store.model.isPreview,
-}))
-@observer
-export default class TouchableWithFeedback extends React.Component<Props> {
+class TouchableWithFeedback extends React.Component {
   render() {
     const { isPreview, children, style, ...rest } = this.props;
     if (Platform.OS === 'android' && Platform.Version >= 21) {
@@ -31,3 +27,7 @@ export default class TouchableWithFeedback extends React.Component<Props> {
     );
   }
 }
+
+export default inject((store: any) => ({
+  isPreview: store.model.isPreview,
+}))(observer(TouchableWithFeedback));

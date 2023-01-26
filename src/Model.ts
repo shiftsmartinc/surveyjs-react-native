@@ -1,4 +1,4 @@
-import { observable, action, computed, toJS } from 'mobx';
+import { observable, action, computed, toJS, makeObservable } from 'mobx';
 import { getTriggerType, SurveyTrigger } from './trigger';
 import moment from 'moment';
 import { ConditionRunner } from './condition/conditions';
@@ -32,7 +32,7 @@ const randomizeArray = (array: Array<string>) => {
 class Page {
   collection;
   name;
-  @observable _visible;
+  _visible;
   json;
   questionNames;
   pageIndex;
@@ -40,6 +40,13 @@ class Page {
   conditionRunner;
 
   constructor(json, collection, pageIndex, questionNames) {
+    makeObservable(this, {
+      _visible: observable,
+      setVisible: action.bound,
+      resetVisible: action.bound,
+      visible: computed
+    });
+
     this.json = json;
     this.collection = collection
     this.pageIndex = pageIndex;
@@ -54,18 +61,18 @@ class Page {
     }
   }
 
-  @action.bound setVisible(visible) {
+  setVisible(visible) {
     this._visible = visible;
   }
 
-  @action.bound resetVisible() {
+  resetVisible() {
     if (this.conditionRunner) {
       const visible = this.conditionRunner.run(this.collection.conditionValues);
       this._visible = visible;
     }
   }
 
-  @computed get visible() {
+  get visible() {
     const questionVisible = this.questionNames.some(name =>
       this.collection.questions[name].visible
     );
@@ -74,14 +81,14 @@ class Page {
 }
 
 class Question {
-  @observable visible;
-  @observable value = null;
-  @observable error = null;
-  @observable comment = null;
-  @observable number;
-  @observable questions = [];
-  @observable choices = [];
-  @observable title = '';
+  visible;
+  value = null;
+  error = null;
+  comment = null;
+  number;
+  questions = [];
+  choices = [];
+  title = '';
 
   originalNumber;
   json;
@@ -90,6 +97,26 @@ class Question {
   page;
 
   constructor(json, originalNumber?, collection?) {
+    makeObservable(this, {
+      visible: observable,
+      value: observable,
+      error: observable,
+      comment: observable,
+      number: observable,
+      questions: observable,
+      choices: observable,
+      title: observable,
+      validate: action.bound,
+      plainValue: computed,
+      setValue: action.bound,
+      setComment: action.bound,
+      setVisible: action.bound,
+      resetVisible: action.bound,
+      resetTitle: action.bound,
+      setError: action.bound,
+      setPage: action.bound
+    });
+
     this.json = json;
     this.visible = json.visible != null ? json.visible : true;
     this.originalNumber = originalNumber;
@@ -117,7 +144,7 @@ class Question {
     }
   }
 
-  @action.bound validate() {
+  validate() {
     if(this.value && typeof this.value === 'string') {
       this.value = this.value.trim();
     }
@@ -125,11 +152,11 @@ class Question {
     return questionValidator.validate();
   }
 
-  @computed get plainValue() {
+  get plainValue() {
     return toJS(this.value);
   }
 
-  @action.bound setValue(value, comment = null) {
+  setValue(value, comment = null) {
     this.value = value && value.uri || value;
     if (comment != null) {
       this.comment = comment;
@@ -156,15 +183,15 @@ class Question {
     }
   }
 
-  @action.bound setComment(comment) {
+  setComment(comment) {
     this.comment = comment;
   }
 
-  @action.bound setVisible(visible) {
+  setVisible(visible) {
     this.visible = visible;
   }
 
-  @action.bound resetVisible() {
+  resetVisible() {
     if (this.conditionRunner) {
       const visible = this.conditionRunner.run(this.collection.conditionValues);
       this.visible = visible;
@@ -174,7 +201,7 @@ class Question {
     }
   }
 
-  @action.bound resetTitle() {
+  resetTitle() {
     const results = this.collection.results;
     const defaultTitle = this.json.title || this.json.name;
     const matches = defaultTitle.match(/{.+?}/g);
@@ -189,19 +216,19 @@ class Question {
     this.title = processedTitle;
   }
 
-  @action.bound setError(error) {
+  setError(error) {
     this.error = error;
   }
 
-  @action.bound setPage(page) {
+  setPage(page) {
     this.page = page;
   }
 }
 
 export default class Model {
-  @observable questions = {};
-  @observable curPageIndex = 0;
-  @observable isComplete = false;
+  questions = {};
+  curPageIndex = 0;
+  isComplete = false;
 
   pages = [];
 
@@ -216,6 +243,22 @@ export default class Model {
   questionNamesInOrder = [];
 
   constructor({ json, apis, isPreview = false }) {
+    makeObservable(this, {
+      questions: observable,
+      curPageIndex: observable,
+      isComplete: observable,
+      nextPage: action.bound,
+      prevPage: action.bound,
+      resetVisible: action.bound,
+      resetTitle: action.bound,
+      prevPageIndex: computed,
+      nextPageIndex: computed,
+      currentPageProps: computed,
+      conditionValues: computed,
+      results: computed,
+      setTriggerValue: action.bound
+    });
+
     if (isPreview) {
       json.pages = [{
         name: 'Preview',
@@ -234,7 +277,7 @@ export default class Model {
     this.regenerateNumbers();
   }
 
-  @action.bound nextPage() {
+  nextPage() {
 
     // validator
     const isValidatorFailed = this.currentPageProps.questions.some(
@@ -259,33 +302,33 @@ export default class Model {
     }
   }
 
-  @action.bound prevPage() {
+  prevPage() {
     if (this.prevPageIndex !== -1) {
       // this.curPageIndex = this.curPageIndex - 1;
       this.curPageIndex = this.prevPageIndex;
     }
   }
 
-  @action.bound resetVisible() {
+  resetVisible() {
     Object.keys(this.questions).forEach(name => this.questions[name].resetVisible());
     this.pages.forEach(page => page.resetVisible());
   }
 
-  @action.bound resetTitle() {
+  resetTitle() {
     Object.keys(this.questions).forEach(name => this.questions[name].resetTitle());
   }
 
-  @computed get prevPageIndex() {
+  get prevPageIndex() {
     const reversedPages = this.pages.slice().reverse();
     const page = reversedPages.find(v => v.visible && v.pageIndex < this.curPageIndex);
     return page ? page.pageIndex : -1;
   }
 
-  @computed get nextPageIndex() {
+  get nextPageIndex() {
     return this.pages.findIndex(v => v.visible && v.pageIndex > this.curPageIndex);
   }
 
-  @computed get currentPageProps() {
+  get currentPageProps() {
     const page = this.pages.find(v => v.pageIndex === this.curPageIndex);
 
     const pageProps = {
@@ -295,7 +338,7 @@ export default class Model {
     return pageProps;
   }
 
-  @computed get conditionValues() {
+  get conditionValues() {
     const values = {}
     Object.keys(this.questions).forEach((name) => {
       values[name] = this.questions[name].value;
@@ -303,7 +346,7 @@ export default class Model {
     return values;
   }
 
-  @computed get results() {
+  get results() {
     const values = {};
     Object.keys(this.questions).forEach(name => {
       const question = this.questions[name];
@@ -425,7 +468,7 @@ export default class Model {
     return [...pages, ...questions];
   }
 
-  @action.bound setTriggerValue(name: string, value: any, isVariable: boolean) {
+  setTriggerValue(name: string, value: any, isVariable: boolean) {
     if (!name) return;
     if (!isVariable) {
       this.questions[name].setValue(value);

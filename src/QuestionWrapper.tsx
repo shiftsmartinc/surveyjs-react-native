@@ -140,11 +140,7 @@ const commentBuilder = question => (
 );
 
 
-@inject((store: any) => ({
-  isPreview: store.model.isPreview,
-}))
-@observer
-export default class QuestionWrapper extends React.Component<any> {
+class QuestionWrapper extends React.Component {
   panelBuilder = question => (
     <View>
       {question.json.elements.map((json) => {
@@ -230,3 +226,7 @@ export default class QuestionWrapper extends React.Component<any> {
     return this.renderQuestion(this.props.question);
   }
 }
+
+export default inject((store: any) => ({
+  isPreview: store.model.isPreview,
+}))(observer(QuestionWrapper));

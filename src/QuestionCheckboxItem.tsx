@@ -71,11 +71,7 @@ export interface Props {
   onChange?: (boolean, string) => void;
 }
 
-@inject((store: any) => ({
-  isPreview: store.model.isPreview,
-}))
-@observer
-export default class CheckBoxItem extends React.Component<Props> {
+class CheckBoxItem extends React.Component {
   handlePress = () => {
     const checked = !this.props.checked;
     if (this.props.onChange) {
@@ -106,3 +102,7 @@ export default class CheckBoxItem extends React.Component<Props> {
     );
   }
 }
+
+export default inject((store: any) => ({
+  isPreview: store.model.isPreview,
+}))(observer(CheckBoxItem));
