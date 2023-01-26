@@ -140,7 +140,6 @@ class Question {
         if (comment != null) {
             this.comment = comment;
         }
-        console.log(value, comment, this.collection);
         if (this.collection) {
             this.collection.resetVisible();
             this.collection.regenerateNumbers();
@@ -298,13 +297,10 @@ export default class Model {
     resetVisible() {
         Object.keys(this.questions).forEach((name) => {
             const oldValue = this.questions[name].visible;
-            console.log('reset', name, oldValue);
             this.questions[name].resetVisible();
             if (oldValue !== this.questions[name].visible) {
-                console.log('reset', name, this.questions[name].visible);
             }
         });
-        console.log('resetVisible');
         this.pages.forEach((page) => page.resetVisible());
     }
     resetTitle() {
