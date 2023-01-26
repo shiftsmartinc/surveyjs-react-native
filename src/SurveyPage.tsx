@@ -15,7 +15,12 @@ const styles = StyleSheet.create({
   },
 });
 
-class SurveyPage extends React.Component {
+export interface SurveyPageProps {
+  currentPageProps?: any;
+  curPageIndex?: any;
+}
+
+class SurveyPage extends React.Component<SurveyPageProps> {
   scrollView: KeyboardAwareScrollView;
   componentDidUpdate(prevProps) {
     if (this.props.curPageIndex !== prevProps.curPageIndex) {

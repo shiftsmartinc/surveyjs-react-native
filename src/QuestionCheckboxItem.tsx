@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export interface Props {
+export interface CheckBoxItemProps {
   isPreview?: boolean;
   text?: string;
   label?: string;
@@ -71,7 +71,7 @@ export interface Props {
   onChange?: (boolean, string) => void;
 }
 
-class CheckBoxItem extends React.Component {
+class CheckBoxItem extends React.Component<CheckBoxItemProps> {
   handlePress = () => {
     const checked = !this.props.checked;
     if (this.props.onChange) {

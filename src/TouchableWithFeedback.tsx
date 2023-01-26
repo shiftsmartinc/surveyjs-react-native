@@ -1,22 +1,27 @@
-import React, { ReactNode } from 'react';
-import { Platform, TouchableNativeFeedback, TouchableOpacity, View, StyleProp, ViewStyle, TouchableWithoutFeedbackProps } from 'react-native';
-import { inject, observer } from 'mobx-react';
+import React, { ReactNode } from "react";
+import {
+  Platform,
+  TouchableNativeFeedback,
+  TouchableOpacity,
+  View,
+  StyleProp,
+  ViewStyle,
+  TouchableWithoutFeedbackProps
+} from "react-native";
+import { inject, observer } from "mobx-react";
 
-interface Props extends TouchableWithoutFeedbackProps {
+interface TouchableWithFeedbackProps extends TouchableWithoutFeedbackProps {
   isPreview?: boolean;
   children?: ReactNode;
   style?: StyleProp<ViewStyle>;
 }
-
-class TouchableWithFeedback extends React.Component {
+class TouchableWithFeedback extends React.Component<TouchableWithFeedbackProps> {
   render() {
     const { isPreview, children, style, ...rest } = this.props;
-    if (Platform.OS === 'android' && Platform.Version >= 21) {
+    if (Platform.OS === "android" && Platform.Version >= 21) {
       return (
         <TouchableNativeFeedback {...rest}>
-          <View style={style}>
-            {children}
-          </View>
+          <View style={style}>{children}</View>
         </TouchableNativeFeedback>
       );
     }
@@ -29,5 +34,5 @@ class TouchableWithFeedback extends React.Component {
 }
 
 export default inject((store: any) => ({
-  isPreview: store.model.isPreview,
+  isPreview: store.model.isPreview
 }))(observer(TouchableWithFeedback));

@@ -1,9 +1,9 @@
-import React from 'react';
-import { View } from 'react-native';
-import CheckboxItem from './QuestionCheckboxItem';
-import QuestionText from './QuestionText';
+import React from "react";
+import { View } from "react-native";
+import CheckboxItem from "./QuestionCheckboxItem";
+import QuestionText from "./QuestionText";
 
-export interface Props {
+export interface QuestionCheckboxProps {
   choices: Array<any>;
   hasOther?: boolean;
   value: Array<string>;
@@ -12,11 +12,13 @@ export interface Props {
   onChange(value, comment?);
 }
 
-const OTHER_VALUE = 'other';
-const DEFAULT_OTHER_TEXT = 'other (describe)';
-const ALPHABET = [...Array(26)].map((_e, i) => (i + 10).toString(36).toUpperCase());
+const OTHER_VALUE = "other";
+const DEFAULT_OTHER_TEXT = "other (describe)";
+const ALPHABET = [...Array(26)].map((_e, i) =>
+  (i + 10).toString(36).toUpperCase()
+);
 
-export default class QuestionCheckbox extends React.Component<Props>{
+export default class QuestionCheckbox extends React.Component<QuestionCheckboxProps> {
   handleChoicesChange = (checked, value) => {
     const valueSet = new Set(this.props.value);
     if (checked) {
@@ -25,22 +27,25 @@ export default class QuestionCheckbox extends React.Component<Props>{
       valueSet.delete(value);
     }
     this.props.onChange([...valueSet]);
-  }
+  };
   handleCommentChange = (comment) => {
     this.props.onChange(this.props.value, comment);
-  }
+  };
   render() {
     const {
       choices,
-      comment = '',
-      otherText = DEFAULT_OTHER_TEXT,
+      comment = "",
+      otherText = DEFAULT_OTHER_TEXT
     } = this.props;
     const value = this.props.value || [];
     const otherChecked = value.indexOf(OTHER_VALUE) !== -1;
-    const generatedChoices = choices.length > 26 ? choices : choices.map((c, i) => ({ ...c, label: ALPHABET[i] }));
+    const generatedChoices =
+      choices.length > 26
+        ? choices
+        : choices.map((c, i) => ({ ...c, label: ALPHABET[i] }));
     return (
       <View>
-        {generatedChoices.map(v =>
+        {generatedChoices.map((v) => (
           <CheckboxItem
             key={v.value}
             label={v.label}
@@ -50,9 +55,8 @@ export default class QuestionCheckbox extends React.Component<Props>{
             checked={value.indexOf(v.value) !== -1}
             onChange={this.handleChoicesChange}
           />
-        )}
-        {
-          this.props.hasOther &&
+        ))}
+        {this.props.hasOther && (
           <View>
             <CheckboxItem
               value={OTHER_VALUE}
@@ -60,16 +64,16 @@ export default class QuestionCheckbox extends React.Component<Props>{
               checked={otherChecked}
               onChange={this.handleChoicesChange}
             />
-            {otherChecked &&
+            {otherChecked && (
               <QuestionText
                 value={comment}
                 onChange={this.handleCommentChange}
                 placeholder={otherText}
               />
-            }
+            )}
           </View>
-        }
+        )}
       </View>
-    )
+    );
   }
 }
