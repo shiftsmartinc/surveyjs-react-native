@@ -8,7 +8,7 @@
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "noImplicitAny": false,
-    "noUnusedLocals": false,
+    "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,

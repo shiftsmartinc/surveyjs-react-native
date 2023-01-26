@@ -26,8 +26,8 @@ export default class QuestionCheckbox extends React.Component<Props>{
     }
     this.props.onChange([...valueSet]);
   }
-  handleCommentChange = (comment) => {
-    this.props.onChange(this.props.value, comment);
+  handleCommentChange = (comment: string): Function => {
+    return this.props.onChange(this.props.value, comment);
   }
   render() {
     const {
