@@ -140,6 +140,7 @@ class Question {
         if (comment != null) {
             this.comment = comment;
         }
+        console.log(value, comment, this.collection);
         if (this.collection) {
             this.collection.resetVisible();
             this.collection.regenerateNumbers();
@@ -152,6 +153,7 @@ class Question {
                 value !== null) {
                 this.collection.apis.onUpload(value, this);
             }
+            this.collection.rerenderSurveyPage.set(this.collection.rerenderSurveyPage);
         }
     }
     setComment(comment) {
@@ -245,6 +247,7 @@ export default class Model {
     questions = {};
     curPageIndex = 0;
     isComplete = false;
+    rerenderSurveyPage = false;
     pages = [];
     triggers = [];
     apis;
@@ -272,7 +275,7 @@ export default class Model {
         this.regenerateNumbers();
     }
     nextPage() {
-        const isValidatorFailed = this.currentPageProps.questions.some((question) => !question.validate());
+        const isValidatorFailed = this.currentQuestions.some((question) => !question.validate());
         if (isValidatorFailed) {
             return;
         }
@@ -293,7 +296,15 @@ export default class Model {
         }
     }
     resetVisible() {
-        Object.keys(this.questions).forEach((name) => this.questions[name].resetVisible());
+        Object.keys(this.questions).forEach((name) => {
+            const oldValue = this.questions[name].visible;
+            console.log('reset', name, oldValue);
+            this.questions[name].resetVisible();
+            if (oldValue !== this.questions[name].visible) {
+                console.log('reset', name, this.questions[name].visible);
+            }
+        });
+        console.log('resetVisible');
         this.pages.forEach((page) => page.resetVisible());
     }
     resetTitle() {
@@ -307,13 +318,15 @@ export default class Model {
     get nextPageIndex() {
         return this.pages.findIndex((v) => v.visible && v.pageIndex > this.curPageIndex);
     }
-    get currentPageProps() {
-        const page = this.pages.find((v) => v.pageIndex === this.curPageIndex);
-        const pageProps = {
-            name: page.name,
-            questions: page.questionNames.map((name) => this.questions[name])
-        };
-        return pageProps;
+    get currentPage() {
+        return this.pages.find((v) => v.pageIndex === this.curPageIndex);
+    }
+    get currentQuestions() {
+        const acc = [];
+        this.currentPage.questionNames.forEach((questionName) => {
+            acc.push(this.questions[questionName]);
+        });
+        return acc;
     }
     get conditionValues() {
         const values = {};
@@ -423,6 +436,9 @@ __decorate([
     observable
 ], Model.prototype, "isComplete", void 0);
 __decorate([
+    observable
+], Model.prototype, "rerenderSurveyPage", void 0);
+__decorate([
     action.bound
 ], Model.prototype, "nextPage", null);
 __decorate([
@@ -442,7 +458,10 @@ __decorate([
 ], Model.prototype, "nextPageIndex", null);
 __decorate([
     computed
-], Model.prototype, "currentPageProps", null);
+], Model.prototype, "currentPage", null);
+__decorate([
+    computed
+], Model.prototype, "currentQuestions", null);
 __decorate([
     computed
 ], Model.prototype, "conditionValues", null);

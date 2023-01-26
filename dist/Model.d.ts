@@ -3,6 +3,7 @@ export default class Model {
     questions: {};
     curPageIndex: number;
     isComplete: boolean;
+    rerenderSurveyPage: boolean;
     pages: any[];
     triggers: Array<SurveyTrigger>;
     apis: any;
@@ -21,10 +22,8 @@ export default class Model {
     resetTitle(): void;
     get prevPageIndex(): any;
     get nextPageIndex(): number;
-    get currentPageProps(): {
-        name: any;
-        questions: any;
-    };
+    get currentPage(): any;
+    get currentQuestions(): any[];
     get conditionValues(): {};
     get results(): {};
     onComplete: () => void;

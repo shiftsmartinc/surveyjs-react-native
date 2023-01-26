@@ -137,6 +137,8 @@ class Question {
       this.comment = comment;
     }
 
+    console.log(value, comment, this.collection);
+
     if (this.collection) {
       // 2. check all questions's visibleIf
       this.collection.resetVisible();
@@ -159,6 +161,7 @@ class Question {
       ) {
         this.collection.apis.onUpload(value, this);
       }
+      this.collection.rerenderSurveyPage.set(this.collection.rerenderSurveyPage);
     }
   }
 
@@ -208,6 +211,7 @@ export default class Model {
   @observable questions = {};
   @observable curPageIndex = 0;
   @observable isComplete = false;
+  @observable rerenderSurveyPage = false;
 
   pages = [];
 
@@ -248,7 +252,7 @@ export default class Model {
 
   @action.bound nextPage() {
     // validator
-    const isValidatorFailed = this.currentPageProps.questions.some(
+    const isValidatorFailed = this.currentQuestions.some(
       (question) => !question.validate()
     );
     if (isValidatorFailed) {
@@ -282,9 +286,15 @@ export default class Model {
   }
 
   @action.bound resetVisible() {
-    Object.keys(this.questions).forEach((name) =>
-      this.questions[name].resetVisible()
-    );
+    Object.keys(this.questions).forEach((name) => {
+      const oldValue = this.questions[name].visible;
+      console.log('reset', name, oldValue);
+      this.questions[name].resetVisible();
+      if (oldValue !== this.questions[name].visible) {
+        console.log('reset', name, this.questions[name].visible);
+      }
+    });
+    console.log('resetVisible');
     this.pages.forEach((page) => page.resetVisible());
   }
 
@@ -308,14 +318,16 @@ export default class Model {
     );
   }
 
-  @computed get currentPageProps() {
-    const page = this.pages.find((v) => v.pageIndex === this.curPageIndex);
+  @computed get currentPage() {
+     return this.pages.find((v) => v.pageIndex === this.curPageIndex);
+  }
 
-    const pageProps = {
-      name: page.name,
-      questions: page.questionNames.map((name) => this.questions[name])
-    };
-    return pageProps;
+  @computed get currentQuestions() {
+    const acc = [];
+    this.currentPage.questionNames.forEach((questionName) => {
+      acc.push(this.questions[questionName]);
+    });
+    return acc;
   }
 
   @computed get conditionValues() {

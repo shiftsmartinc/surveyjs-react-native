@@ -29,16 +29,17 @@ let SurveyPage = class SurveyPage extends React.Component {
         }
     }
     render() {
-        const { currentPageProps } = this.props;
+        const { currentQuestions } = this.props;
         return (<KeyboardAwareScrollView ref={(ref) => { this.scrollView = ref; }} style={styles.container} contentContainerStyle={styles.content} showsVerticalScrollIndicator={false} enableOnAndroid>
-        {currentPageProps.questions.map(question => <QuestionWrapper key={question.json.name} question={question} visible={question.visible}/>)}
+        {currentQuestions.questions.map(question => <QuestionWrapper key={question.json.name} question={question} visible={question.visible}/>)}
       </KeyboardAwareScrollView>);
     }
 };
 SurveyPage = __decorate([
     inject((store) => ({
-        currentPageProps: store.model.currentPageProps,
+        currentQuestions: store.model.currentQuestions,
         curPageIndex: store.model.curPageIndex,
+        rerenderSurveyPage: store.model.rerenderSurveyPage,
     })),
     observer
 ], SurveyPage);
