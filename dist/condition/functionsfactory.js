@@ -1,8 +1,7 @@
 export class FunctionFactory {
-    constructor() {
-        this.functionHash = {};
-        this.isAsyncHash = {};
-    }
+    static Instance = new FunctionFactory();
+    functionHash = {};
+    isAsyncHash = {};
     register(name, func) {
         this.functionHash[name] = func;
     }
@@ -34,7 +33,6 @@ export class FunctionFactory {
         return classRunner.func(params);
     }
 }
-FunctionFactory.Instance = new FunctionFactory();
 function sum(params) {
     var res = 0;
     for (var i = 0; i < params.length; i++) {
@@ -42,7 +40,7 @@ function sum(params) {
     }
     return res;
 }
-FunctionFactory.Instance.register("sum", sum);
+FunctionFactory.Instance.register('sum', sum);
 function age(params) {
     if (params.length < 1)
         return -1;
@@ -51,4 +49,4 @@ function age(params) {
     var ageDate = new Date(ageDifMs);
     return Math.abs(ageDate.getUTCFullYear() - 1970);
 }
-FunctionFactory.Instance.register("age", age);
+FunctionFactory.Instance.register('age', age);

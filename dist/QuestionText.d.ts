@@ -1,19 +1,19 @@
 import React from 'react';
-export interface Props {
-    isPreview?: boolean;
-    placeholder?: string;
-    inputType?: string;
-    rows?: number;
-    value: string;
-    onChange(value: string): Function;
+export interface QuestionTextProps {
     autoComplete?: string;
     dataList?: [string];
+    inputType?: string;
+    isPreview?: boolean;
+    onChange(value: string): void;
+    placeholder?: string;
+    rows?: number;
+    value: string;
 }
-export default class QuestionText extends React.Component<Props> {
-    getKeyboardType: () => "default" | "email-address" | "numeric";
+declare class QuestionText extends React.Component<QuestionTextProps> {
     state: {
         autocompleteModalVisible: boolean;
     };
+    getKeyboardType: () => "default" | "numeric" | "email-address";
     openAutocompleteModal: () => void;
     closeAutocompleteModal: () => void;
     renderAutoCompleteItem: ({ item }: {
@@ -21,3 +21,5 @@ export default class QuestionText extends React.Component<Props> {
     }) => JSX.Element;
     render(): JSX.Element;
 }
+declare const _default: typeof QuestionText & import("mobx-react").IWrappedComponent<{}>;
+export default _default;

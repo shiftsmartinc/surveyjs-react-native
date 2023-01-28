@@ -1,6 +1,6 @@
 export interface HashTable<T> {
   [key: string]: T;
-};
+}
 
 export class Helpers {
   /**
@@ -9,7 +9,7 @@ export class Helpers {
    */
   public static isValueEmpty(value: any) {
     if (Array.isArray(value) && value.length === 0) return true;
-    if (!!value && typeof value === "object" && value.constructor === Object) {
+    if (!!value && typeof value === 'object' && value.constructor === Object) {
       for (var key in value) {
         if (!Helpers.isValueEmpty(value[key])) return false;
       }
@@ -32,7 +32,7 @@ export class Helpers {
   public static isArraysEqual(
     x: any,
     y: any,
-    ignoreOrder: boolean = false
+    ignoreOrder: boolean = false,
   ): boolean {
     if (!Array.isArray(x) || !Array.isArray(y)) return false;
     if (x.length !== y.length) return false;
@@ -56,18 +56,18 @@ export class Helpers {
   public static isTwoValueEquals(
     x: any,
     y: any,
-    ignoreOrder: boolean = false
+    ignoreOrder: boolean = false,
   ): boolean {
     if (x === y) return true;
 
-    if (Array.isArray(x) && x.length === 0 && typeof y === "undefined")
+    if (Array.isArray(x) && x.length === 0 && typeof y === 'undefined')
       return true;
-    if (Array.isArray(y) && y.length === 0 && typeof x === "undefined")
+    if (Array.isArray(y) && y.length === 0 && typeof x === 'undefined')
       return true;
-    if ((x === undefined || x === null) && y === "") return true;
-    if ((y === undefined || y === null) && x === "") return true;
+    if ((x === undefined || x === null) && y === '') return true;
+    if ((y === undefined || y === null) && x === '') return true;
 
-    if (typeof x === "string" && typeof y == "string") return x == y;
+    if (typeof x === 'string' && typeof y == 'string') return x == y;
 
     if (Helpers.isConvertibleToNumber(x) && Helpers.isConvertibleToNumber(y)) {
       if (parseInt(x) === parseInt(y) && parseFloat(x) === parseFloat(y)) {
@@ -80,15 +80,15 @@ export class Helpers {
       (Helpers.isValueEmpty(x) && !Helpers.isValueEmpty(y))
     )
       return false;
-    if ((x === true || x === false) && typeof y == "string") {
+    if ((x === true || x === false) && typeof y == 'string') {
       return x.toString() === y.toLocaleLowerCase();
     }
-    if ((y === true || y === false) && typeof x == "string") {
+    if ((y === true || y === false) && typeof x == 'string') {
       return y.toString() === x.toLocaleLowerCase();
     }
     if (!(x instanceof Object) && !(y instanceof Object)) return x == y;
     if (!(x instanceof Object) || !(y instanceof Object)) return false;
-    if (x["equals"]) return x.equals(y);
+    if (x['equals']) return x.equals(y);
     if (!!x.toJSON && !!y.toJSON && !!x.getType && !!y.getType) {
       if (x.isDiposed || y.isDiposed) return false;
       if (x.getType() !== y.getType()) return false;
@@ -102,7 +102,7 @@ export class Helpers {
       if (!x.hasOwnProperty(p)) continue;
       if (!y.hasOwnProperty(p)) return false;
       if (x[p] === y[p]) continue;
-      if (typeof x[p] !== "object") return false;
+      if (typeof x[p] !== 'object') return false;
       if (!this.isTwoValueEquals(x[p], y[p])) return false;
     }
     for (p in y) {
@@ -144,9 +144,9 @@ export class Helpers {
   }
   public static isNumber(value: any): boolean {
     if (
-      typeof value == "string" &&
+      typeof value == 'string' &&
       !!value &&
-      value.indexOf("0x") == 0 &&
+      value.indexOf('0x') == 0 &&
       value.length > 32
     )
       return false;
@@ -159,13 +159,13 @@ export class Helpers {
     return maxLength > 0 ? maxLength : null;
   }
   public static getNumberByIndex(index: number, startIndexStr: string): string {
-    if (index < 0) return "";
+    if (index < 0) return '';
     var startIndex = 1;
-    var prefix = "";
-    var postfix = ".";
+    var prefix = '';
+    var postfix = '.';
     var isNumeric = true;
-    var strIndex = "A";
-    var str = "";
+    var strIndex = 'A';
+    var str = '';
     if (!!startIndexStr) {
       str = startIndexStr;
       var ind = str.length - 1;
@@ -176,14 +176,14 @@ export class Helpers {
           break;
         }
       }
-      var checkLetter = function() {
+      var checkLetter = function () {
         return (
           (hasDigit && !Helpers.isCharDigit(str[ind])) ||
           Helpers.isCharNotLetterAndDigit(str[ind])
         );
       };
       while (ind >= 0 && checkLetter()) ind--;
-      var newPostfix = "";
+      var newPostfix = '';
       if (ind < str.length - 1) {
         newPostfix = str.substr(ind + 1);
         str = str.substr(0, ind + 1);
@@ -211,37 +211,45 @@ export class Helpers {
     return ch.toUpperCase() == ch.toLowerCase() && !Helpers.isCharDigit(ch);
   }
   public static isCharDigit(ch: string): boolean {
-    return ch >= "0" && ch <= "9";
+    return ch >= '0' && ch <= '9';
   }
   private static countDecimals(value: number): number {
     if (Helpers.isNumber(value) && Math.floor(value) !== value) {
-      const strs = value.toString().split(".");
-      return strs.length > 1 && strs[1].length || 0;
+      const strs = value.toString().split('.');
+      return (strs.length > 1 && strs[1].length) || 0;
     }
     return 0;
   }
-  public static correctAfterPlusMinis(a: number, b: number, res: number): number {
+  public static correctAfterPlusMinis(
+    a: number,
+    b: number,
+    res: number,
+  ): number {
     const digitsA = Helpers.countDecimals(a);
     const digitsB = Helpers.countDecimals(b);
-    if(digitsA > 0 || digitsB > 0) {
+    if (digitsA > 0 || digitsB > 0) {
       const digits = Math.max(digitsA, digitsB);
       res = parseFloat(res.toFixed(digits));
     }
     return res;
   }
-  public static correctAfterMultiple(a: number, b: number, res: number): number {
+  public static correctAfterMultiple(
+    a: number,
+    b: number,
+    res: number,
+  ): number {
     const digits = Helpers.countDecimals(a) + Helpers.countDecimals(b);
-    if(digits > 0) {
+    if (digits > 0) {
       res = parseFloat(res.toFixed(digits));
     }
     return res;
   }
 }
-if (!(<any>String.prototype)["format"]) {
-  (<any>String.prototype)["format"] = function() {
+if (!(<any>String.prototype)['format']) {
+  (<any>String.prototype)['format'] = function () {
     var args = arguments;
-    return this.replace(/{(\d+)}/g, function(match: any, number: any) {
-      return typeof args[number] != "undefined" ? args[number] : match;
+    return this.replace(/{(\d+)}/g, function (match: any, number: any) {
+      return typeof args[number] != 'undefined' ? args[number] : match;
     });
   };
 }

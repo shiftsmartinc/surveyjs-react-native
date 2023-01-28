@@ -1,5 +1,9 @@
 import React from 'react';
-export default class QuestionWrapper extends React.Component<any> {
+export interface QuestionWrapperProps {
+    isPreview?: boolean;
+    question?: any;
+}
+declare class QuestionWrapper extends React.Component<QuestionWrapperProps> {
     panelBuilder: (question: any) => JSX.Element;
     panelDynamicBuilder: (json: any) => JSX.Element;
     multipleTextBuilder: (question: any) => JSX.Element;
@@ -7,3 +11,5 @@ export default class QuestionWrapper extends React.Component<any> {
     renderQuestion: (question: any) => JSX.Element;
     render(): JSX.Element;
 }
+declare const _default: typeof QuestionWrapper & import("mobx-react").IWrappedComponent<{}>;
+export default _default;

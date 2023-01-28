@@ -60,49 +60,59 @@ const styles = StyleSheet.create({
   },
 });
 
-export interface Props {
-  isPreview?: boolean;
-  text?: string;
-  label?: string;
-  value: string;
-  defaultChecked?: boolean;
-  pristine?: boolean;
+export interface CheckBoxItemProps {
   checked: boolean;
+  defaultChecked?: boolean;
+  isPreview?: boolean;
+  label?: string;
   onChange?: (boolean, string) => void;
+  pristine?: boolean;
+  text?: string;
+  value: string;
 }
 
-@inject((store: any) => ({
-  isPreview: store.model.isPreview,
-}))
-@observer
-export default class CheckBoxItem extends React.Component<Props> {
+class CheckBoxItem extends React.Component<CheckBoxItemProps> {
   handlePress = () => {
     const checked = !this.props.checked;
+
     if (this.props.onChange) {
       this.props.onChange(checked, this.props.value);
     }
-  }
+  };
 
   render() {
     const { isPreview, label, text, value, checked, pristine } = this.props;
+
     return (
-      <TouchableWithFeedback style={[styles.container, checked && styles.containerChecked]} onPress={this.handlePress}>
-        {label &&
+      <TouchableWithFeedback
+        style={[styles.container, checked && styles.containerChecked]}
+        onPress={this.handlePress}
+      >
+        {label && (
           <View style={[styles.label, checked && styles.labelChecked]}>
             <Text style={styles.labelText}>{label}</Text>
           </View>
-        }
-        <Text style={[styles.text, checked && styles.textChecked]}>{text || value}</Text>
-        {!isPreview && <Image
-          style={styles.checkbox}
-          source={pristine
-            ? require('./images/radio-checked.png')
-            : checked
-              ? require('./images/checkbox-checked.png')
-              : require('./images/check.png')
-          }
-        />}
+        )}
+        <Text style={[styles.text, checked && styles.textChecked]}>
+          {text || value}
+        </Text>
+        {!isPreview && (
+          <Image
+            style={styles.checkbox}
+            source={
+              pristine
+                ? require('./images/radio-checked.png')
+                : checked
+                ? require('./images/checkbox-checked.png')
+                : require('./images/check.png')
+            }
+          />
+        )}
       </TouchableWithFeedback>
     );
   }
 }
+
+export default inject((store: any) => ({
+  isPreview: store.model.isPreview,
+}))(observer(CheckBoxItem));

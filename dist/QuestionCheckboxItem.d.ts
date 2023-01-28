@@ -1,15 +1,17 @@
 import React from 'react';
-export interface Props {
-    isPreview?: boolean;
-    text?: string;
-    label?: string;
-    value: string;
-    defaultChecked?: boolean;
-    pristine?: boolean;
+export interface CheckBoxItemProps {
     checked: boolean;
+    defaultChecked?: boolean;
+    isPreview?: boolean;
+    label?: string;
     onChange?: (boolean: any, string: any) => void;
+    pristine?: boolean;
+    text?: string;
+    value: string;
 }
-export default class CheckBoxItem extends React.Component<Props> {
+declare class CheckBoxItem extends React.Component<CheckBoxItemProps> {
     handlePress: () => void;
     render(): JSX.Element;
 }
+declare const _default: typeof CheckBoxItem & import("mobx-react").IWrappedComponent<{}>;
+export default _default;

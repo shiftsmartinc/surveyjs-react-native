@@ -1,17 +1,11 @@
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-import { observable, action, computed, toJS } from 'mobx';
+import { observable, action, computed, toJS, makeObservable } from 'mobx';
 import { getTriggerType } from './trigger';
 import moment from 'moment';
 import { ConditionRunner } from './condition/conditions';
 import QuestionValidator from './validator';
 import { isValueEmpty } from './utils';
 const getResponseValue = (obj, desc) => {
-    var arr = desc.split(".");
+    var arr = desc.split('.');
     while (arr.length && (obj = obj[arr.shift()]))
         ;
     return obj;
@@ -35,7 +29,20 @@ const randomizeArray = (array) => {
     return array;
 };
 class Page {
+    _visible = true;
+    collection = null;
+    conditionRunner = null;
+    json = null;
+    name = '';
+    pageIndex = 0;
+    questionNames = [];
     constructor(json, collection, pageIndex, questionNames) {
+        makeObservable(this, {
+            _visible: observable,
+            resetVisible: action.bound,
+            setVisible: action.bound,
+            visible: computed,
+        });
         this.json = json;
         this.collection = collection;
         this.pageIndex = pageIndex;
@@ -58,30 +65,44 @@ class Page {
         }
     }
     get visible() {
-        const questionVisible = this.questionNames.some(name => this.collection.questions[name].visible);
+        const questionVisible = this.questionNames.some((name) => this.collection.questions[name].visible);
         return this._visible && questionVisible;
     }
 }
-__decorate([
-    observable
-], Page.prototype, "_visible", void 0);
-__decorate([
-    action.bound
-], Page.prototype, "setVisible", null);
-__decorate([
-    action.bound
-], Page.prototype, "resetVisible", null);
-__decorate([
-    computed
-], Page.prototype, "visible", null);
 class Question {
+    choices = [];
+    collection = null;
+    comment = null;
+    conditionRunner = null;
+    error = null;
+    json = {};
+    number = 0;
+    originalNumber = 0;
+    page = 0;
+    questions = [];
+    title = '';
+    value = null;
+    visible = false;
     constructor(json, originalNumber, collection) {
-        this.value = null;
-        this.error = null;
-        this.comment = null;
-        this.questions = [];
-        this.choices = [];
-        this.title = '';
+        makeObservable(this, {
+            choices: observable,
+            comment: observable,
+            error: observable,
+            number: observable,
+            plainValue: computed,
+            questions: observable,
+            resetTitle: action.bound,
+            resetVisible: action.bound,
+            setComment: action.bound,
+            setError: action.bound,
+            setPage: action.bound,
+            setValue: action.bound,
+            setVisible: action.bound,
+            title: observable,
+            validate: action.bound,
+            value: observable,
+            visible: observable,
+        });
         this.json = json;
         this.visible = json.visible != null ? json.visible : true;
         this.originalNumber = originalNumber;
@@ -89,17 +110,17 @@ class Question {
         this.title = json.title;
         this.conditionRunner = null;
         if (json.choices && json.choices.length > 0) {
-            const clonedChoices = json.choices.map(c => c);
+            const clonedChoices = json.choices.map((c) => c);
             this.choices = clonedChoices;
-            if (json.choicesOrder && json.choicesOrder !== "none") {
+            if (json.choicesOrder && json.choicesOrder !== 'none') {
                 let order = json.choicesOrder.toLowerCase();
-                if (order == "asc") {
+                if (order == 'asc') {
                     this.choices = sortArray(clonedChoices, 1);
                 }
-                else if (order == "desc") {
+                else if (order == 'desc') {
                     this.choices = sortArray(clonedChoices, -1);
                 }
-                else if (order == "random") {
+                else if (order == 'random') {
                     this.choices = randomizeArray(clonedChoices);
                 }
             }
@@ -120,7 +141,7 @@ class Question {
         return toJS(this.value);
     }
     setValue(value, comment = null) {
-        this.value = value && value.uri || value;
+        this.value = (value && value.uri) || value;
         if (comment != null) {
             this.comment = comment;
         }
@@ -129,9 +150,11 @@ class Question {
             this.collection.regenerateNumbers();
             this.collection.resetTitle();
             this.collection.triggers
-                .filter(v => v.name === this.json.name && !v.isOnNextPage)
-                .forEach(trigger => trigger.check(value));
-            if (this.json.type === 'file' && this.collection.apis.onUpload && value !== null) {
+                .filter((v) => v.name === this.json.name && !v.isOnNextPage)
+                .forEach((trigger) => trigger.check(value));
+            if (this.json.type === 'file' &&
+                this.collection.apis.onUpload &&
+                value !== null) {
                 this.collection.apis.onUpload(value, this);
             }
         }
@@ -172,130 +195,40 @@ class Question {
         this.page = page;
     }
 }
-__decorate([
-    observable
-], Question.prototype, "visible", void 0);
-__decorate([
-    observable
-], Question.prototype, "value", void 0);
-__decorate([
-    observable
-], Question.prototype, "error", void 0);
-__decorate([
-    observable
-], Question.prototype, "comment", void 0);
-__decorate([
-    observable
-], Question.prototype, "number", void 0);
-__decorate([
-    observable
-], Question.prototype, "questions", void 0);
-__decorate([
-    observable
-], Question.prototype, "choices", void 0);
-__decorate([
-    observable
-], Question.prototype, "title", void 0);
-__decorate([
-    action.bound
-], Question.prototype, "validate", null);
-__decorate([
-    computed
-], Question.prototype, "plainValue", null);
-__decorate([
-    action.bound
-], Question.prototype, "setValue", null);
-__decorate([
-    action.bound
-], Question.prototype, "setComment", null);
-__decorate([
-    action.bound
-], Question.prototype, "setVisible", null);
-__decorate([
-    action.bound
-], Question.prototype, "resetVisible", null);
-__decorate([
-    action.bound
-], Question.prototype, "resetTitle", null);
-__decorate([
-    action.bound
-], Question.prototype, "setError", null);
-__decorate([
-    action.bound
-], Question.prototype, "setPage", null);
 export default class Model {
+    apis = null;
+    curPageIndex = 0;
+    isComplete = false;
+    isPreview = false;
+    originalNumber = 0;
+    pages = [];
+    questionNamesInOrder = [];
+    questions = {};
+    triggers = [];
     constructor({ json, apis, isPreview = false }) {
-        this.questions = {};
-        this.curPageIndex = 0;
-        this.isComplete = false;
-        this.pages = [];
-        this.triggers = [];
-        this.originalNumber = 0;
-        this.questionNamesInOrder = [];
-        this.onComplete = () => {
-            this.isComplete = true;
-            if (this.apis.onComplete) {
-                this.apis.onComplete(this.results);
-            }
-        };
-        this.parseQuestion = (json, questionNames) => {
-            if (json.type === 'panel') {
-                json.showTitle = false;
-            }
-            questionNames.push(json.name);
-            if (json.type !== 'html' && json.type !== 'panel') {
-                this.questionNamesInOrder.push(json.name);
-            }
-            const question = new Question(json, this.originalNumber++, this);
-            this.questions[json.name] = question;
-            if (json.type === 'multipletext') {
-                question.questions = json.items.map(itemjson => new Question(itemjson));
-            }
-        };
-        this.initPages = (pagesJson) => {
-            this.pages = pagesJson.map((page, pageIndex) => {
-                const questionNames = [];
-                (page.elements || page.questions || []).forEach(question => this.parseQuestion(question, questionNames));
-                const pageStore = new Page(page, this, pageIndex, questionNames);
-                questionNames.forEach((name) => {
-                    this.questions[name].setPage(pageStore);
-                });
-                return pageStore;
-            });
-        };
-        this.regenerateNumbers = () => {
-            let count = 1;
-            this.questionNamesInOrder.forEach((name) => {
-                const question = this.questions[name];
-                if (question.visible && question.page.visible) {
-                    question.number = count++;
-                }
-            });
-        };
-        this.initTriggers = (triggersJson = []) => {
-            const owner = {
-                doComplete: this.onComplete,
-                getObjects: this.triggerGetObjects,
-                setTriggerValue: this.setTriggerValue,
-            };
-            this.triggers = triggersJson.map(json => {
-                let TriggerType = getTriggerType(json);
-                const trigger = new TriggerType(json);
-                trigger.setOwner(owner);
-                return trigger;
-            });
-        };
-        this.triggerGetObjects = (pageNames, questionNames) => {
-            const pages = this.pages.filter(v => pageNames.indexOf(v.name) !== -1);
-            const questions = questionNames.map(v => this.questions[v]);
-            return [...pages, ...questions];
-        };
+        makeObservable(this, {
+            conditionValues: computed,
+            curPageIndex: observable,
+            currentPageProps: computed,
+            isComplete: observable,
+            nextPage: action.bound,
+            nextPageIndex: computed,
+            prevPage: action.bound,
+            prevPageIndex: computed,
+            questions: observable,
+            resetTitle: action.bound,
+            resetVisible: action.bound,
+            results: computed,
+            setTriggerValue: action.bound,
+        });
         if (isPreview) {
-            json.pages = [{
+            json.pages = [
+                {
                     name: 'Preview',
                     title: 'Preview',
-                    elements: json.pages.reduce((prev, curr) => ([...prev, ...curr.elements]), []),
-                }];
+                    elements: json.pages.reduce((prev, curr) => [...prev, ...curr.elements], []),
+                },
+            ];
         }
         this.apis = apis;
         this.isPreview = isPreview;
@@ -307,14 +240,14 @@ export default class Model {
         this.regenerateNumbers();
     }
     nextPage() {
-        const isValidatorFailed = this.currentPageProps.questions.some(question => !question.validate());
+        const isValidatorFailed = this.currentPageProps.questions.some((question) => !question.validate());
         if (isValidatorFailed) {
             return;
         }
-        const pageTriggers = this.triggers.filter(v => v.isOnNextPage);
+        const pageTriggers = this.triggers.filter((v) => v.isOnNextPage);
         const curPageQuestionNames = this.pages[this.curPageIndex].questionNames;
-        const curPageTriggers = pageTriggers.filter(v => curPageQuestionNames.indexOf(v.name) !== -1);
-        curPageTriggers.forEach(trigger => trigger.check(this.questions[trigger.name].value));
+        const curPageTriggers = pageTriggers.filter((v) => curPageQuestionNames.indexOf(v.name) !== -1);
+        curPageTriggers.forEach((trigger) => trigger.check(this.questions[trigger.name].value));
         if (this.nextPageIndex !== -1) {
             this.curPageIndex = this.nextPageIndex;
         }
@@ -328,25 +261,25 @@ export default class Model {
         }
     }
     resetVisible() {
-        Object.keys(this.questions).forEach(name => this.questions[name].resetVisible());
-        this.pages.forEach(page => page.resetVisible());
+        Object.keys(this.questions).forEach((name) => this.questions[name].resetVisible());
+        this.pages.forEach((page) => page.resetVisible());
     }
     resetTitle() {
-        Object.keys(this.questions).forEach(name => this.questions[name].resetTitle());
+        Object.keys(this.questions).forEach((name) => this.questions[name].resetTitle());
     }
     get prevPageIndex() {
         const reversedPages = this.pages.slice().reverse();
-        const page = reversedPages.find(v => v.visible && v.pageIndex < this.curPageIndex);
+        const page = reversedPages.find((v) => v.visible && v.pageIndex < this.curPageIndex);
         return page ? page.pageIndex : -1;
     }
     get nextPageIndex() {
-        return this.pages.findIndex(v => v.visible && v.pageIndex > this.curPageIndex);
+        return this.pages.findIndex((v) => v.visible && v.pageIndex > this.curPageIndex);
     }
     get currentPageProps() {
-        const page = this.pages.find(v => v.pageIndex === this.curPageIndex);
+        const page = this.pages.find((v) => v.pageIndex === this.curPageIndex);
         const pageProps = {
             name: page.name,
-            questions: page.questionNames.map(name => this.questions[name]),
+            questions: page.questionNames.map((name) => this.questions[name]),
         };
         return pageProps;
     }
@@ -359,12 +292,13 @@ export default class Model {
     }
     get results() {
         const values = {};
-        Object.keys(this.questions).forEach(name => {
+        Object.keys(this.questions).forEach((name) => {
             const question = this.questions[name];
             const value = question.value;
             if (!isValueEmpty(value)) {
                 values[name] = value;
-                if (question.json.inputType === 'datetime' || question.json.inputType === 'datetime-local') {
+                if (question.json.inputType === 'datetime' ||
+                    question.json.inputType === 'datetime-local') {
                     values[name] = moment(value).format();
                 }
                 else if (question.json.inputType === 'date') {
@@ -374,12 +308,71 @@ export default class Model {
                     values[name] = moment(value).format('HH:mm');
                 }
             }
-            if (question.comment && (question.json.hasComment || question.json.hasOther)) {
+            if (question.comment &&
+                (question.json.hasComment || question.json.hasOther)) {
                 values[`${name}-Comment`] = question.comment;
             }
         });
         return values;
     }
+    onComplete = () => {
+        this.isComplete = true;
+        if (this.apis.onComplete) {
+            this.apis.onComplete(this.results);
+        }
+    };
+    parseQuestion = (json, questionNames) => {
+        if (json.type === 'panel') {
+            json.showTitle = false;
+        }
+        questionNames.push(json.name);
+        if (json.type !== 'html' && json.type !== 'panel') {
+            this.questionNamesInOrder.push(json.name);
+        }
+        const question = new Question(json, this.originalNumber++, this);
+        this.questions[json.name] = question;
+        if (json.type === 'multipletext') {
+            question.questions = json.items.map((itemjson) => new Question(itemjson));
+        }
+    };
+    initPages = (pagesJson) => {
+        this.pages = pagesJson.map((page, pageIndex) => {
+            const questionNames = [];
+            (page.elements || page.questions || []).forEach((question) => this.parseQuestion(question, questionNames));
+            const pageStore = new Page(page, this, pageIndex, questionNames);
+            questionNames.forEach((name) => {
+                this.questions[name].setPage(pageStore);
+            });
+            return pageStore;
+        });
+    };
+    regenerateNumbers = () => {
+        let count = 1;
+        this.questionNamesInOrder.forEach((name) => {
+            const question = this.questions[name];
+            if (question.visible && question.page.visible) {
+                question.number = count++;
+            }
+        });
+    };
+    initTriggers = (triggersJson = []) => {
+        const owner = {
+            doComplete: this.onComplete,
+            getObjects: this.triggerGetObjects,
+            setTriggerValue: this.setTriggerValue,
+        };
+        this.triggers = triggersJson.map((json) => {
+            let TriggerType = getTriggerType(json);
+            const trigger = new TriggerType(json);
+            trigger.setOwner(owner);
+            return trigger;
+        });
+    };
+    triggerGetObjects = (pageNames, questionNames) => {
+        const pages = this.pages.filter((v) => pageNames.indexOf(v.name) !== -1);
+        const questions = questionNames.map((v) => this.questions[v]);
+        return [...pages, ...questions];
+    };
     setTriggerValue(name, value, isVariable) {
         if (!name)
             return;
@@ -388,42 +381,3 @@ export default class Model {
         }
     }
 }
-__decorate([
-    observable
-], Model.prototype, "questions", void 0);
-__decorate([
-    observable
-], Model.prototype, "curPageIndex", void 0);
-__decorate([
-    observable
-], Model.prototype, "isComplete", void 0);
-__decorate([
-    action.bound
-], Model.prototype, "nextPage", null);
-__decorate([
-    action.bound
-], Model.prototype, "prevPage", null);
-__decorate([
-    action.bound
-], Model.prototype, "resetVisible", null);
-__decorate([
-    action.bound
-], Model.prototype, "resetTitle", null);
-__decorate([
-    computed
-], Model.prototype, "prevPageIndex", null);
-__decorate([
-    computed
-], Model.prototype, "nextPageIndex", null);
-__decorate([
-    computed
-], Model.prototype, "currentPageProps", null);
-__decorate([
-    computed
-], Model.prototype, "conditionValues", null);
-__decorate([
-    computed
-], Model.prototype, "results", null);
-__decorate([
-    action.bound
-], Model.prototype, "setTriggerValue", null);

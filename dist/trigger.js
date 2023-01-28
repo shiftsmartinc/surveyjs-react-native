@@ -1,26 +1,50 @@
 export class Trigger {
-    constructor() {
-        this.opValue = "equal";
-    }
+    static operatorsValue = null;
     static get operators() {
         if (Trigger.operatorsValue != null)
             return Trigger.operatorsValue;
         Trigger.operatorsValue = {
-            empty: function (value, _) { return !value; },
-            notempty: function (value, _) { return !(!value); },
-            equal: function (value, expectedValue) { return value == expectedValue; },
-            notequal: function (value, expectedValue) { return value != expectedValue; },
-            contains: function (value, expectedValue) { return value && value["indexOf"] && value.indexOf(expectedValue) > -1; },
-            notcontains: function (value, expectedValue) { return !value || !value["indexOf"] || value.indexOf(expectedValue) == -1; },
-            greater: function (value, expectedValue) { return value > expectedValue; },
-            less: function (value, expectedValue) { return value < expectedValue; },
-            greaterorequal: function (value, expectedValue) { return value >= expectedValue; },
-            lessorequal: function (value, expectedValue) { return value <= expectedValue; }
+            empty: function (value, _) {
+                return !value;
+            },
+            notempty: function (value, _) {
+                return !!value;
+            },
+            equal: function (value, expectedValue) {
+                return value == expectedValue;
+            },
+            notequal: function (value, expectedValue) {
+                return value != expectedValue;
+            },
+            contains: function (value, expectedValue) {
+                return value && value['indexOf'] && value.indexOf(expectedValue) > -1;
+            },
+            notcontains: function (value, expectedValue) {
+                return (!value || !value['indexOf'] || value.indexOf(expectedValue) == -1);
+            },
+            greater: function (value, expectedValue) {
+                return value > expectedValue;
+            },
+            less: function (value, expectedValue) {
+                return value < expectedValue;
+            },
+            greaterorequal: function (value, expectedValue) {
+                return value >= expectedValue;
+            },
+            lessorequal: function (value, expectedValue) {
+                return value <= expectedValue;
+            },
         };
         return Trigger.operatorsValue;
     }
-    getType() { return "triggerbase"; }
-    get operator() { return this.opValue; }
+    opValue = 'equal';
+    value;
+    getType() {
+        return 'triggerbase';
+    }
+    get operator() {
+        return this.opValue;
+    }
     set operator(value) {
         if (!value)
             return;
@@ -40,11 +64,11 @@ export class Trigger {
     onSuccess() { }
     onFailure() { }
 }
-Trigger.operatorsValue = null;
 export class SurveyTrigger extends Trigger {
+    name;
+    owner = null;
     constructor(json) {
         super();
-        this.owner = null;
         this.name = json.name;
         this.operator = json.operator;
         this.value = json.value;
@@ -52,17 +76,25 @@ export class SurveyTrigger extends Trigger {
     setOwner(owner) {
         this.owner = owner;
     }
-    get isOnNextPage() { return false; }
+    get isOnNextPage() {
+        return false;
+    }
 }
 export class SurveyTriggerVisible extends SurveyTrigger {
+    pages = [];
+    questions = [];
     constructor(json) {
         super(json);
-        this.pages = [];
-        this.questions = [];
     }
-    getType() { return "visibletrigger"; }
-    onSuccess() { this.onTrigger(this.onItemSuccess); }
-    onFailure() { this.onTrigger(this.onItemFailure); }
+    getType() {
+        return 'visibletrigger';
+    }
+    onSuccess() {
+        this.onTrigger(this.onItemSuccess);
+    }
+    onFailure() {
+        this.onTrigger(this.onItemFailure);
+    }
     onTrigger(func) {
         if (!this.owner)
             return;
@@ -71,25 +103,40 @@ export class SurveyTriggerVisible extends SurveyTrigger {
             func(objects[i]);
         }
     }
-    onItemSuccess(item) { item.setVisible(true); }
-    onItemFailure(item) { item.setVisible(false); }
+    onItemSuccess(item) {
+        item.setVisible(true);
+    }
+    onItemFailure(item) {
+        item.setVisible(false);
+    }
 }
 export class SurveyTriggerComplete extends SurveyTrigger {
     constructor(json) {
         super(json);
     }
-    getType() { return "completetrigger"; }
-    get isOnNextPage() { return true; }
-    onSuccess() { if (this.owner)
-        this.owner.doComplete(); }
+    getType() {
+        return 'completetrigger';
+    }
+    get isOnNextPage() {
+        return true;
+    }
+    onSuccess() {
+        if (this.owner)
+            this.owner.doComplete();
+    }
 }
 export class SurveyTriggerSetValue extends SurveyTrigger {
+    setToName;
+    setValue;
+    isVariable;
     constructor(json) {
         super(json);
         this.setToName = json.setToName;
         this.setValue = json.setValue;
     }
-    getType() { return "setvaluetrigger"; }
+    getType() {
+        return 'setvaluetrigger';
+    }
     onSuccess() {
         if (!this.setToName || !this.owner)
             return;

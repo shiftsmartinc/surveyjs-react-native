@@ -1,14 +1,16 @@
 import React from 'react';
-export interface Props {
-    isPreview?: boolean;
-    text?: string;
-    label?: string;
-    value: string;
-    defaultChecked?: boolean;
+export interface QuestionRadioItemProps {
     checked: boolean;
+    defaultChecked?: boolean;
+    isPreview?: boolean;
+    label?: string;
     onChange?: (string: any) => void;
+    text?: string;
+    value: string;
 }
-export default class QuestionRadioItem extends React.Component<Props> {
+declare class QuestionRadioItem extends React.Component<QuestionRadioItemProps> {
     handlePress: () => void;
     render(): JSX.Element;
 }
+declare const _default: typeof QuestionRadioItem & import("mobx-react").IWrappedComponent<{}>;
+export default _default;

@@ -35,28 +35,28 @@ const styles = StyleSheet.create({
   },
   checkedRateItem: {
     backgroundColor: colors.primary,
-  }
+  },
 });
 
-export interface Props {
-  rateValues: Array<any>;
-  minRateDescription?: string;
+export interface QuestionRateProps {
   maxRateDescription?: string;
-  value?: any;
+  minRateDescription?: string;
   onChange(value, comment?);
+  rateValues: Array<any>;
+  value?: any;
 }
 
-export default class QuestionRate extends React.Component<Props> {
+export default class QuestionRate extends React.Component<QuestionRateProps> {
   onItemChecked = (value) => {
     this.props.onChange(value);
-  }
+  };
 
   render() {
     const {
       rateValues = [],
       minRateDescription = '',
       maxRateDescription = '',
-      value
+      value,
     } = this.props;
 
     const itemsMaxIdx = rateValues.length - 1;
@@ -82,7 +82,9 @@ export default class QuestionRate extends React.Component<Props> {
                   checked && styles.checkedRateItem,
                 ]}
               >
-                {isFirst && <Text style={textStyles}>{minRateDescription}</Text>}
+                {isFirst && (
+                  <Text style={textStyles}>{minRateDescription}</Text>
+                )}
                 <Text style={textStyles}>{v.text}</Text>
                 {isLast && <Text style={textStyles}>{maxRateDescription}</Text>}
               </View>

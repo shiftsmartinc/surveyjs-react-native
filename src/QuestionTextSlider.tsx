@@ -3,9 +3,7 @@ import { Slider } from 'react-native';
 
 export default class QuestionTextSlider extends React.Component<any, any> {
   render() {
-    const {
-      value,
-    } = this.props;
+    const { value } = this.props;
 
     return (
       <Slider
@@ -15,6 +13,6 @@ export default class QuestionTextSlider extends React.Component<any, any> {
         step={1}
         onValueChange={this.props.onChange}
       />
-    )
+    );
   }
 }

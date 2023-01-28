@@ -1,7 +1,8 @@
 import { ConditionsParser } from './conditionsParser';
-import { FunctionFactory } from "./functionsfactory";
-import { ProcessValue } from "./conditionProcessValue";
+import { FunctionFactory } from './functionsfactory';
+import { ProcessValue } from './conditionProcessValue';
 export class Operand {
+    origionalValue;
     constructor(origionalValue) {
         this.origionalValue = origionalValue;
     }
@@ -9,10 +10,10 @@ export class Operand {
         var val = this.origionalValue;
         if (val === undefined || val === 'undefined')
             return null;
-        if (!val || (typeof val != "string"))
+        if (!val || typeof val != 'string')
             return val;
         if (this.isBoolean(val))
-            return val.toLowerCase() == "true";
+            return val.toLowerCase() == 'true';
         val = this.removeQuotes(val);
         if (processValue) {
             var name = this.getValueName(val);
@@ -26,7 +27,7 @@ export class Operand {
     }
     operandToString() {
         var val = this.origionalValue;
-        if (val && (!this.isNumeric(val) && !this.isBoolean(val)))
+        if (val && !this.isNumeric(val) && !this.isBoolean(val))
             val = "'" + val + "'";
         return val;
     }
@@ -44,7 +45,8 @@ export class Operand {
         return val.substr(1, val.length - 2);
     }
     isBoolean(value) {
-        return value && (value.toLowerCase() === "true" || value.toLowerCase() === "false");
+        return (value &&
+            (value.toLowerCase() === 'true' || value.toLowerCase() === 'false'));
     }
     isNumeric(value) {
         var val = parseFloat(value);
@@ -54,10 +56,11 @@ export class Operand {
     }
 }
 export class FunctionOperand extends Operand {
+    origionalValue;
+    parameters = new Array();
     constructor(origionalValue) {
         super(origionalValue);
         this.origionalValue = origionalValue;
-        this.parameters = new Array();
     }
     getValue(processValue) {
         var paramValues = [];
@@ -67,21 +70,17 @@ export class FunctionOperand extends Operand {
         return FunctionFactory.Instance.run(this.origionalValue, paramValues);
     }
     operandToString() {
-        var res = this.origionalValue + "(";
+        var res = this.origionalValue + '(';
         for (var i = 0; i < this.parameters.length; i++) {
             if (i > 0)
-                res += ", ";
+                res += ', ';
             res += this.parameters[i].operandToString();
         }
         return res;
     }
 }
 export class Condition {
-    constructor() {
-        this.opValue = "equal";
-        this.leftValue = null;
-        this.rightValue = null;
-    }
+    static operatorsValue = null;
     static get operators() {
         if (Condition.operatorsValue != null)
             return Condition.operatorsValue;
@@ -94,24 +93,28 @@ export class Condition {
             notempty: function (left) {
                 if (left == null)
                     return false;
-                return !(!left);
+                return !!left;
             },
             equal: function (left, right) {
-                if (left == null && right != null || left != null && right == null)
+                if ((left == null && right != null) || (left != null && right == null))
                     return false;
                 if (left == null && right == null)
                     return true;
                 return left == right;
             },
             notequal: function (left, right) {
-                if (left == null && right != null || left != null && right == null)
+                if ((left == null && right != null) || (left != null && right == null))
                     return true;
                 if (left == null && right == null)
                     return false;
                 return left != right;
             },
-            contains: function (left, right) { return (left != null) && left["indexOf"] && left.indexOf(right) > -1; },
-            notcontains: function (left, right) { return (left == null) || !left["indexOf"] || left.indexOf(right) == -1; },
+            contains: function (left, right) {
+                return left != null && left['indexOf'] && left.indexOf(right) > -1;
+            },
+            notcontains: function (left, right) {
+                return left == null || !left['indexOf'] || left.indexOf(right) == -1;
+            },
             greater: function (left, right) {
                 if (left == null)
                     return false;
@@ -147,17 +150,30 @@ export class Condition {
                 if (!Array.isArray(left.slice()) || !Array.isArray(right.slice())) {
                     return false;
                 }
-                const found = left.some(r => right.includes(r));
+                const found = left.some((r) => right.includes(r));
                 return found;
-            }
+            },
         };
         return Condition.operatorsValue;
     }
-    get left() { return this.leftValue; }
-    set left(val) { this.leftValue = val; }
-    get right() { return this.rightValue; }
-    set right(val) { this.rightValue = val; }
-    get operator() { return this.opValue; }
+    opValue = 'equal';
+    leftValue = null;
+    rightValue = null;
+    get left() {
+        return this.leftValue;
+    }
+    set left(val) {
+        this.leftValue = val;
+    }
+    get right() {
+        return this.rightValue;
+    }
+    set right(val) {
+        this.rightValue = val;
+    }
+    get operator() {
+        return this.opValue;
+    }
     set operator(value) {
         if (!value)
             return;
@@ -181,38 +197,45 @@ export class Condition {
         return Condition.operators[this.operator](leftValue, rightValue);
     }
 }
-Condition.operatorsValue = null;
 export class ConditionNode {
-    constructor() {
-        this.connectiveValue = "and";
-        this.children = [];
+    connectiveValue = 'and';
+    children = [];
+    constructor() { }
+    get connective() {
+        return this.connectiveValue;
     }
-    get connective() { return this.connectiveValue; }
     set connective(value) {
         if (!value)
             return;
         value = value.toLowerCase();
-        if (value == "&" || value == "&&")
-            value = "and";
-        if (value == "|" || value == "||")
-            value = "or";
-        if (value != "and" && value != "or")
+        if (value == '&' || value == '&&')
+            value = 'and';
+        if (value == '|' || value == '||')
+            value = 'or';
+        if (value != 'and' && value != 'or')
             return;
         this.connectiveValue = value;
     }
-    get isEmpty() { return this.children.length == 0; }
+    get isEmpty() {
+        return this.children.length == 0;
+    }
     clear() {
         this.children = [];
-        this.connective = "and";
+        this.connective = 'and';
     }
 }
 export class ConditionRunner {
+    expressionValue;
+    processValue;
+    root;
     constructor(expression) {
         this.root = new ConditionNode();
         this.expression = expression;
         this.processValue = new ProcessValue();
     }
-    get expression() { return this.expressionValue; }
+    get expression() {
+        return this.expressionValue;
+    }
     set expression(value) {
         if (this.expression == value)
             return;
@@ -224,7 +247,7 @@ export class ConditionRunner {
         return this.runNode(this.root);
     }
     runNode(node) {
-        var onFirstFail = node.connective == "and";
+        var onFirstFail = node.connective == 'and';
         for (var i = 0; i < node.children.length; i++) {
             var res = this.runNodeCondition(node.children[i]);
             if (!res && onFirstFail)
@@ -235,9 +258,9 @@ export class ConditionRunner {
         return onFirstFail;
     }
     runNodeCondition(value) {
-        if (value["children"])
+        if (value['children'])
             return this.runNode(value);
-        if (value["left"])
+        if (value['left'])
             return this.runCondition(value);
         return false;
     }

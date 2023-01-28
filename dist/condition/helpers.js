@@ -1,9 +1,8 @@
-;
 export class Helpers {
     static isValueEmpty(value) {
         if (Array.isArray(value) && value.length === 0)
             return true;
-        if (!!value && typeof value === "object" && value.constructor === Object) {
+        if (!!value && typeof value === 'object' && value.constructor === Object) {
             for (var key in value) {
                 if (!Helpers.isValueEmpty(value[key]))
                     return false;
@@ -54,15 +53,15 @@ export class Helpers {
     static isTwoValueEquals(x, y, ignoreOrder = false) {
         if (x === y)
             return true;
-        if (Array.isArray(x) && x.length === 0 && typeof y === "undefined")
+        if (Array.isArray(x) && x.length === 0 && typeof y === 'undefined')
             return true;
-        if (Array.isArray(y) && y.length === 0 && typeof x === "undefined")
+        if (Array.isArray(y) && y.length === 0 && typeof x === 'undefined')
             return true;
-        if ((x === undefined || x === null) && y === "")
+        if ((x === undefined || x === null) && y === '')
             return true;
-        if ((y === undefined || y === null) && x === "")
+        if ((y === undefined || y === null) && x === '')
             return true;
-        if (typeof x === "string" && typeof y == "string")
+        if (typeof x === 'string' && typeof y == 'string')
             return x == y;
         if (Helpers.isConvertibleToNumber(x) && Helpers.isConvertibleToNumber(y)) {
             if (parseInt(x) === parseInt(y) && parseFloat(x) === parseFloat(y)) {
@@ -72,17 +71,17 @@ export class Helpers {
         if ((!Helpers.isValueEmpty(x) && Helpers.isValueEmpty(y)) ||
             (Helpers.isValueEmpty(x) && !Helpers.isValueEmpty(y)))
             return false;
-        if ((x === true || x === false) && typeof y == "string") {
+        if ((x === true || x === false) && typeof y == 'string') {
             return x.toString() === y.toLocaleLowerCase();
         }
-        if ((y === true || y === false) && typeof x == "string") {
+        if ((y === true || y === false) && typeof x == 'string') {
             return y.toString() === x.toLocaleLowerCase();
         }
         if (!(x instanceof Object) && !(y instanceof Object))
             return x == y;
         if (!(x instanceof Object) || !(y instanceof Object))
             return false;
-        if (x["equals"])
+        if (x['equals'])
             return x.equals(y);
         if (!!x.toJSON && !!y.toJSON && !!x.getType && !!y.getType) {
             if (x.isDiposed || y.isDiposed)
@@ -102,7 +101,7 @@ export class Helpers {
                 return false;
             if (x[p] === y[p])
                 continue;
-            if (typeof x[p] !== "object")
+            if (typeof x[p] !== 'object')
                 return false;
             if (!this.isTwoValueEquals(x[p], y[p]))
                 return false;
@@ -144,9 +143,9 @@ export class Helpers {
             !isNaN(value));
     }
     static isNumber(value) {
-        if (typeof value == "string" &&
+        if (typeof value == 'string' &&
             !!value &&
-            value.indexOf("0x") == 0 &&
+            value.indexOf('0x') == 0 &&
             value.length > 32)
             return false;
         return !isNaN(parseFloat(value)) && isFinite(value);
@@ -159,13 +158,13 @@ export class Helpers {
     }
     static getNumberByIndex(index, startIndexStr) {
         if (index < 0)
-            return "";
+            return '';
         var startIndex = 1;
-        var prefix = "";
-        var postfix = ".";
+        var prefix = '';
+        var postfix = '.';
         var isNumeric = true;
-        var strIndex = "A";
-        var str = "";
+        var strIndex = 'A';
+        var str = '';
         if (!!startIndexStr) {
             str = startIndexStr;
             var ind = str.length - 1;
@@ -182,7 +181,7 @@ export class Helpers {
             };
             while (ind >= 0 && checkLetter())
                 ind--;
-            var newPostfix = "";
+            var newPostfix = '';
             if (ind < str.length - 1) {
                 newPostfix = str.substr(ind + 1);
                 str = str.substr(0, ind + 1);
@@ -213,12 +212,12 @@ export class Helpers {
         return ch.toUpperCase() == ch.toLowerCase() && !Helpers.isCharDigit(ch);
     }
     static isCharDigit(ch) {
-        return ch >= "0" && ch <= "9";
+        return ch >= '0' && ch <= '9';
     }
     static countDecimals(value) {
         if (Helpers.isNumber(value) && Math.floor(value) !== value) {
-            const strs = value.toString().split(".");
-            return strs.length > 1 && strs[1].length || 0;
+            const strs = value.toString().split('.');
+            return (strs.length > 1 && strs[1].length) || 0;
         }
         return 0;
     }
@@ -239,11 +238,11 @@ export class Helpers {
         return res;
     }
 }
-if (!String.prototype["format"]) {
-    String.prototype["format"] = function () {
+if (!String.prototype['format']) {
+    String.prototype['format'] = function () {
         var args = arguments;
         return this.replace(/{(\d+)}/g, function (match, number) {
-            return typeof args[number] != "undefined" ? args[number] : match;
+            return typeof args[number] != 'undefined' ? args[number] : match;
         });
     };
 }

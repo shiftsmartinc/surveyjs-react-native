@@ -1,13 +1,13 @@
 import React from 'react';
-export interface Props {
+export interface QuestionCheckboxProps {
     choices: Array<any>;
-    hasOther?: boolean;
-    value: Array<string>;
     comment?: string;
-    otherText?: string;
+    hasOther?: boolean;
     onChange(value: any, comment?: any): any;
+    otherText?: string;
+    value: Array<string>;
 }
-export default class QuestionCheckbox extends React.Component<Props> {
+export default class QuestionCheckbox extends React.Component<QuestionCheckboxProps> {
     handleChoicesChange: (checked: any, value: any) => void;
     handleCommentChange: (comment: any) => void;
     render(): JSX.Element;

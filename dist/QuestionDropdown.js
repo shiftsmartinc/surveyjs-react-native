@@ -90,24 +90,13 @@ const styles = StyleSheet.create({
         color: '#fff',
     },
 });
-const OTHER_VALUE = 'other';
-const DEFAULT_OTHER_TEXT = 'other (describe)';
 const DEFAULT_OPTION_CAPTION = 'Select an Answer';
+const DEFAULT_OTHER_TEXT = 'other (describe)';
+const OTHER_VALUE = 'other';
 export default class QuestionDropdown extends React.Component {
     constructor(props) {
         super(props);
-        this.handleCommentChange = (comment) => {
-            this.props.onChange(this.props.value, comment);
-        };
-        this.openModal = () => {
-            this.setState({ modalVisible: true });
-        };
-        this.closeModal = () => {
-            this.setState({ modalVisible: false });
-        };
-        const options = [
-            ...props.choices,
-        ];
+        const options = [...props.choices];
         if (props.hasOther) {
             options.push({
                 value: OTHER_VALUE,
@@ -119,17 +108,27 @@ export default class QuestionDropdown extends React.Component {
             modalVisible: false,
         };
     }
+    handleCommentChange = (comment) => {
+        this.props.onChange(this.props.value, comment);
+    };
+    openModal = () => {
+        this.setState({ modalVisible: true });
+    };
+    closeModal = () => {
+        this.setState({ modalVisible: false });
+    };
     render() {
-        const { otherText = DEFAULT_OTHER_TEXT, optionsCaption = DEFAULT_OPTION_CAPTION, value, comment, hasOther, onChange } = this.props;
+        const { otherText = DEFAULT_OTHER_TEXT, optionsCaption = DEFAULT_OPTION_CAPTION, value, comment, hasOther, onChange, } = this.props;
         const { options, modalVisible } = this.state;
-        const selectedChocie = options.find(v => v.value === value) || {};
+        const selectedChocie = options.find((v) => v.value === value) || {};
         return (<View>
         <TouchableWithFeedback style={styles.caption} onPress={this.openModal}>
-          <Text style={styles.captionText}>{selectedChocie.text || optionsCaption}</Text>
+          <Text style={styles.captionText}>
+            {selectedChocie.text || optionsCaption}
+          </Text>
           <Image style={styles.rightArrow} source={require('./images/right-arrow-grey.png')}/>
         </TouchableWithFeedback>
-        {value === OTHER_VALUE &&
-            <QuestionText value={comment} onChange={this.handleCommentChange} placeholder={otherText}/>}
+        {value === OTHER_VALUE && (<QuestionText value={comment} onChange={this.handleCommentChange} placeholder={otherText}/>)}
         <Modal visible={modalVisible} onRequestClose={this.closeModal}>
           <View style={styles.modal}>
             <View style={styles.modalContainer}>

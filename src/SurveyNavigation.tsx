@@ -57,56 +57,52 @@ const styles = StyleSheet.create({
   },
 });
 
-export interface Props {
-  prevPage?: () => {};
-  nextPage?: () => {};
-  prevPageIndex?: number;
-  nextPageIndex?: number;
+export interface SurveyNavigationProps {
   curPageIndex?: number;
+  nextPage?: () => {};
+  nextPageIndex?: number;
   pages?: Array<any>;
+  prevPage?: () => {};
+  prevPageIndex?: number;
 }
 
-@inject((store: any) => ({
-  prevPage: store.model.prevPage,
-  nextPage: store.model.nextPage,
-  prevPageIndex: store.model.prevPageIndex,
-  curPageIndex: store.model.curPageIndex,
-  pages: store.model.pages,
-}))
-@observer
-export default class SurveyNavigation extends React.Component<Props> {
+class SurveyNavigation extends React.Component<SurveyNavigationProps> {
   render() {
-    const {
-      prevPage,
-      nextPage,
-      prevPageIndex,
-      curPageIndex,
-      pages,
-    } = this.props;
+    const { prevPage, nextPage, prevPageIndex, curPageIndex, pages } =
+      this.props;
+
     return [
       <View key="navigation" style={styles.container}>
-        {prevPageIndex !== -1
-          ? (
-            <TouchableWithFeedback
-              onPress={prevPage}
-              style={styles.button}
-            >
-              <Text style={styles.buttonText}>&lt;</Text>
-            </TouchableWithFeedback>
-          )
-          : <View style={styles.placeholder} />
-        }
+        {prevPageIndex !== -1 ? (
+          <TouchableWithFeedback onPress={prevPage} style={styles.button}>
+            <Text style={styles.buttonText}>&lt;</Text>
+          </TouchableWithFeedback>
+        ) : (
+          <View style={styles.placeholder} />
+        )}
         <Text style={styles.title}>
-          Page <Text style={styles.bold}>{curPageIndex + 1}</Text> of <Text style={styles.bold}>{pages.length}</Text>
-      </Text>
-        <TouchableWithFeedback
-          onPress={nextPage}
-          style={styles.button}
-        >
+          Page <Text style={styles.bold}>{curPageIndex + 1}</Text> of{' '}
+          <Text style={styles.bold}>{pages.length}</Text>
+        </Text>
+        <TouchableWithFeedback onPress={nextPage} style={styles.button}>
           <Text style={styles.buttonText}>&gt;</Text>
         </TouchableWithFeedback>
       </View>,
-      <View key="progress-bar" style={[styles.progressBar, { width: `${(curPageIndex + 1) / pages.length * 100}%` }]} />,
+      <View
+        key="progress-bar"
+        style={[
+          styles.progressBar,
+          { width: `${((curPageIndex + 1) / pages.length) * 100}%` },
+        ]}
+      />,
     ];
   }
 }
+
+export default inject((store: any) => ({
+  curPageIndex: store.model.curPageIndex,
+  nextPage: store.model.nextPage,
+  pages: store.model.pages,
+  prevPage: store.model.prevPage,
+  prevPageIndex: store.model.prevPageIndex,
+}))(observer(SurveyNavigation));

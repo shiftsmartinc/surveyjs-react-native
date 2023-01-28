@@ -11,13 +11,13 @@ export default class QuestionTextWrapper extends React.Component<any> {
       case 'datetime':
       case 'datetime-local':
       case 'time':
-        return <QuestionTextDatetime {...this.props as any} />;
+        return <QuestionTextDatetime {...(this.props as any)} />;
 
       case 'range':
         return <QuestionTextSlider {...this.props} />;
 
       default:
-        return <QuestionText {...this.props as any} />;
+        return <QuestionText {...(this.props as any)} />;
     }
   }
 }

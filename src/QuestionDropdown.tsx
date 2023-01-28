@@ -92,27 +92,27 @@ const styles = StyleSheet.create({
   },
 });
 
-export interface Props {
+export interface QuestionDropdownProps {
   choices: any;
-  hasOther?: boolean;
-  optionsCaption?: string;
-  value: string;
   comment?: string;
-  otherText?: string;
+  hasOther?: boolean;
   onChange(value, comment?);
+  optionsCaption?: string;
+  otherText?: string;
+  value: string;
 }
 
-const OTHER_VALUE = 'other';
-const DEFAULT_OTHER_TEXT = 'other (describe)';
-
 const DEFAULT_OPTION_CAPTION = 'Select an Answer';
+const DEFAULT_OTHER_TEXT = 'other (describe)';
+const OTHER_VALUE = 'other';
 
-export default class QuestionDropdown extends React.Component<Props, any>{
-  constructor(props: Props) {
+export default class QuestionDropdown extends React.Component<
+  QuestionDropdownProps,
+  any
+> {
+  constructor(props: QuestionDropdownProps) {
     super(props);
-    const options = [
-      ...props.choices,
-    ];
+    const options = [...props.choices];
     if (props.hasOther) {
       options.push({
         value: OTHER_VALUE,
@@ -124,45 +124,64 @@ export default class QuestionDropdown extends React.Component<Props, any>{
       modalVisible: false,
     };
   }
+
   handleCommentChange = (comment) => {
     this.props.onChange(this.props.value, comment);
-  }
+  };
+
   openModal = () => {
     this.setState({ modalVisible: true });
-  }
+  };
+
   closeModal = () => {
     this.setState({ modalVisible: false });
-  }
+  };
+
   render() {
-    const { otherText = DEFAULT_OTHER_TEXT, optionsCaption = DEFAULT_OPTION_CAPTION, value, comment, hasOther, onChange } = this.props;
+    const {
+      otherText = DEFAULT_OTHER_TEXT,
+      optionsCaption = DEFAULT_OPTION_CAPTION,
+      value,
+      comment,
+      hasOther,
+      onChange,
+    } = this.props;
     const { options, modalVisible } = this.state;
-    const selectedChocie = options.find(v => v.value === value) || {};
+    const selectedChocie = options.find((v) => v.value === value) || {};
     return (
       <View>
         <TouchableWithFeedback style={styles.caption} onPress={this.openModal}>
-          <Text style={styles.captionText}>{selectedChocie.text || optionsCaption}</Text>
-          <Image style={styles.rightArrow} source={require('./images/right-arrow-grey.png')} />
+          <Text style={styles.captionText}>
+            {selectedChocie.text || optionsCaption}
+          </Text>
+          <Image
+            style={styles.rightArrow}
+            source={require('./images/right-arrow-grey.png')}
+          />
         </TouchableWithFeedback>
-        {value === OTHER_VALUE &&
+        {value === OTHER_VALUE && (
           <QuestionText
             value={comment}
             onChange={this.handleCommentChange}
             placeholder={otherText}
           />
-        }
-        <Modal
-          visible={modalVisible}
-          onRequestClose={this.closeModal}
-        >
+        )}
+        <Modal visible={modalVisible} onRequestClose={this.closeModal}>
           <View style={styles.modal}>
             <View style={styles.modalContainer}>
               <View style={styles.modalHeader}>
                 <TouchableWithFeedback onPress={this.closeModal}>
-                  <Image style={styles.leftArrow} source={require('./images/left-arrow-blue.png')} />
+                  <Image
+                    style={styles.leftArrow}
+                    source={require('./images/left-arrow-blue.png')}
+                  />
                 </TouchableWithFeedback>
                 <Text style={styles.modalHeaderText}>Select an Answer</Text>
               </View>
-              <ScrollView contentContainerStyle={styles.modalContent} showsVerticalScrollIndicator={false}>
+              <ScrollView
+                contentContainerStyle={styles.modalContent}
+                showsVerticalScrollIndicator={false}
+              >
                 <QuestionRadiogroup
                   choices={options}
                   onChange={onChange}
@@ -172,13 +191,16 @@ export default class QuestionDropdown extends React.Component<Props, any>{
                   otherText={otherText}
                 />
               </ScrollView>
-              <TouchableWithFeedback style={styles.button} onPress={this.closeModal}>
+              <TouchableWithFeedback
+                style={styles.button}
+                onPress={this.closeModal}
+              >
                 <Text style={styles.buttonText}>Done</Text>
               </TouchableWithFeedback>
             </View>
           </View>
         </Modal>
       </View>
-    )
+    );
   }
 }
