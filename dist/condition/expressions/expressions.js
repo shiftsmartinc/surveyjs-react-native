@@ -1,9 +1,9 @@
-import { Helpers } from "../helpers";
-import { FunctionFactory } from "../functionsfactory";
-import { ProcessValue } from "../conditionProcessValue";
+import { Helpers } from '../helpers';
+import { FunctionFactory } from '../functionsfactory';
+import { ProcessValue } from '../conditionProcessValue';
 export class Operand {
-    toString(func = undefined) {
-        return "";
+    toString(_func = undefined) {
+        return '';
     }
     hasFunction() {
         return false;
@@ -11,15 +11,20 @@ export class Operand {
     hasAsyncFunction() {
         return false;
     }
-    addToAsyncList(list) { }
+    addToAsyncList(_list) { }
     isEqual(op) {
         return !!op && op.getType() === this.getType() && this.isContentEqual(op);
     }
     areOperatorsEquals(op1, op2) {
-        return !op1 && !op2 || !!op1 && op1.isEqual(op2);
+        return (!op1 && !op2) || (!!op1 && op1.isEqual(op2));
     }
 }
 export class BinaryOperand extends Operand {
+    operatorName;
+    left;
+    right;
+    consumer;
+    isArithmeticValue;
     constructor(operatorName, left = null, right = null, isArithmeticOp = false) {
         super();
         this.operatorName = operatorName;
@@ -27,7 +32,8 @@ export class BinaryOperand extends Operand {
         this.right = right;
         this.isArithmeticValue = isArithmeticOp;
         if (isArithmeticOp) {
-            this.consumer = OperandMaker.binaryFunctions["arithmeticOp"](operatorName);
+            this.consumer =
+                OperandMaker.binaryFunctions['arithmeticOp'](operatorName);
         }
         else {
             this.consumer = OperandMaker.binaryFunctions[operatorName];
@@ -37,16 +43,16 @@ export class BinaryOperand extends Operand {
         }
     }
     getType() {
-        return "binary";
+        return 'binary';
     }
     get isArithmetic() {
         return this.isArithmeticValue;
     }
     get isConjunction() {
-        return this.operatorName == "or" || this.operatorName == "and";
+        return this.operatorName == 'or' || this.operatorName == 'and';
     }
     get conjunction() {
-        return this.isConjunction ? this.operatorName : "";
+        return this.isConjunction ? this.operatorName : '';
     }
     get operator() {
         return this.operatorName;
@@ -59,9 +65,9 @@ export class BinaryOperand extends Operand {
     }
     isContentEqual(op) {
         const bOp = op;
-        return bOp.operator === this.operator &&
+        return (bOp.operator === this.operator &&
             this.areOperatorsEquals(this.left, bOp.left) &&
-            this.areOperatorsEquals(this.right, bOp.right);
+            this.areOperatorsEquals(this.right, bOp.right));
     }
     evaluateParam(x, processValue) {
         return x == null ? null : x.evaluate(processValue);
@@ -75,13 +81,13 @@ export class BinaryOperand extends Operand {
             if (!!res)
                 return res;
         }
-        return ("(" +
+        return ('(' +
             OperandMaker.safeToString(this.left, func) +
-            " " +
+            ' ' +
             OperandMaker.operatorToString(this.operatorName) +
-            " " +
+            ' ' +
             OperandMaker.safeToString(this.right, func) +
-            ")");
+            ')');
     }
     setVariables(variables) {
         if (this.left != null)
@@ -105,6 +111,9 @@ export class BinaryOperand extends Operand {
     }
 }
 export class UnaryOperand extends Operand {
+    expressionValue;
+    operatorName;
+    consumer;
     constructor(expressionValue, operatorName) {
         super();
         this.expressionValue = expressionValue;
@@ -121,7 +130,7 @@ export class UnaryOperand extends Operand {
         return this.expressionValue;
     }
     getType() {
-        return "unary";
+        return 'unary';
     }
     toString(func = undefined) {
         if (!!func) {
@@ -130,12 +139,13 @@ export class UnaryOperand extends Operand {
                 return res;
         }
         return (OperandMaker.operatorToString(this.operatorName) +
-            " " +
+            ' ' +
             this.expression.toString(func));
     }
     isContentEqual(op) {
         const uOp = op;
-        return uOp.operator == this.operator && this.areOperatorsEquals(this.expression, uOp.expression);
+        return (uOp.operator == this.operator &&
+            this.areOperatorsEquals(this.expression, uOp.expression));
     }
     evaluate(processValue) {
         let value = this.expression.evaluate(processValue);
@@ -146,12 +156,13 @@ export class UnaryOperand extends Operand {
     }
 }
 export class ArrayOperand extends Operand {
+    values;
     constructor(values) {
         super();
         this.values = values;
     }
     getType() {
-        return "array";
+        return 'array';
     }
     toString(func = undefined) {
         if (!!func) {
@@ -159,13 +170,13 @@ export class ArrayOperand extends Operand {
             if (!!res)
                 return res;
         }
-        return ("[" +
+        return ('[' +
             this.values
                 .map(function (el) {
                 return el.toString(func);
             })
-                .join(", ") +
-            "]");
+                .join(', ') +
+            ']');
     }
     evaluate(processValue) {
         return this.values.map(function (el) {
@@ -198,12 +209,13 @@ export class ArrayOperand extends Operand {
     }
 }
 export class Const extends Operand {
+    value;
     constructor(value) {
         super();
         this.value = value;
     }
     getType() {
-        return "const";
+        return 'const';
     }
     toString(func = undefined) {
         if (!!func) {
@@ -219,20 +231,20 @@ export class Const extends Operand {
     evaluate() {
         return this.getCorrectValue(this.value);
     }
-    setVariables(variables) { }
+    setVariables(_variables) { }
     getCorrectValue(value) {
-        if (!value || typeof value != "string")
+        if (!value || typeof value != 'string')
             return value;
         if (this.isBooleanValue(value))
-            return value.toLowerCase() === "true";
+            return value.toLowerCase() === 'true';
         if (value.length > 1 &&
             this.isQuote(value[0]) &&
             this.isQuote(value[value.length - 1]))
             return value.substr(1, value.length - 2);
         if (OperandMaker.isNumeric(value)) {
-            if (value.indexOf("0x") == 0)
+            if (value.indexOf('0x') == 0)
                 return parseInt(value);
-            if (value.length > 1 && value[0] == "0")
+            if (value.length > 1 && value[0] == '0')
                 return value;
             return parseFloat(value);
         }
@@ -247,15 +259,17 @@ export class Const extends Operand {
     }
     isBooleanValue(value) {
         return (value &&
-            (value.toLowerCase() === "true" || value.toLowerCase() === "false"));
+            (value.toLowerCase() === 'true' || value.toLowerCase() === 'false'));
     }
 }
 export class Variable extends Const {
+    variableName;
+    static DisableConversionChar = '#';
+    valueInfo = {};
+    useValueAsItIs = false;
     constructor(variableName) {
         super(variableName);
         this.variableName = variableName;
-        this.valueInfo = {};
-        this.useValueAsItIs = false;
         if (!!this.variableName &&
             this.variableName.length > 1 &&
             this.variableName[0] === Variable.DisableConversionChar) {
@@ -264,7 +278,7 @@ export class Variable extends Const {
         }
     }
     getType() {
-        return "variable";
+        return 'variable';
     }
     toString(func = undefined) {
         if (!!func) {
@@ -272,8 +286,8 @@ export class Variable extends Const {
             if (!!res)
                 return res;
         }
-        var prefix = this.useValueAsItIs ? Variable.DisableConversionChar : "";
-        return "{" + prefix + this.variableName + "}";
+        var prefix = this.useValueAsItIs ? Variable.DisableConversionChar : '';
+        return '{' + prefix + this.variableName + '}';
     }
     get variable() {
         return this.variableName;
@@ -298,8 +312,12 @@ export class Variable extends Const {
         return vOp.variable == this.variable;
     }
 }
-Variable.DisableConversionChar = "#";
 export class FunctionOperand extends Operand {
+    originalValue;
+    parameters;
+    isReadyValue;
+    asynResult;
+    onAsyncReady;
     constructor(originalValue, parameters) {
         super();
         this.originalValue = originalValue;
@@ -310,7 +328,7 @@ export class FunctionOperand extends Operand {
         }
     }
     getType() {
-        return "function";
+        return 'function';
     }
     evaluateAsync(processValue) {
         this.isReadyValue = false;
@@ -338,7 +356,7 @@ export class FunctionOperand extends Operand {
             if (!!res)
                 return res;
         }
-        return this.originalValue + "(" + this.parameters.toString(func) + ")";
+        return this.originalValue + '(' + this.parameters.toString(func) + ')';
     }
     setVariables(variables) {
         this.parameters.setVariables(variables);
@@ -359,7 +377,8 @@ export class FunctionOperand extends Operand {
     }
     isContentEqual(op) {
         const fOp = op;
-        return fOp.originalValue == this.originalValue && this.areOperatorsEquals(fOp.parameters, this.parameters);
+        return (fOp.originalValue == this.originalValue &&
+            this.areOperatorsEquals(fOp.parameters, this.parameters));
     }
 }
 export class OperandMaker {
@@ -367,7 +386,7 @@ export class OperandMaker {
         throw new Error("Invalid operator: '" + op + "'");
     }
     static safeToString(operand, func) {
-        return operand == null ? "" : operand.toString(func);
+        return operand == null ? '' : operand.toString(func);
     }
     static toOperandString(value) {
         if (!!value &&
@@ -377,16 +396,16 @@ export class OperandMaker {
         return value;
     }
     static isSpaceString(str) {
-        return !!str && !str.replace(" ", "");
+        return !!str && !str.replace(' ', '');
     }
     static isNumeric(value) {
         if (!!value &&
-            (value.indexOf("-") > -1 ||
-                value.indexOf("+") > 1 ||
-                value.indexOf("*") > -1 ||
-                value.indexOf("^") > -1 ||
-                value.indexOf("/") > -1 ||
-                value.indexOf("%") > -1))
+            (value.indexOf('-') > -1 ||
+                value.indexOf('+') > 1 ||
+                value.indexOf('*') > -1 ||
+                value.indexOf('^') > -1 ||
+                value.indexOf('/') > -1 ||
+                value.indexOf('%') > -1))
             return false;
         if (OperandMaker.isSpaceString(value))
             return false;
@@ -394,12 +413,12 @@ export class OperandMaker {
     }
     static isBooleanValue(value) {
         return (!!value &&
-            (value.toLowerCase() === "true" || value.toLowerCase() === "false"));
+            (value.toLowerCase() === 'true' || value.toLowerCase() === 'false'));
     }
     static countDecimals(value) {
         if (Helpers.isNumber(value) && Math.floor(value) !== value) {
-            const strs = value.toString().split(".");
-            return strs.length > 1 && strs[1].length || 0;
+            const strs = value.toString().split('.');
+            return (strs.length > 1 && strs[1].length) || 0;
         }
         return 0;
     }
@@ -412,10 +431,156 @@ export class OperandMaker {
         }
         return res;
     }
+    static unaryFunctions = {
+        empty: function (value) {
+            return Helpers.isValueEmpty(value);
+        },
+        notempty: function (value) {
+            return !OperandMaker.unaryFunctions.empty(value);
+        },
+        negate: function (value) {
+            return !value;
+        },
+    };
+    static binaryFunctions = {
+        arithmeticOp(operatorName) {
+            return function (a, b) {
+                if (Helpers.isValueEmpty(a) && !OperandMaker.isSpaceString(a)) {
+                    a = typeof b === 'string' ? '' : 0;
+                }
+                if (Helpers.isValueEmpty(b) && !OperandMaker.isSpaceString(b)) {
+                    b = typeof a === 'string' ? '' : 0;
+                }
+                let consumer = OperandMaker.binaryFunctions[operatorName];
+                return consumer == null ? null : consumer.call(this, a, b);
+            };
+        },
+        and: function (a, b) {
+            return a && b;
+        },
+        or: function (a, b) {
+            return a || b;
+        },
+        plus: function (a, b) {
+            return Helpers.correctAfterPlusMinis(a, b, a + b);
+        },
+        minus: function (a, b) {
+            return Helpers.correctAfterPlusMinis(a, b, a - b);
+        },
+        mul: function (a, b) {
+            return Helpers.correctAfterMultiple(a, b, a * b);
+        },
+        div: function (a, b) {
+            if (!b)
+                return null;
+            return a / b;
+        },
+        mod: function (a, b) {
+            if (!b)
+                return null;
+            return a % b;
+        },
+        power: function (a, b) {
+            return Math.pow(a, b);
+        },
+        greater: function (left, right) {
+            if (left == null || right == null)
+                return false;
+            return left > right;
+        },
+        less: function (left, right) {
+            if (left == null || right == null)
+                return false;
+            return left < right;
+        },
+        greaterorequal: function (left, right) {
+            if (OperandMaker.binaryFunctions.equal(left, right))
+                return true;
+            return OperandMaker.binaryFunctions.greater(left, right);
+        },
+        lessorequal: function (left, right) {
+            if (OperandMaker.binaryFunctions.equal(left, right))
+                return true;
+            return OperandMaker.binaryFunctions.less(left, right);
+        },
+        equal: function (left, right) {
+            return OperandMaker.isTwoValueEquals(left, right);
+        },
+        notequal: function (left, right) {
+            return !OperandMaker.binaryFunctions.equal(left, right);
+        },
+        contains: function (left, right) {
+            return OperandMaker.binaryFunctions.containsCore(left, right, true);
+        },
+        notcontains: function (left, right) {
+            if (!left && !Helpers.isValueEmpty(right))
+                return true;
+            return OperandMaker.binaryFunctions.containsCore(left, right, false);
+        },
+        anyof: function (left, right) {
+            if (Helpers.isValueEmpty(left) && Helpers.isValueEmpty(right))
+                return true;
+            if (Helpers.isValueEmpty(left) ||
+                (!Array.isArray(left) && left.length === 0))
+                return false;
+            if (Helpers.isValueEmpty(right))
+                return true;
+            if (!Array.isArray(left))
+                return OperandMaker.binaryFunctions.contains(right, left);
+            if (!Array.isArray(right))
+                return OperandMaker.binaryFunctions.contains(left, right);
+            for (var i = 0; i < right.length; i++) {
+                if (OperandMaker.binaryFunctions.contains(left, right[i]))
+                    return true;
+            }
+            return false;
+        },
+        allof: function (left, right) {
+            if (!left && !Helpers.isValueEmpty(right))
+                return false;
+            if (!Array.isArray(right))
+                return OperandMaker.binaryFunctions.contains(left, right);
+            for (var i = 0; i < right.length; i++) {
+                if (!OperandMaker.binaryFunctions.contains(left, right[i]))
+                    return false;
+            }
+            return true;
+        },
+        containsCore: function (left, right, isContains) {
+            if (!left && left !== 0 && left !== false)
+                return false;
+            if (!left.length) {
+                left = left.toString();
+                if (typeof right === 'string' || right instanceof String) {
+                    left = left.toUpperCase();
+                    right = right.toUpperCase();
+                }
+            }
+            if (typeof left === 'string' || left instanceof String) {
+                if (!right)
+                    return false;
+                right = right.toString();
+                var found = left.indexOf(right) > -1;
+                return isContains ? found : !found;
+            }
+            var rightArray = Array.isArray(right) ? right : [right];
+            for (var rIndex = 0; rIndex < rightArray.length; rIndex++) {
+                var i = 0;
+                right = rightArray[rIndex];
+                for (; i < left.length; i++) {
+                    if (OperandMaker.isTwoValueEquals(left[i], right))
+                        break;
+                }
+                if (i == left.length)
+                    return !isContains;
+            }
+            return isContains;
+        },
+    };
     static isTwoValueEquals(x, y) {
-        if (x === "undefined")
+        if (x === 'undefined')
             x = undefined;
-        if (y === "undefined")
+        if (y === 'undefined')
             y = undefined;
         return Helpers.isTwoValueEquals(x, y, true);
     }
@@ -423,167 +588,21 @@ export class OperandMaker {
         let opStr = OperandMaker.signs[operatorName];
         return opStr == null ? operatorName : opStr;
     }
+    static signs = {
+        less: '<',
+        lessorequal: '<=',
+        greater: '>',
+        greaterorequal: '>=',
+        equal: '==',
+        notequal: '!=',
+        plus: '+',
+        minus: '-',
+        mul: '*',
+        div: '/',
+        and: 'and',
+        or: 'or',
+        power: '^',
+        mod: '%',
+        negate: '!',
+    };
 }
-OperandMaker.unaryFunctions = {
-    empty: function (value) {
-        return Helpers.isValueEmpty(value);
-    },
-    notempty: function (value) {
-        return !OperandMaker.unaryFunctions.empty(value);
-    },
-    negate: function (value) {
-        return !value;
-    },
-};
-OperandMaker.binaryFunctions = {
-    arithmeticOp(operatorName) {
-        return function (a, b) {
-            if (Helpers.isValueEmpty(a) && !OperandMaker.isSpaceString(a)) {
-                a = typeof b === "string" ? "" : 0;
-            }
-            if (Helpers.isValueEmpty(b) && !OperandMaker.isSpaceString(b)) {
-                b = typeof a === "string" ? "" : 0;
-            }
-            let consumer = OperandMaker.binaryFunctions[operatorName];
-            return consumer == null ? null : consumer.call(this, a, b);
-        };
-    },
-    and: function (a, b) {
-        return a && b;
-    },
-    or: function (a, b) {
-        return a || b;
-    },
-    plus: function (a, b) {
-        return Helpers.correctAfterPlusMinis(a, b, a + b);
-    },
-    minus: function (a, b) {
-        return Helpers.correctAfterPlusMinis(a, b, a - b);
-    },
-    mul: function (a, b) {
-        return Helpers.correctAfterMultiple(a, b, a * b);
-    },
-    div: function (a, b) {
-        if (!b)
-            return null;
-        return a / b;
-    },
-    mod: function (a, b) {
-        if (!b)
-            return null;
-        return a % b;
-    },
-    power: function (a, b) {
-        return Math.pow(a, b);
-    },
-    greater: function (left, right) {
-        if (left == null || right == null)
-            return false;
-        return left > right;
-    },
-    less: function (left, right) {
-        if (left == null || right == null)
-            return false;
-        return left < right;
-    },
-    greaterorequal: function (left, right) {
-        if (OperandMaker.binaryFunctions.equal(left, right))
-            return true;
-        return OperandMaker.binaryFunctions.greater(left, right);
-    },
-    lessorequal: function (left, right) {
-        if (OperandMaker.binaryFunctions.equal(left, right))
-            return true;
-        return OperandMaker.binaryFunctions.less(left, right);
-    },
-    equal: function (left, right) {
-        return OperandMaker.isTwoValueEquals(left, right);
-    },
-    notequal: function (left, right) {
-        return !OperandMaker.binaryFunctions.equal(left, right);
-    },
-    contains: function (left, right) {
-        return OperandMaker.binaryFunctions.containsCore(left, right, true);
-    },
-    notcontains: function (left, right) {
-        if (!left && !Helpers.isValueEmpty(right))
-            return true;
-        return OperandMaker.binaryFunctions.containsCore(left, right, false);
-    },
-    anyof: function (left, right) {
-        if (Helpers.isValueEmpty(left) && Helpers.isValueEmpty(right))
-            return true;
-        if (Helpers.isValueEmpty(left) ||
-            (!Array.isArray(left) && left.length === 0))
-            return false;
-        if (Helpers.isValueEmpty(right))
-            return true;
-        if (!Array.isArray(left))
-            return OperandMaker.binaryFunctions.contains(right, left);
-        if (!Array.isArray(right))
-            return OperandMaker.binaryFunctions.contains(left, right);
-        for (var i = 0; i < right.length; i++) {
-            if (OperandMaker.binaryFunctions.contains(left, right[i]))
-                return true;
-        }
-        return false;
-    },
-    allof: function (left, right) {
-        if (!left && !Helpers.isValueEmpty(right))
-            return false;
-        if (!Array.isArray(right))
-            return OperandMaker.binaryFunctions.contains(left, right);
-        for (var i = 0; i < right.length; i++) {
-            if (!OperandMaker.binaryFunctions.contains(left, right[i]))
-                return false;
-        }
-        return true;
-    },
-    containsCore: function (left, right, isContains) {
-        if (!left && left !== 0 && left !== false)
-            return false;
-        if (!left.length) {
-            left = left.toString();
-            if (typeof right === "string" || right instanceof String) {
-                left = left.toUpperCase();
-                right = right.toUpperCase();
-            }
-        }
-        if (typeof left === "string" || left instanceof String) {
-            if (!right)
-                return false;
-            right = right.toString();
-            var found = left.indexOf(right) > -1;
-            return isContains ? found : !found;
-        }
-        var rightArray = Array.isArray(right) ? right : [right];
-        for (var rIndex = 0; rIndex < rightArray.length; rIndex++) {
-            var i = 0;
-            right = rightArray[rIndex];
-            for (; i < left.length; i++) {
-                if (OperandMaker.isTwoValueEquals(left[i], right))
-                    break;
-            }
-            if (i == left.length)
-                return !isContains;
-        }
-        return isContains;
-    },
-};
-OperandMaker.signs = {
-    less: "<",
-    lessorequal: "<=",
-    greater: ">",
-    greaterorequal: ">=",
-    equal: "==",
-    notequal: "!=",
-    plus: "+",
-    minus: "-",
-    mul: "*",
-    div: "/",
-    and: "and",
-    or: "or",
-    power: "^",
-    mod: "%",
-    negate: "!",
-};

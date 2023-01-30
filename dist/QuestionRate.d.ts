@@ -1,12 +1,12 @@
 import React from 'react';
-export interface Props {
-    rateValues: Array<any>;
-    minRateDescription?: string;
+export interface QuestionRateProps {
     maxRateDescription?: string;
-    value?: any;
+    minRateDescription?: string;
     onChange(value: any, comment?: any): any;
+    rateValues: Array<any>;
+    value?: any;
 }
-export default class QuestionRate extends React.Component<Props> {
+export default class QuestionRate extends React.Component<QuestionRateProps> {
     onItemChecked: (value: any) => void;
     render(): JSX.Element;
 }

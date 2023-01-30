@@ -1,5 +1,12 @@
-import { Condition, ConditionNode, Operand, FunctionOperand } from "./conditions";
+import { Condition, ConditionNode, Operand, FunctionOperand, } from './conditions';
 export class ConditionsParser {
+    static constants = ['true', 'false'];
+    text;
+    root;
+    expressionNodes;
+    node;
+    at;
+    length;
     parse(text, root) {
         this.text = text;
         this.root = root;
@@ -15,17 +22,17 @@ export class ConditionsParser {
     }
     toStringCore(value) {
         if (!value)
-            return "";
-        if (value["children"])
+            return '';
+        if (value['children'])
             return this.nodeToString(value);
-        if (value["left"])
+        if (value['left'])
             return this.conditionToString(value);
-        return "";
+        return '';
     }
     nodeToString(node) {
         if (node.isEmpty)
-            return "";
-        var res = "";
+            return '';
+        var res = '';
         for (var i = 0; i < node.children.length; i++) {
             var nodeText = this.toStringCore(node.children[i]);
             if (nodeText) {
@@ -41,7 +48,7 @@ export class ConditionsParser {
     }
     conditionToString(condition) {
         if (!condition.right || !condition.operator)
-            return "";
+            return '';
         var left = condition.left.operandToString();
         var res = left + ' ' + this.operationToString(condition.operator);
         if (this.isNoRightOperation(condition.operator))
@@ -50,18 +57,18 @@ export class ConditionsParser {
         return res + ' ' + right;
     }
     operationToString(op) {
-        if (op == "equal")
-            return "=";
-        if (op == "notequal")
-            return "!=";
-        if (op == "greater")
-            return ">";
-        if (op == "less")
-            return "<";
-        if (op == "greaterorequal")
-            return ">=";
-        if (op == "lessorequal")
-            return "<=";
+        if (op == 'equal')
+            return '=';
+        if (op == 'notequal')
+            return '!=';
+        if (op == 'greater')
+            return '>';
+        if (op == 'less')
+            return '<';
+        if (op == 'greaterorequal')
+            return '>=';
+        if (op == 'lessorequal')
+            return '<=';
         return op;
     }
     parseText() {
@@ -130,7 +137,9 @@ export class ConditionsParser {
         }
         return -1;
     }
-    get ch() { return this.text.charAt(this.at); }
+    get ch() {
+        return this.text.charAt(this.at);
+    }
     skip() {
         while (this.at < this.length && this.isSpace(this.ch))
             this.at++;
@@ -141,17 +150,27 @@ export class ConditionsParser {
     isQuotes(c) {
         return c == "'" || c == '"';
     }
-    isComma(c) { return c == ','; }
+    isComma(c) {
+        return c == ',';
+    }
     isOperatorChar(c) {
         return c == '>' || c == '<' || c == '=' || c == '!';
     }
-    isOpenBracket(c) { return c == '('; }
-    isCloseBracket(c) { return c == ')'; }
+    isOpenBracket(c) {
+        return c == '(';
+    }
+    isCloseBracket(c) {
+        return c == ')';
+    }
     isBrackets(c) {
         return this.isOpenBracket(c) || this.isCloseBracket(c);
     }
-    isOpenSquareBracket(c) { return c == '['; }
-    isCloseSquareBracket(c) { return c == ']'; }
+    isOpenSquareBracket(c) {
+        return c == '[';
+    }
+    isCloseSquareBracket(c) {
+        return c == ']';
+    }
     isSquareBrackets(c) {
         return this.isOpenSquareBracket(c) || this.isCloseSquareBracket(c);
     }
@@ -180,7 +199,8 @@ export class ConditionsParser {
                 if (isAnyOf && this.isSquareBrackets(this.ch)) {
                     inArray = !inArray;
                 }
-                else if ((this.isBrackets(this.ch) || this.isComma(this.ch)) && !inArray)
+                else if ((this.isBrackets(this.ch) || this.isComma(this.ch)) &&
+                    !inArray)
                     break;
             }
             this.at++;
@@ -200,7 +220,7 @@ export class ConditionsParser {
                 if (this.isSquareBrackets(res[res.length - 1]))
                     len--;
                 res = res.substr(1, len).split(', ');
-                res = res.map(choice => {
+                res = res.map((choice) => {
                     if (choice.length > 1 && this.isQuotes(choice[0])) {
                         var len = choice.length - 1;
                         if (this.isQuotes(choice[choice.length - 1]))
@@ -236,7 +256,7 @@ export class ConditionsParser {
         return params;
     }
     isNoRightOperation(op) {
-        return op == "empty" || op == "notempty";
+        return op == 'empty' || op == 'notempty';
     }
     isConstant(str) {
         if (!str)
@@ -250,23 +270,23 @@ export class ConditionsParser {
             return null;
         op = op.toLowerCase();
         if (op == '>')
-            op = "greater";
+            op = 'greater';
         if (op == '<')
-            op = "less";
+            op = 'less';
         if (op == '>=' || op == '=>')
-            op = "greaterorequal";
+            op = 'greaterorequal';
         if (op == '<=' || op == '=<')
-            op = "lessorequal";
+            op = 'lessorequal';
         if (op == '=' || op == '==')
-            op = "equal";
+            op = 'equal';
         if (op == '<>' || op == '!=')
-            op = "notequal";
+            op = 'notequal';
         if (op == 'contain')
-            op = "contains";
+            op = 'contains';
         if (op == 'notcontain')
-            op = "notcontains";
+            op = 'notcontains';
         if (op == 'anyof')
-            op = "anyof";
+            op = 'anyof';
         return op;
     }
     readConnective() {
@@ -274,11 +294,11 @@ export class ConditionsParser {
         if (!con)
             return null;
         con = con.toLowerCase();
-        if (con == "&" || con == "&&")
-            con = "and";
-        if (con == "|" || con == "||")
-            con = "or";
-        if (con != "and" && con != "or")
+        if (con == '&' || con == '&&')
+            con = 'and';
+        if (con == '|' || con == '||')
+            con = 'or';
+        if (con != 'and' && con != 'or')
             con = null;
         return con;
     }
@@ -316,4 +336,3 @@ export class ConditionsParser {
         }
     }
 }
-ConditionsParser.constants = ["true", "false"];

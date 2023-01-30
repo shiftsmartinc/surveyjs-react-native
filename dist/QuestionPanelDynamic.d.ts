@@ -1,21 +1,21 @@
 import React from 'react';
-export interface Props {
+export interface QuestionPanelDynamicProps {
+    buildComponent: (json: any) => {};
     choices: any;
-    hasOther?: boolean;
-    minPanelCount?: number;
-    maxPanelCount?: number;
-    panelCount?: number;
-    panelAddText?: string;
-    panelRemoveText?: string;
-    templateTitle?: string;
     confirmDelete?: boolean;
     confirmDeleteText?: string;
+    hasOther?: boolean;
+    maxPanelCount?: number;
+    minPanelCount?: number;
+    panelAddText?: string;
+    panelCount?: number;
+    panelRemoveText?: string;
     templateElements: Array<any>;
-    buildComponent: (json: any) => {};
+    templateTitle?: string;
 }
-export default class QuestionPanelDynamic extends React.Component<Props, any> {
-    constructor(props: any);
+export default class QuestionPanelDynamic extends React.Component<QuestionPanelDynamicProps, any> {
     cnt: number;
+    constructor(props: any);
     onPanelRemoveButtonClicked: (key: any) => void;
     onPanelRemove: (key: any) => void;
     onNewPanel: () => void;

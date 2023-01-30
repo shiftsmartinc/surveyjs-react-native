@@ -8,27 +8,22 @@ const styles = StyleSheet.create({
   },
 });
 
-export interface Props {
-  html: string;
-  isPreview?: boolean;
-}
-
 const injectedStyles = `
   <style>
     body {
+      background-color: #FAFAFA;
+      color: #4471a0;
       font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu;
       font-size: 16;
       padding-right: 15;
-      background-color: #FAFAFA;
-      color: #4471a0;
     }
   </style>
 `;
 
-const injectedMeta = '<meta name="viewport" content="width=device-width, initial-scale=1" />';
+const injectedMeta = `<meta name="viewport" content="width=device-width, initial-scale=1" />`;
 
 /* Use an updated injectedScript to handle new react-native-webview [Pavan 2019-08-15] */
-const injectedScript = 'window.ReactNativeWebView.postMessage(document.body.scrollHeight)';
+const injectedScript = `window.ReactNativeWebView.postMessage(document.body.scrollHeight)`;
 
 // const injectedScript = `(function () {
 //   function getAndSendHeight() {
@@ -55,18 +50,18 @@ const injectedScript = 'window.ReactNativeWebView.postMessage(document.body.scro
 
 class MyWebView extends React.Component<any, any> {
   state = {
-    webViewHeight: Number
+    webViewHeight: Number,
   };
 
   static defaultProps = {
     autoHeight: true,
-  }
+  };
 
   constructor(props: Object) {
     super(props);
     this.state = {
-      webViewHeight: this.props.defaultHeight
-    }
+      webViewHeight: this.props.defaultHeight,
+    };
 
     this._onMessage = this._onMessage.bind(this);
     this._onNavigationStateChange = this._onNavigationStateChange.bind(this);
@@ -74,17 +69,16 @@ class MyWebView extends React.Component<any, any> {
 
   _onMessage(e) {
     this.setState({
-      webViewHeight: parseInt(e.nativeEvent.data)
+      webViewHeight: parseInt(e.nativeEvent.data),
     });
   }
 
   _onNavigationStateChange(e) {
-    const regex = /^data:text\/html;.+href\=\"(https?\:\/\/.*?\.pdf)\".*$/mi;
+    const regex = /^data:text\/html;.+href\=\"(https?\:\/\/.*?\.pdf)\".*$/im;
     const matches = e.url.match(regex);
     if (matches) {
       return false;
-    }
-    else if (e.url.indexOf('http') > -1) {
+    } else if (e.url.indexOf('http') > -1) {
       return Linking.openURL(e.url);
     }
     return false;
@@ -92,7 +86,10 @@ class MyWebView extends React.Component<any, any> {
 
   render() {
     // const width = this.props.width || Dimensions.get('window').width;
-    const height = this.props.autoHeight ? this.state.webViewHeight : this.props.defaultHeight;
+    const height = this.props.autoHeight
+      ? this.state.webViewHeight
+      : this.props.defaultHeight;
+
     return (
       <WebView
         injectedJavaScript={injectedScript}
@@ -104,17 +101,24 @@ class MyWebView extends React.Component<any, any> {
         {...this.props}
         style={[styles.container, this.props.style, { height }]}
         androidHardwareAccelerationDisabled={
-          !!'https://github.com/react-native-webview/react-native-webview/issues/811'}
+          !!'https://github.com/react-native-webview/react-native-webview/issues/811'
+        }
       />
-    )
+    );
   }
 }
 
-export default class QuestionHtml extends React.Component<Props> {
+export interface QuestionHtmlProps {
+  html: string;
+  isPreview?: boolean;
+}
+
+export default class QuestionHtml extends React.Component<QuestionHtmlProps> {
   render() {
     if (this.props.isPreview) {
       return null;
     }
+
     return (
       <MyWebView
         source={{

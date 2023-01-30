@@ -1,4 +1,4 @@
-import { HashTable } from "./helpers";
+import { HashTable } from './helpers';
 export declare class FunctionFactory {
     static Instance: FunctionFactory;
     private functionHash;

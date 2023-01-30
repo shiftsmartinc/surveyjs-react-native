@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { inject, observer } from 'mobx-react';
 import QuestionWrapper from './QuestionWrapper';
@@ -15,13 +15,14 @@ const styles = StyleSheet.create({
   },
 });
 
-@inject((store: any) => ({
-  currentPageProps: store.model.currentPageProps,
-  curPageIndex: store.model.curPageIndex,
-}))
-@observer
-export default class SurveyPage extends React.Component<any> {
+export interface SurveyPageProps {
+  curPageIndex?: any;
+  currentPageProps?: any;
+}
+
+class SurveyPage extends React.Component<SurveyPageProps> {
   scrollView: KeyboardAwareScrollView;
+
   componentDidUpdate(prevProps) {
     if (this.props.curPageIndex !== prevProps.curPageIndex) {
       requestAnimationFrame(() => {
@@ -29,20 +30,29 @@ export default class SurveyPage extends React.Component<any> {
       });
     }
   }
+
   render() {
     const { currentPageProps } = this.props;
+
     return (
       <KeyboardAwareScrollView
-        ref={(ref) => { this.scrollView = ref; }}
+        ref={(ref) => {
+          this.scrollView = ref;
+        }}
         style={styles.container}
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
         enableOnAndroid
       >
-        {currentPageProps.questions.map(question =>
+        {currentPageProps.questions.map((question) => (
           <QuestionWrapper key={question.json.name} question={question} />
-        )}
+        ))}
       </KeyboardAwareScrollView>
     );
   }
 }
+
+export default inject((store: any) => ({
+  curPageIndex: store.model.curPageIndex,
+  currentPageProps: store.model.currentPageProps,
+}))(observer(SurveyPage));

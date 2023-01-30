@@ -1,11 +1,14 @@
 import React from 'react';
-export interface Props {
+export interface QuestionBooleanProps {
     label?: string;
     name: string;
-    value?: boolean;
     onChange(value: any, comment?: any): any;
+    value?: boolean;
 }
-export default class QuestionBoolean extends React.Component<Props, any> {
+export interface QuestionBooleanState {
+    dirty: boolean;
+}
+export default class QuestionBoolean extends React.Component<QuestionBooleanProps, QuestionBooleanState> {
     constructor(props: any);
     handleChecked: (checked: any) => void;
     render(): JSX.Element;

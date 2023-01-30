@@ -1,9 +1,3 @@
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { StyleSheet, View, Text } from 'react-native';
@@ -61,35 +55,33 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
 });
-let SurveyNavigation = class SurveyNavigation extends React.Component {
+class SurveyNavigation extends React.Component {
     render() {
-        const { prevPage, nextPage, prevPageIndex, curPageIndex, pages, } = this.props;
+        const { prevPage, nextPage, prevPageIndex, curPageIndex, pages } = this.props;
         return [
             <View key="navigation" style={styles.container}>
-        {prevPageIndex !== -1
-                ? (<TouchableWithFeedback onPress={prevPage} style={styles.button}>
-              <Text style={styles.buttonText}>&lt;</Text>
-            </TouchableWithFeedback>)
-                : <View style={styles.placeholder}/>}
+        {prevPageIndex !== -1 ? (<TouchableWithFeedback onPress={prevPage} style={styles.button}>
+            <Text style={styles.buttonText}>&lt;</Text>
+          </TouchableWithFeedback>) : (<View style={styles.placeholder}/>)}
         <Text style={styles.title}>
-          Page <Text style={styles.bold}>{curPageIndex + 1}</Text> of <Text style={styles.bold}>{pages.length}</Text>
-      </Text>
+          Page <Text style={styles.bold}>{curPageIndex + 1}</Text> of{' '}
+          <Text style={styles.bold}>{pages.length}</Text>
+        </Text>
         <TouchableWithFeedback onPress={nextPage} style={styles.button}>
           <Text style={styles.buttonText}>&gt;</Text>
         </TouchableWithFeedback>
       </View>,
-            <View key="progress-bar" style={[styles.progressBar, { width: `${(curPageIndex + 1) / pages.length * 100}%` }]}/>,
+            <View key="progress-bar" style={[
+                    styles.progressBar,
+                    { width: `${((curPageIndex + 1) / pages.length) * 100}%` },
+                ]}/>,
         ];
     }
-};
-SurveyNavigation = __decorate([
-    inject((store) => ({
-        prevPage: store.model.prevPage,
-        nextPage: store.model.nextPage,
-        prevPageIndex: store.model.prevPageIndex,
-        curPageIndex: store.model.curPageIndex,
-        pages: store.model.pages,
-    })),
-    observer
-], SurveyNavigation);
-export default SurveyNavigation;
+}
+export default inject((store) => ({
+    curPageIndex: store.model.curPageIndex,
+    nextPage: store.model.nextPage,
+    pages: store.model.pages,
+    prevPage: store.model.prevPage,
+    prevPageIndex: store.model.prevPageIndex,
+}))(observer(SurveyNavigation));

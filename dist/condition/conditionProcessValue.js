@@ -1,13 +1,12 @@
 import { Helpers } from './helpers';
 export class ProcessValue {
-    constructor() {
-        this.values = null;
-        this.properties = null;
-    }
+    values = null;
+    properties = null;
+    constructor() { }
     getFirstName(text) {
         if (!text)
             return text;
-        var res = "";
+        var res = '';
         for (var i = 0; i < text.length; i++) {
             var ch = text[i];
             if (ch == '.' || ch == '[')
@@ -35,7 +34,7 @@ export class ProcessValue {
                 valueInfo.value !== null && !Helpers.isValueEmpty(valueInfo.value);
             if (!valueInfo.hasValue &&
                 valueInfo.path.length > 1 &&
-                valueInfo.path[valueInfo.path.length - 1] == "length") {
+                valueInfo.path[valueInfo.path.length - 1] == 'length') {
                 valueInfo.hasValue = true;
                 valueInfo.value = 0;
             }
@@ -82,12 +81,12 @@ export class ProcessValue {
                 if (!Array.isArray(curValue))
                     return res;
                 var index = 1;
-                var str = "";
+                var str = '';
                 while (index < text.length && text[index] != ']') {
                     str += text[index];
                     index++;
                 }
-                text = index < text.length ? text.substr(index + 1) : "";
+                text = index < text.length ? text.substr(index + 1) : '';
                 index = this.getIntValue(str);
                 if (index < 0 || index >= curValue.length)
                     return res;
@@ -100,7 +99,7 @@ export class ProcessValue {
         return res;
     }
     getIntValue(str) {
-        if (str == "0" || ((str | 0) > 0 && str % 1 == 0))
+        if (str == '0' || ((str | 0) > 0 && str % 1 == 0))
             return Number(str);
         return -1;
     }

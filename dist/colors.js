@@ -1,5 +1,5 @@
 const colors = {
-    alphaBlack: alpha => `rgba(0, 0, 0, ${alpha})`,
+    alphaBlack: (alpha) => `rgba(0, 0, 0, ${alpha})`,
     transparent: 'transparent',
     white: '#FFFFFF',
     black: '#000000',

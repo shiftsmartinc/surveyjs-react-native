@@ -39,16 +39,17 @@ const styles = StyleSheet.create({
   },
 });
 
-@inject((store: any) => ({
-  isComplete: store.model.isComplete,
-  isPreview: store.model.isPreview,
-  nextPageIndex: store.model.nextPageIndex,
-  nextPage: store.model.nextPage,
-}))
-@observer
-export default class Survey extends React.Component<any> {
+export interface SurveyProps {
+  isComplete?: boolean;
+  isPreview?: boolean;
+  nextPage?: any;
+  nextPageIndex?: number;
+}
+
+class Survey extends React.Component<SurveyProps> {
   render() {
     const { isComplete, isPreview, nextPageIndex, nextPage } = this.props;
+
     if (isComplete) {
       return (
         <View style={styles.results}>
@@ -56,16 +57,26 @@ export default class Survey extends React.Component<any> {
         </View>
       );
     }
+
     return (
       <SafeAreaView style={styles.container}>
         {!isPreview && <SurveyNavigation />}
         <SurveyPage />
-        {!isPreview &&
+        {!isPreview && (
           <TouchableWithFeedback style={styles.button} onPress={nextPage}>
-            <Text style={styles.buttonText}>{nextPageIndex !== -1 ? 'Next' : 'Complete'}</Text>
+            <Text style={styles.buttonText}>
+              {nextPageIndex !== -1 ? 'Next' : 'Complete'}
+            </Text>
           </TouchableWithFeedback>
-        }
+        )}
       </SafeAreaView>
     );
   }
 }
+
+export default inject((store: any) => ({
+  isComplete: store.model.isComplete,
+  isPreview: store.model.isPreview,
+  nextPage: store.model.nextPage,
+  nextPageIndex: store.model.nextPageIndex,
+}))(observer(Survey));

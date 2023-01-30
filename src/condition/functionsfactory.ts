@@ -1,4 +1,4 @@
-import { HashTable } from "./helpers";
+import { HashTable } from './helpers';
 
 export class FunctionFactory {
   public static Instance: FunctionFactory = new FunctionFactory();
@@ -24,7 +24,7 @@ export class FunctionFactory {
   public run(
     name: string,
     params: any[],
-    properties: HashTable<any> = null
+    properties: HashTable<any> = null,
   ): any {
     var func = this.functionHash[name];
     if (!func) return null;
@@ -48,7 +48,7 @@ function sum(params: any[]): any {
   }
   return res;
 }
-FunctionFactory.Instance.register("sum", sum);
+FunctionFactory.Instance.register('sum', sum);
 
 function age(params: any[]): any {
   if (params.length < 1) return -1;
@@ -57,4 +57,4 @@ function age(params: any[]): any {
   var ageDate = new Date(ageDifMs); // miliseconds from epoch
   return Math.abs(ageDate.getUTCFullYear() - 1970);
 }
-FunctionFactory.Instance.register("age", age);
+FunctionFactory.Instance.register('age', age);

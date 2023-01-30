@@ -1,13 +1,13 @@
 import React from 'react';
-export interface Props {
+export interface QuestionRadiogroupProps {
     choices: Array<any>;
+    comment?: string;
     hasOther?: boolean;
     onChange(value: any, comment?: any): any;
-    value: string;
-    comment?: string;
     otherText?: string;
+    value: string;
 }
-export default class QuestionRadiogroup extends React.Component<Props> {
+export default class QuestionRadiogroup extends React.Component<QuestionRadiogroupProps> {
     handleChoicesChange: (value: any) => void;
     handleTextInputChange: (comment: any) => void;
     render(): JSX.Element;

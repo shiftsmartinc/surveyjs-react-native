@@ -4,8 +4,7 @@ import { observer } from 'mobx-react';
 import QuestionTextWrapper from './QuestionTextWrapper';
 
 const styles = StyleSheet.create({
-  container: {
-  },
+  container: {},
   itemsContainer: {
     flexDirection: 'column',
   },
@@ -28,30 +27,28 @@ const styles = StyleSheet.create({
   },
 });
 
-export interface Props {
+export interface QuestionMultipleTextProps {
   items: Array<any>;
-  questions: Array<any>;
   onChange(value);
+  questions: Array<any>;
 }
 
-@observer
-export default class QuestionMultipleText extends React.Component<Props> {
+class QuestionMultipleText extends React.Component<QuestionMultipleTextProps> {
   renderItem = (question, idx) => {
     const item = question.json;
     const isFirst = idx === 0;
     const onSubChange = (value) => {
       question.setValue(value);
       const multiValue = {};
-      this.props.questions.forEach(subQuestion =>
-        multiValue[subQuestion.json.name] = subQuestion.value
+      this.props.questions.forEach(
+        (subQuestion) =>
+          (multiValue[subQuestion.json.name] = subQuestion.value),
       );
       this.props.onChange(multiValue);
     };
+
     return (
-      <View
-        key={item.name}
-        style={[styles.item, isFirst && styles.itemFirst]}
-      >
+      <View key={item.name} style={[styles.item, isFirst && styles.itemFirst]}>
         <Text style={styles.itemLabel}>
           {item.isRequired && '*'}
           {item.title || item.name}
@@ -65,13 +62,11 @@ export default class QuestionMultipleText extends React.Component<Props> {
         </View>
       </View>
     );
-  }
+  };
 
   render() {
-    return (
-      <View>
-        {this.props.questions.map(this.renderItem)}
-      </View>
-    );
+    return <View>{this.props.questions.map(this.renderItem)}</View>;
   }
 }
+
+export default observer(QuestionMultipleText);

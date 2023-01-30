@@ -1,12 +1,14 @@
 import React from 'react';
-export interface Props {
-    prevPage?: () => {};
-    nextPage?: () => {};
-    prevPageIndex?: number;
-    nextPageIndex?: number;
+export interface SurveyNavigationProps {
     curPageIndex?: number;
+    nextPage?: () => {};
+    nextPageIndex?: number;
     pages?: Array<any>;
+    prevPage?: () => {};
+    prevPageIndex?: number;
 }
-export default class SurveyNavigation extends React.Component<Props> {
+declare class SurveyNavigation extends React.Component<SurveyNavigationProps> {
     render(): JSX.Element[];
 }
+declare const _default: typeof SurveyNavigation & import("mobx-react").IWrappedComponent<{}>;
+export default _default;

@@ -1,10 +1,10 @@
 import React from 'react';
-export interface Props {
-    json: any;
+export interface FactoryProps {
     apis: any;
     isPreview?: boolean;
+    json: any;
 }
-export default class Factory extends React.PureComponent<Props> {
+export default class Factory extends React.PureComponent<FactoryProps> {
     private model;
     render(): JSX.Element;
 }
