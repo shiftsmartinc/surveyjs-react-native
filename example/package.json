@@ -15,7 +15,7 @@
     "mobx-logger": "^0.7.1",
     "mobx-react": "^5.4.4",
     "moment": "^2.29.1",
-    "react": "16.13.1",
+    "react": "16.14.0",
     "react-native": "0.63.4",
     "react-native-image-picker": "^3.2.1",
     "react-native-keyboard-aware-scroll-view": "github:APSL/react-native-keyboard-aware-scroll-view#v0.9.2",
