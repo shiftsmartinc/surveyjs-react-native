@@ -1,0 +1,27 @@
+########################################################################
+#
+#   Used to help automate the process of updating packages. While the
+#   example below is for Javascript, it supports much more. Check the docs.
+#
+#       @external https://bit.ly/3hbTxRQ "Configuring Dependabot"
+#
+########################################################################
+version: 2
+updates:
+  - directory: '/'
+    # ignore:
+    #   - dependency-name: '@sentry/react-native'
+    #   - dependency-name: 'react-native*'
+    #   - dependency-name: 'rn-*'
+    labels:
+      - 'dependencies'
+    package-ecosystem: 'npm'
+    rebase-strategy: 'auto'
+    schedule:
+      day: 'sunday'
+      interval: monthly
+      time: '07:00'
+    target-branch: 'main'
+
+    # 👀 Limit or disable version updates for npm dependencies
+    # open-pull-requests-limit: 10
