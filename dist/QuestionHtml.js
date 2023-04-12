@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Linking } from 'react-native';
+import { StyleSheet, Linking, Platform } from 'react-native';
 import WebView from 'react-native-webview';
 const styles = StyleSheet.create({
     container: {
@@ -54,7 +54,11 @@ class MyWebView extends React.Component {
         const height = this.props.autoHeight
             ? this.state.webViewHeight
             : this.props.defaultHeight;
-        return (<WebView injectedJavaScript={injectedScript} scrollEnabled={this.props.scrollEnabled || false} onNavigationStateChange={this._onNavigationStateChange} onMessage={this._onMessage} javaScriptEnabled={true} automaticallyAdjustContentInsets={true} {...this.props} style={[styles.container, this.props.style, { height }]} androidHardwareAccelerationDisabled={!!'https://github.com/react-native-webview/react-native-webview/issues/811'}/>);
+        return (<WebView {...this.props} automaticallyAdjustContentInsets={true} injectedJavaScript={injectedScript} javaScriptEnabled={true} onMessage={this._onMessage} onNavigationStateChange={this._onNavigationStateChange} scrollEnabled={this.props.scrollEnabled || false} style={[
+                styles.container,
+                this.props.style,
+                { height, opacity: Platform.OS === 'android' ? 0.99 : 1 },
+            ]}/>);
     }
 }
 export default class QuestionHtml extends React.Component {
