@@ -93,9 +93,6 @@ class MyWebView extends React.Component<any, any> {
     return (
       <WebView
         {...this.props}
-        // androidHardwareAccelerationDisabled={
-        //   !!'https://github.com/react-native-webview/react-native-webview/issues/811'
-        // }
         automaticallyAdjustContentInsets={true}
         injectedJavaScript={injectedScript}
         javaScriptEnabled={true}
