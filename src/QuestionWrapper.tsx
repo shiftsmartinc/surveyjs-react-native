@@ -48,6 +48,17 @@ const styles = StyleSheet.create({
   questionContent: {
     paddingVertical: 16,
   },
+  description: {
+    marginHorizontal: 24,
+    marginTop: 8,
+  },
+  descriptionText: {
+      fontSize: 14,
+      color: '#666',
+  },
+  previewDescriptionText: {
+      color: '#4471a0',
+  },
 });
 
 const commonBuilderCreator = (Component) => (question, isPreview) =>
@@ -183,8 +194,9 @@ class QuestionWrapper extends React.Component<QuestionWrapperProps> {
     const json = question.json || question;
     const build = this.typeBuilderMap[json.type];
     const content = build(question, isPreview);
-    const { title = null, name, showTitle = true } = json;
+    const { title = null, name, showTitle = true, description } = json;
     const renderedTitle = question.title || title;
+    const renderedDescription = question.description || description;
     const { number = null } = question;
 
     if (!question.visible) {
@@ -199,6 +211,13 @@ class QuestionWrapper extends React.Component<QuestionWrapperProps> {
               style={[styles.titleText, isPreview && styles.previewTitleText]}
             >
               {number ? `${number}.` : ''} {renderedTitle || name}
+            </Text>
+          </View>
+        )}
+        {renderedDescription && (
+          <View style={styles.description}>
+            <Text style={[styles.descriptionText, isPreview && styles.previewDescriptionText]}>
+              {renderedDescription}
             </Text>
           </View>
         )}
