@@ -47,6 +47,17 @@ const styles = StyleSheet.create({
     questionContent: {
         paddingVertical: 16,
     },
+    description: {
+        marginHorizontal: 24,
+        marginTop: 8,
+    },
+    descriptionText: {
+        fontSize: 14,
+        color: '#666',
+    },
+    previewDescriptionText: {
+        color: '#4471a0',
+    },
 });
 const commonBuilderCreator = (Component) => (question, isPreview) => (<Component {...question.json} value={question.value} comment={question.comment} onChange={question.setValue} isPreview={isPreview}/>);
 const choiceBuilderCreator = (Component) => (question) => {
@@ -109,8 +120,9 @@ class QuestionWrapper extends React.Component {
         const json = question.json || question;
         const build = this.typeBuilderMap[json.type];
         const content = build(question, isPreview);
-        const { title = null, name, showTitle = true } = json;
+        const { title = null, name, showTitle = true, description } = json;
         const renderedTitle = question.title || title;
+        const renderedDescription = question.description || description;
         const { number = null } = question;
         if (!question.visible) {
             return null;
@@ -119,6 +131,11 @@ class QuestionWrapper extends React.Component {
         {showTitle && question.json.type !== 'html' && (<View style={[styles.title, isPreview && styles.previewTitle]}>
             <Text style={[styles.titleText, isPreview && styles.previewTitleText]}>
               {number ? `${number}.` : ''} {renderedTitle || name}
+            </Text>
+          </View>)}
+        {renderedDescription && (<View style={styles.description}>
+            <Text style={[styles.descriptionText, isPreview && styles.previewDescriptionText]}>
+              {renderedDescription}
             </Text>
           </View>)}
         {question.error && (<View style={styles.error}>
