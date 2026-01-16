@@ -12,6 +12,7 @@ import QuestionPanelDynamic from './QuestionPanelDynamic';
 import QuestionHtml from './QuestionHtml';
 import QuestionFile from './QuestionFile';
 import QuestionTextWrapper from './QuestionTextWrapper';
+import HtmlText from './HtmlText';
 
 const styles = StyleSheet.create({
   container: {
@@ -207,18 +208,20 @@ class QuestionWrapper extends React.Component<QuestionWrapperProps> {
       <View key={json.name} style={styles.container}>
         {showTitle && question.json.type !== 'html' && (
           <View style={[styles.title, isPreview && styles.previewTitle]}>
-            <Text
-              style={[styles.titleText, isPreview && styles.previewTitleText]}
+            <HtmlText
+              textStyle={[styles.titleText, isPreview && styles.previewTitleText]}
             >
-              {number ? `${number}.` : ''} {renderedTitle || name}
-            </Text>
+              {`${number ? `${number}. ` : ''}${renderedTitle || name}`}
+            </HtmlText>
           </View>
         )}
         {renderedDescription && (
           <View style={styles.description}>
-            <Text style={[styles.descriptionText, isPreview && styles.previewDescriptionText]}>
+            <HtmlText
+              textStyle={[styles.descriptionText, isPreview && styles.previewDescriptionText]}
+            >
               {renderedDescription}
-            </Text>
+            </HtmlText>
           </View>
         )}
         {question.error && (
