@@ -83,6 +83,7 @@ export default class QuestionFile extends React.Component {
             };
             if (allowMultiple && method === 'openPicker') {
                 pickerOptions.multiple = true;
+                pickerOptions.storeDataAsText = false;
             }
             const response = await imageAction(pickerOptions);
             const responses = Array.isArray(response) ? response : [response];
@@ -96,15 +97,10 @@ export default class QuestionFile extends React.Component {
                 const currentValue = this.parseValue(this.props.value);
                 const currentFiles = Array.isArray(currentValue) ? currentValue : (currentValue ? [currentValue] : []);
                 const newFiles = responses.map(res => {
-                    if (storeDataAsText) {
-                        return res.base64;
-                    }
-                    else {
-                        return this.getFileURI(res);
-                    }
+                    return this.getFileURI(res);
                 });
                 const allFiles = [...currentFiles, ...newFiles];
-                const csvValue = this.toCSV(allFiles);
+                const csvValue = allFiles.join(',');
                 onChange(csvValue);
             }
             else {
@@ -139,7 +135,7 @@ export default class QuestionFile extends React.Component {
                 onChange(null);
             }
             else {
-                const csvValue = this.toCSV(updatedFiles);
+                const csvValue = updatedFiles.join(',');
                 onChange(csvValue);
             }
         }
@@ -153,10 +149,7 @@ export default class QuestionFile extends React.Component {
         {!hasFiles && (<Image style={styles.image} source={require('./images/file-placeholder.png')}/>)}
         
         {isMultiple && (<ScrollView style={styles.imagesContainer}>
-            {parsedValue.map((fileValue, index) => {
-                    const imageUri = this.props.storeDataAsText && !fileValue.startsWith('http') && !fileValue.startsWith('file://')
-                        ? `data:image/jpeg;base64,${fileValue}`
-                        : fileValue;
+            {parsedValue.map((imageUri, index) => {
                     return (<View key={index} style={styles.imageWrapper}>
                   <Image style={styles.image} source={{ uri: imageUri }}/>
                   <TouchableWithFeedback style={[styles.button, styles.removeButton]} onPress={() => this.removeFile(index)}>

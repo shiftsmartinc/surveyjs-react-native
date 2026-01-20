@@ -106,9 +106,10 @@ export default class QuestionFile extends React.Component<QuestionFileProps> {
         includeExif: true,
       };
 
-      // For multiple selection, only openPicker supports multiple
+      // For multiple selection, only openPicker supports multiple and must be storeDataAsText as false
       if (allowMultiple && method === 'openPicker') {
         pickerOptions.multiple = true;
+        pickerOptions.storeDataAsText = false;
       }
 
       const response = await imageAction(pickerOptions);
@@ -131,18 +132,12 @@ export default class QuestionFile extends React.Component<QuestionFileProps> {
         
         // Add new files
         const newFiles = responses.map(res => {
-          if (storeDataAsText) {
-            // For base64, store the base64 string directly
-            return (res as any).base64;
-          } else {
-            // For file objects, extract URI
             return this.getFileURI(res);
-          }
         });
         
         // Combine and store as CSV
         const allFiles = [...currentFiles, ...newFiles];
-        const csvValue = this.toCSV(allFiles);
+        const csvValue = allFiles.join(',');
         onChange(csvValue);
       } else {
         // Single file mode - keep existing behavior
@@ -177,7 +172,7 @@ export default class QuestionFile extends React.Component<QuestionFileProps> {
       if (updatedFiles.length === 0) {
         onChange(null);
       } else {
-        const csvValue = this.toCSV(updatedFiles);
+        const csvValue = updatedFiles.join(',');
         onChange(csvValue);
       }
     }
@@ -200,12 +195,7 @@ export default class QuestionFile extends React.Component<QuestionFileProps> {
         
         {isMultiple && (
           <ScrollView style={styles.imagesContainer}>
-            {parsedValue.map((fileValue: string, index: number) => {
-              // For base64 strings, create data URI; for regular URIs, use as-is
-              const imageUri = this.props.storeDataAsText && !fileValue.startsWith('http') && !fileValue.startsWith('file://')
-                ? `data:image/jpeg;base64,${fileValue}`
-                : fileValue;
-              
+            {parsedValue.map((imageUri: string, index: number) => {              
               return (
                 <View key={index} style={styles.imageWrapper}>
                   <Image style={styles.image} source={{ uri: imageUri }} />
