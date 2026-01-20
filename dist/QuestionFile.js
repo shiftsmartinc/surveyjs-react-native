@@ -57,20 +57,6 @@ export default class QuestionFile extends React.Component {
         }
         return value;
     };
-    toCSV = (files) => {
-        return files.map(file => {
-            if (typeof file === 'string') {
-                return file;
-            }
-            return file.uri || file.path || '';
-        }).filter(item => item.length > 0).join(',');
-    };
-    getFileURI = (file) => {
-        if (typeof file === 'string') {
-            return file;
-        }
-        return file.uri || file.path || '';
-    };
     openPicker = async (method) => {
         const { storeDataAsText = false, isVideo, maxSize, onChange, allowMultiple = false } = this.props;
         const imageAction = ImagePicker[method];
@@ -86,22 +72,12 @@ export default class QuestionFile extends React.Component {
                 pickerOptions.storeDataAsText = false;
             }
             const response = await imageAction(pickerOptions);
-            const responses = Array.isArray(response) ? response : [response];
-            for (const res of responses) {
-                if (maxSize && res.size > maxSize) {
-                    Alert.alert('FileSize', 'Too Large FileSize', [{ text: 'OK' }]);
-                    return;
-                }
-            }
             if (allowMultiple) {
                 const currentValue = this.parseValue(this.props.value);
-                const currentFiles = Array.isArray(currentValue) ? currentValue : (currentValue ? [currentValue] : []);
-                const newFiles = responses.map(res => {
-                    return this.getFileURI(res);
-                });
-                const allFiles = [...currentFiles, ...newFiles];
-                const csvValue = allFiles.join(',');
-                onChange(csvValue);
+                const currentFiles = currentValue ? currentValue.images : [];
+                const responses = Array.isArray(response) ? response : [response];
+                const allFiles = [...currentFiles, ...responses];
+                onChange({ images: allFiles });
             }
             else {
                 const value = storeDataAsText ? response.base64 : response;
@@ -129,35 +105,33 @@ export default class QuestionFile extends React.Component {
             return;
         }
         const currentValue = this.parseValue(this.props.value);
-        if (Array.isArray(currentValue)) {
-            const updatedFiles = currentValue.filter((_, index) => index !== indexToRemove);
-            if (updatedFiles.length === 0) {
-                onChange(null);
-            }
-            else {
-                const csvValue = updatedFiles.join(',');
-                onChange(csvValue);
-            }
+        const currentFiles = currentValue ? currentValue.images : [];
+        const updatedFiles = currentFiles.filter((_, index) => index !== indexToRemove);
+        if (updatedFiles.length === 0) {
+            onChange(null);
+        }
+        else {
+            onChange({ images: updatedFiles });
         }
     };
     render() {
         const { value, onChange, allowMultiple = false } = this.props;
         const parsedValue = this.parseValue(value);
-        const isMultiple = allowMultiple && Array.isArray(parsedValue);
-        const hasFiles = isMultiple ? parsedValue.length > 0 : !!parsedValue;
+        const isMultiple = allowMultiple;
+        const hasFiles = isMultiple ? (parsedValue?.images ?? []).length > 0 : !!parsedValue;
         return (<View style={styles.container}>
         {!hasFiles && (<Image style={styles.image} source={require('./images/file-placeholder.png')}/>)}
         
-        {isMultiple && (<ScrollView style={styles.imagesContainer}>
-            {parsedValue.map((imageUri, index) => {
+        {isMultiple && hasFiles && (<ScrollView style={styles.imagesContainer}>
+          {parsedValue.images.map((imageInfo, index) => {
                     return (<View key={index} style={styles.imageWrapper}>
-                  <Image style={styles.image} source={{ uri: imageUri }}/>
-                  <TouchableWithFeedback style={[styles.button, styles.removeButton]} onPress={() => this.removeFile(index)}>
-                    <Text style={styles.buttonText}>Remove</Text>
-                  </TouchableWithFeedback>
-                </View>);
+              <Image style={styles.image} source={{ uri: imageInfo.path }}/>
+              <TouchableWithFeedback style={[styles.button, styles.removeButton]} onPress={() => this.removeFile(index)}>
+                <Text style={styles.buttonText}>Remove</Text>
+              </TouchableWithFeedback>
+            </View>);
                 })}
-          </ScrollView>)}
+        </ScrollView>)}
 
         {!isMultiple && parsedValue && parsedValue.path && (<Image style={styles.image} source={{ uri: parsedValue.path }}/>)}
         {!isMultiple && typeof parsedValue === 'string' && (<Image style={styles.image} source={{ uri: parsedValue }}/>)}

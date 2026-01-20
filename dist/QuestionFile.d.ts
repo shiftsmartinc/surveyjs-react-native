@@ -12,8 +12,6 @@ export interface QuestionFileProps {
 }
 export default class QuestionFile extends React.Component<QuestionFileProps> {
     parseValue: (value: any) => any[] | any;
-    toCSV: (files: any[]) => string;
-    getFileURI: (file: any) => string;
     openPicker: (method: 'openCamera' | 'openPicker') => Promise<void>;
     removeFile: (indexToRemove: number) => void;
     render(): JSX.Element;
