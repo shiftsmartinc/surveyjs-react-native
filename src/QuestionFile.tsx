@@ -89,7 +89,7 @@ export default class QuestionFile extends React.Component<QuestionFileProps> {
       // For multiple selection, only openPicker supports multiple and must be storeDataAsText as false
       if (allowMultiple && method === 'openPicker') {
         pickerOptions.multiple = true;
-        pickerOptions.storeDataAsText = false;
+        pickerOptions.includeBase64 = false;
       }
 
       const response = await imageAction(pickerOptions);
