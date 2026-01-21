@@ -13,6 +13,6 @@ export interface QuestionFileProps {
 export default class QuestionFile extends React.Component<QuestionFileProps> {
     parseValue: (value: any) => any[] | any;
     openPicker: (method: 'openCamera' | 'openPicker') => Promise<void>;
-    removeFile: (indexToRemove: number) => void;
+    removeFile: () => void;
     render(): JSX.Element;
 }

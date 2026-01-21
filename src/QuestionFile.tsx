@@ -76,7 +76,7 @@ export default class QuestionFile extends React.Component<QuestionFileProps> {
   };
 
   openPicker = async (method: 'openCamera' | 'openPicker') => {
-    const { storeDataAsText = false, isVideo, maxSize, onChange, allowMultiple = false } = this.props;
+    const { storeDataAsText = false, isVideo, onChange, allowMultiple = false } = this.props;
     const imageAction = ImagePicker[method];
     try {
       const pickerOptions: any = {
@@ -95,12 +95,8 @@ export default class QuestionFile extends React.Component<QuestionFileProps> {
       const response = await imageAction(pickerOptions);
       
       if (allowMultiple) {
-        // Get current files
-        const currentValue = this.parseValue(this.props.value);
-        const currentFiles = currentValue ? currentValue.images : [];
         const responses = Array.isArray(response) ? response : [response];
-        const allFiles = [...currentFiles, ...responses];
-        onChange({ images: allFiles });
+        onChange({ images: responses });
       } else {
         const value = storeDataAsText ? (response as any).base64 : response;
         onChange(value);
@@ -120,28 +116,20 @@ export default class QuestionFile extends React.Component<QuestionFileProps> {
     }
   };
 
-  removeFile = (indexToRemove: number) => {
+  removeFile = () => {
     const { onChange, allowMultiple } = this.props;
     if (!allowMultiple) {
       onChange(null);
       return;
     }
-    const currentValue = this.parseValue(this.props.value);
-    const currentFiles = currentValue ? currentValue.images : [];
-    const updatedFiles = currentFiles.filter((_, index: number) => index !== indexToRemove);
-    if (updatedFiles.length === 0) {
-      onChange(null);
-    }
-    else {
-      onChange({ images: updatedFiles });
-    }
+    onChange({ removeAll: true });
   };
 
   render() {
-    const { value, onChange, allowMultiple = false } = this.props;
+    const { value, allowMultiple = false } = this.props;
     const parsedValue = this.parseValue(value);
     const isMultiple = allowMultiple;
-    const hasFiles = isMultiple ? (parsedValue?.images ?? []).length > 0 : !!parsedValue;
+    const hasFiles = isMultiple ? (Array.isArray(parsedValue) ? parsedValue.length > 0 : !!parsedValue?.images) : !!parsedValue;
 
     return (
       <View style={styles.container}>
@@ -153,15 +141,19 @@ export default class QuestionFile extends React.Component<QuestionFileProps> {
         )}
         
         {isMultiple && hasFiles && (<ScrollView style={styles.imagesContainer}>
-          {parsedValue.images.map((imageInfo: any, index: number) => {
+        {Array.isArray(parsedValue) ? parsedValue.map((imageURL, index) => {
+          return (<View key={index} style={styles.imageWrapper}>
+            <Image style={styles.image} source={{ uri: imageURL }} />
+          </View>);
+        }) : (
+          (parsedValue?.images ?? []).map((imageInfo, index) => {
+            const imageURL = typeof imageInfo === 'string' ? imageInfo : imageInfo.path;
             return (<View key={index} style={styles.imageWrapper}>
-              <Image style={styles.image} source={{ uri: imageInfo.path }} />
-              <TouchableWithFeedback style={[styles.button, styles.removeButton]} onPress={() => this.removeFile(index)}>
-                <Text style={styles.buttonText}>Remove</Text>
-              </TouchableWithFeedback>
+              <Image style={styles.image} source={{ uri: imageURL }} />
             </View>);
-          })}
-        </ScrollView>)}
+          })
+        )}
+      </ScrollView>)}
 
         {!isMultiple && parsedValue && parsedValue.path && (
           <Image style={styles.image} source={{ uri: parsedValue.path }} />
@@ -170,37 +162,22 @@ export default class QuestionFile extends React.Component<QuestionFileProps> {
           <Image style={styles.image} source={{ uri: parsedValue }} />
         )}
 
-        {hasFiles && !isMultiple && (
-          <View style={styles.buttons}>
-            <TouchableWithFeedback
-              style={styles.button}
-              onPress={() => onChange(null)}
-            >
-              <Text style={styles.buttonText}>Remove</Text>
-            </TouchableWithFeedback>
-          </View>
-        )}
+       {hasFiles && (<View style={styles.buttons}>
+        <TouchableWithFeedback style={styles.button} onPress={() => this.removeFile()}>
+          <Text style={styles.buttonText}>{isMultiple ? 'Remove All' : 'Remove'}</Text>
+        </TouchableWithFeedback>
+      </View>)}
 
-        {(isMultiple || !hasFiles) && (
-          <View style={styles.buttons}>
-            <TouchableWithFeedback
-              style={styles.button}
-              onPress={() => this.openPicker('openPicker')}
-            >
-              <Text style={styles.buttonText}>
-                {isMultiple ? 'Add Files from Camera Roll' : 'Upload from Camera Roll'}
-              </Text>
-            </TouchableWithFeedback>
-            {!isMultiple && (
-              <TouchableWithFeedback
-                style={styles.button}
-                onPress={() => this.openPicker('openCamera')}
-              >
-                <Text style={styles.buttonText}>Capture Now</Text>
-              </TouchableWithFeedback>
-            )}
-          </View>
-        )}
+      {!hasFiles && (<View style={styles.buttons}>
+        <TouchableWithFeedback style={styles.button} onPress={() => this.openPicker('openPicker')}>
+          <Text style={styles.buttonText}>
+            {isMultiple ? 'Add Files from Camera Roll' : 'Upload from Camera Roll'}
+          </Text>
+        </TouchableWithFeedback>
+        {!isMultiple && (<TouchableWithFeedback style={styles.button} onPress={() => this.openPicker('openCamera')}>
+          <Text style={styles.buttonText}>Capture Now</Text>
+        </TouchableWithFeedback>)}
+      </View>)}
       </View>
     );
   }
