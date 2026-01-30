@@ -7,9 +7,12 @@ export interface QuestionFileProps {
     onChange(value: any, comment?: any): any;
     showPreview?: boolean;
     storeDataAsText?: boolean;
+    allowMultiple?: boolean;
     value?: any;
 }
 export default class QuestionFile extends React.Component<QuestionFileProps> {
+    parseValue: (value: any) => any[] | any;
     openPicker: (method: 'openCamera' | 'openPicker') => Promise<void>;
+    removeFile: () => void;
     render(): JSX.Element;
 }

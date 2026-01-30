@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, Image, Alert } from 'react-native';
+import { StyleSheet, View, Text, Image, Alert, ScrollView } from 'react-native';
 import * as ImagePicker from 'react-native-image-crop-picker';
 import TouchableWithFeedback from './TouchableWithFeedback';
 const styles = StyleSheet.create({
@@ -8,6 +8,13 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         width: 176,
         height: 176,
+    },
+    imagesContainer: {
+        marginBottom: 16,
+    },
+    imageWrapper: {
+        marginBottom: 16,
+        position: 'relative',
     },
     buttons: {
         marginTop: 16,
@@ -34,24 +41,45 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#1a71cf',
     },
+    removeButton: {
+        marginTop: 8,
+    },
 });
 export default class QuestionFile extends React.Component {
+    parseValue = (value) => {
+        if (!value)
+            return null;
+        if (this.props.allowMultiple && typeof value === 'string') {
+            if (value.includes(',')) {
+                return value.split(',').map(item => item.trim()).filter(item => item.length > 0);
+            }
+            return [value];
+        }
+        return value;
+    };
     openPicker = async (method) => {
-        const { storeDataAsText = false, isVideo, maxSize, onChange } = this.props;
+        const { storeDataAsText = false, isVideo, onChange, allowMultiple = false } = this.props;
         const imageAction = ImagePicker[method];
         try {
-            const response = await imageAction({
+            const pickerOptions = {
                 includeBase64: storeDataAsText,
                 mediaType: isVideo ? 'video' : 'photo',
                 compressImageQuality: 0.5,
                 includeExif: true,
-            });
-            if (maxSize && response.size > maxSize) {
-                Alert.alert('FileSize', 'Too Large FileSize', [{ text: 'OK' }]);
-                return;
+            };
+            if (allowMultiple && method === 'openPicker') {
+                pickerOptions.multiple = true;
+                pickerOptions.storeDataAsText = false;
             }
-            const value = storeDataAsText ? response.base64 : response;
-            onChange(value);
+            const response = await imageAction(pickerOptions);
+            if (allowMultiple) {
+                const responses = Array.isArray(response) ? response : [response];
+                onChange({ images: responses });
+            }
+            else {
+                const value = storeDataAsText ? response.base64 : response;
+                onChange(value);
+            }
         }
         catch (error) {
             if (error.code === 'E_PICKER_CANCELLED') {
@@ -67,24 +95,54 @@ export default class QuestionFile extends React.Component {
             Alert.alert('Error', error.message || error.code, [{ text: 'OK' }]);
         }
     };
+    removeFile = () => {
+        const { onChange, allowMultiple } = this.props;
+        if (!allowMultiple) {
+            onChange(null);
+            return;
+        }
+        onChange({ removeAll: true });
+    };
     render() {
-        const { value, onChange } = this.props;
+        const { value, allowMultiple = false } = this.props;
+        const parsedValue = this.parseValue(value);
+        const isMultiple = allowMultiple;
+        const hasFiles = isMultiple ? (Array.isArray(parsedValue) ? parsedValue.length > 0 : !!parsedValue?.images) : !!parsedValue;
         return (<View style={styles.container}>
-        {!value && (<Image style={styles.image} source={require('./images/file-placeholder.png')}/>)}
-        {value && value.path && (<Image style={styles.image} source={{ uri: value.path }}/>)}
-        {typeof value === 'string' && (<Image style={styles.image} source={{ uri: value }}/>)}
-        {value ? (<View style={styles.buttons}>
-            <TouchableWithFeedback style={styles.button} onPress={() => onChange(null)}>
-              <Text style={styles.buttonText}>Remove</Text>
-            </TouchableWithFeedback>
-          </View>) : (<View style={styles.buttons}>
-            <TouchableWithFeedback style={styles.button} onPress={() => this.openPicker('openPicker')}>
-              <Text style={styles.buttonText}>Upload from Camera Roll</Text>
-            </TouchableWithFeedback>
-            <TouchableWithFeedback style={styles.button} onPress={() => this.openPicker('openCamera')}>
-              <Text style={styles.buttonText}>Capture Now</Text>
-            </TouchableWithFeedback>
-          </View>)}
+        {!hasFiles && (<Image style={styles.image} source={require('./images/file-placeholder.png')}/>)}
+        
+        {isMultiple && hasFiles && (<ScrollView style={styles.imagesContainer}>
+        {Array.isArray(parsedValue) ? parsedValue.map((imageURL, index) => {
+                    return (<View key={index} style={styles.imageWrapper}>
+            <Image style={styles.image} source={{ uri: imageURL }}/>
+          </View>);
+                }) : ((parsedValue?.images ?? []).map((imageInfo, index) => {
+                    const imageURL = typeof imageInfo === 'string' ? imageInfo : imageInfo.path;
+                    return (<View key={index} style={styles.imageWrapper}>
+              <Image style={styles.image} source={{ uri: imageURL }}/>
+            </View>);
+                }))}
+      </ScrollView>)}
+
+        {!isMultiple && parsedValue && parsedValue.path && (<Image style={styles.image} source={{ uri: parsedValue.path }}/>)}
+        {!isMultiple && typeof parsedValue === 'string' && (<Image style={styles.image} source={{ uri: parsedValue }}/>)}
+
+       {hasFiles && (<View style={styles.buttons}>
+        <TouchableWithFeedback style={styles.button} onPress={() => this.removeFile()}>
+          <Text style={styles.buttonText}>{isMultiple ? 'Remove All' : 'Remove'}</Text>
+        </TouchableWithFeedback>
+      </View>)}
+
+      {!hasFiles && (<View style={styles.buttons}>
+        <TouchableWithFeedback style={styles.button} onPress={() => this.openPicker('openPicker')}>
+          <Text style={styles.buttonText}>
+            {isMultiple ? 'Add Files from Camera Roll' : 'Upload from Camera Roll'}
+          </Text>
+        </TouchableWithFeedback>
+        {!isMultiple && (<TouchableWithFeedback style={styles.button} onPress={() => this.openPicker('openCamera')}>
+          <Text style={styles.buttonText}>Capture Now</Text>
+        </TouchableWithFeedback>)}
+      </View>)}
       </View>);
     }
 }
