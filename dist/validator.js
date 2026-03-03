@@ -1,6 +1,7 @@
 import { SyntaxError, parse } from './condition/expressions/expressionParser';
 const errorTemplates = {
     requiredError: 'Please answer the question.',
+    commentRequiredError: 'Please provide a comment for this choice.',
     numericError: 'The value should be numeric.',
     numericMin: 'Should be equal or more than {0}',
     numericMax: 'Should be equal or less than {0}',
@@ -79,7 +80,35 @@ export default class QuestionValidator {
             this.owner.setError(error);
             return error;
         });
+        if (!hasError && this.isCommentRequiredForCurrentValue()) {
+            const commentError = this.validateCommentRequired();
+            if (commentError) {
+                this.owner.setError(commentError);
+                return false;
+            }
+        }
         return !hasError;
+    }
+    isCommentRequiredForCurrentValue() {
+        const { json, value } = this.owner;
+        const choicesThatRequireComment = json.choicesThatRequireComment;
+        if (!choicesThatRequireComment?.length ||
+            !json.isRequired ||
+            !json.hasComment) {
+            return false;
+        }
+        const list = Array.isArray(choicesThatRequireComment)
+            ? choicesThatRequireComment
+            : [];
+        const selectedValues = Array.isArray(value) ? value : [value];
+        return selectedValues.some((v) => v != null && list.includes(v));
+    }
+    validateCommentRequired() {
+        if (!this.isValueEmpty(this.owner.comment)) {
+            return null;
+        }
+        const customText = this.owner.json.commentRequiredErrorText;
+        return getErrorStr('commentRequiredError', [], customText || undefined, {});
     }
     getValidators() {
         const originalValidators = this.owner.json.validators || [];

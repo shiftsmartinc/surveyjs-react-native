@@ -4,6 +4,8 @@ export default class QuestionValidator {
     private emailRegex;
     constructor(owner: any);
     validate(): boolean;
+    private isCommentRequiredForCurrentValue;
+    private validateCommentRequired;
     getValidators(): any[];
     validateRequire: (value: any, validator: any) => any;
     validateNumber: (value: any, validator: any) => any;
