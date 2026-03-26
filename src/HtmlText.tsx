@@ -118,7 +118,6 @@ interface HtmlTextComponentProps {
  * each render, but `children` (HTML) is stable while the user types in another field — reloading
  * WebViews every keystroke is a common Android crash/OOM trigger.
  */
-export default class HtmlText extends React.Component<HtmlTextComponentProps> {
 const sameStyle = (leftStyle?: any, rightStyle?: any) => {
   const left = StyleSheet.flatten(leftStyle) || {};
   const right = StyleSheet.flatten(rightStyle) || {};
@@ -133,7 +132,6 @@ export default class HtmlText extends React.Component<HtmlTextComponentProps> {
       !sameStyle(nextProps.style, this.props.style) ||
       !sameStyle(nextProps.textStyle, this.props.textStyle)
     );
-  }
   }
 
   render() {
