@@ -278,10 +278,13 @@ export default class Model {
    * fast typing (long text on Android) does not re-run the whole survey on every key.
    */
   applyQuestionSideEffects() {
+    const pendingNames = Array.from(this.pendingTriggerQuestionNames);
+    this.pendingTriggerQuestionNames.clear();
+
     this.resetVisible();
     this.regenerateNumbers();
     this.resetTitle();
-    this.pendingTriggerQuestionNames.forEach((name) => {
+    pendingNames.forEach((name) => {
       const q = this.questions[name];
       if (!q) {
         return;
@@ -291,7 +294,6 @@ export default class Model {
         .filter((t) => t.name === name && !t.isOnNextPage)
         .forEach((trigger) => trigger.check(v));
     });
-    this.pendingTriggerQuestionNames.clear();
   }
 
   scheduleDeferredSideEffects(questionName: string) {
@@ -306,12 +308,14 @@ export default class Model {
   }
 
   flushDeferredSideEffects() {
-    if (this.deferredSideEffectsTimer != null) {
-      clearTimeout(this.deferredSideEffectsTimer);
-      this.deferredSideEffectsTimer = null;
-    }
-    if (this.pendingTriggerQuestionNames.size > 0) {
-      this.applyQuestionSideEffects();
+    while (this.deferredSideEffectsTimer != null || this.pendingTriggerQuestionNames.size > 0) {
+      if (this.deferredSideEffectsTimer != null) {
+        clearTimeout(this.deferredSideEffectsTimer);
+        this.deferredSideEffectsTimer = null;
+      }
+      if (this.pendingTriggerQuestionNames.size > 0) {
+        this.applyQuestionSideEffects();
+      }
     }
   }
 

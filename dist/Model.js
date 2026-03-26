@@ -239,10 +239,12 @@ export default class Model {
         this.regenerateNumbers();
     }
     applyQuestionSideEffects() {
+        const pendingNames = Array.from(this.pendingTriggerQuestionNames);
+        this.pendingTriggerQuestionNames.clear();
         this.resetVisible();
         this.regenerateNumbers();
         this.resetTitle();
-        this.pendingTriggerQuestionNames.forEach((name) => {
+        pendingNames.forEach((name) => {
             const q = this.questions[name];
             if (!q) {
                 return;
@@ -252,7 +254,6 @@ export default class Model {
                 .filter((t) => t.name === name && !t.isOnNextPage)
                 .forEach((trigger) => trigger.check(v));
         });
-        this.pendingTriggerQuestionNames.clear();
     }
     scheduleDeferredSideEffects(questionName) {
         this.pendingTriggerQuestionNames.add(questionName);
@@ -265,12 +266,14 @@ export default class Model {
         }, 200);
     }
     flushDeferredSideEffects() {
-        if (this.deferredSideEffectsTimer != null) {
-            clearTimeout(this.deferredSideEffectsTimer);
-            this.deferredSideEffectsTimer = null;
-        }
-        if (this.pendingTriggerQuestionNames.size > 0) {
-            this.applyQuestionSideEffects();
+        while (this.deferredSideEffectsTimer != null || this.pendingTriggerQuestionNames.size > 0) {
+            if (this.deferredSideEffectsTimer != null) {
+                clearTimeout(this.deferredSideEffectsTimer);
+                this.deferredSideEffectsTimer = null;
+            }
+            if (this.pendingTriggerQuestionNames.size > 0) {
+                this.applyQuestionSideEffects();
+            }
         }
     }
     nextPage() {
