@@ -119,8 +119,21 @@ interface HtmlTextComponentProps {
  * WebViews every keystroke is a common Android crash/OOM trigger.
  */
 export default class HtmlText extends React.Component<HtmlTextComponentProps> {
+const sameStyle = (leftStyle?: any, rightStyle?: any) => {
+  const left = StyleSheet.flatten(leftStyle) || {};
+  const right = StyleSheet.flatten(rightStyle) || {};
+  const keys = new Set([...Object.keys(left), ...Object.keys(right)]);
+  return Array.from(keys).every((key) => left[key] === right[key]);
+};
+
+export default class HtmlText extends React.Component<HtmlTextComponentProps> {
   shouldComponentUpdate(nextProps: HtmlTextComponentProps) {
-    return nextProps.children !== this.props.children;
+    return (
+      nextProps.children !== this.props.children ||
+      !sameStyle(nextProps.style, this.props.style) ||
+      !sameStyle(nextProps.textStyle, this.props.textStyle)
+    );
+  }
   }
 
   render() {
