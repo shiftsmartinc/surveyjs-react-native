@@ -74,6 +74,9 @@ class HtmlWebView extends React.Component {
     }
 }
 export default class HtmlText extends React.Component {
+    shouldComponentUpdate(nextProps) {
+        return nextProps.children !== this.props.children;
+    }
     render() {
         const { children, style, textStyle } = this.props;
         if (!children) {

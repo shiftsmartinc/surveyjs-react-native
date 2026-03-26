@@ -113,7 +113,16 @@ interface HtmlTextComponentProps {
   textStyle?: any;
 }
 
+/**
+ * Skip re-renders when only unrelated props change: parents often pass a new `textStyle` array
+ * each render, but `children` (HTML) is stable while the user types in another field — reloading
+ * WebViews every keystroke is a common Android crash/OOM trigger.
+ */
 export default class HtmlText extends React.Component<HtmlTextComponentProps> {
+  shouldComponentUpdate(nextProps: HtmlTextComponentProps) {
+    return nextProps.children !== this.props.children;
+  }
+
   render() {
     const { children, style, textStyle } = this.props;
 

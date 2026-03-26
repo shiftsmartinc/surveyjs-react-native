@@ -7,6 +7,7 @@ import {
   Modal,
   Image,
   FlatList,
+  Platform,
 } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import TouchableWithFeedback from './TouchableWithFeedback';
@@ -236,6 +237,7 @@ class QuestionText extends React.Component<QuestionTextProps> {
           keyboardType={this.getKeyboardType()}
           editable={!isPreview}
           onFocus={this.openAutocompleteModal}
+          textAlignVertical={isMultiline && Platform.OS === 'android' ? 'top' : undefined}
         />
         {autoCompleteContent}
       </>

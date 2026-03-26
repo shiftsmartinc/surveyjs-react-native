@@ -146,12 +146,7 @@ class Question {
             this.comment = comment;
         }
         if (this.collection) {
-            this.collection.resetVisible();
-            this.collection.regenerateNumbers();
-            this.collection.resetTitle();
-            this.collection.triggers
-                .filter((v) => v.name === this.json.name && !v.isOnNextPage)
-                .forEach((trigger) => trigger.check(value));
+            this.collection.scheduleDeferredSideEffects(this.json.name);
             if (this.json.type === 'file' &&
                 this.collection.apis.onUpload &&
                 value !== null) {
@@ -205,6 +200,8 @@ export default class Model {
     questionNamesInOrder = [];
     questions = {};
     triggers = [];
+    pendingTriggerQuestionNames = new Set();
+    deferredSideEffectsTimer = null;
     constructor({ json, apis, isPreview = false }) {
         makeObservable(this, {
             conditionValues: computed,
@@ -220,6 +217,8 @@ export default class Model {
             resetVisible: action.bound,
             results: computed,
             setTriggerValue: action.bound,
+            applyQuestionSideEffects: action.bound,
+            flushDeferredSideEffects: action.bound,
         });
         if (isPreview) {
             json.pages = [
@@ -239,7 +238,43 @@ export default class Model {
         this.initTriggers(json.triggers);
         this.regenerateNumbers();
     }
+    applyQuestionSideEffects() {
+        this.resetVisible();
+        this.regenerateNumbers();
+        this.resetTitle();
+        this.pendingTriggerQuestionNames.forEach((name) => {
+            const q = this.questions[name];
+            if (!q) {
+                return;
+            }
+            const v = q.value;
+            this.triggers
+                .filter((t) => t.name === name && !t.isOnNextPage)
+                .forEach((trigger) => trigger.check(v));
+        });
+        this.pendingTriggerQuestionNames.clear();
+    }
+    scheduleDeferredSideEffects(questionName) {
+        this.pendingTriggerQuestionNames.add(questionName);
+        if (this.deferredSideEffectsTimer != null) {
+            clearTimeout(this.deferredSideEffectsTimer);
+        }
+        this.deferredSideEffectsTimer = setTimeout(() => {
+            this.deferredSideEffectsTimer = null;
+            this.applyQuestionSideEffects();
+        }, 200);
+    }
+    flushDeferredSideEffects() {
+        if (this.deferredSideEffectsTimer != null) {
+            clearTimeout(this.deferredSideEffectsTimer);
+            this.deferredSideEffectsTimer = null;
+        }
+        if (this.pendingTriggerQuestionNames.size > 0) {
+            this.applyQuestionSideEffects();
+        }
+    }
     nextPage() {
+        this.flushDeferredSideEffects();
         const isValidatorFailed = this.currentPageProps.questions.some((question) => !question.validate());
         if (isValidatorFailed) {
             return;
@@ -256,6 +291,7 @@ export default class Model {
         }
     }
     prevPage() {
+        this.flushDeferredSideEffects();
         if (this.prevPageIndex !== -1) {
             this.curPageIndex = this.prevPageIndex;
         }

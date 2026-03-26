@@ -161,19 +161,9 @@ class Question {
     }
 
     if (this.collection) {
-      // 2. check all questions's visibleIf
-      this.collection.resetVisible();
-
-      // 3. re-generate question order number
-      this.collection.regenerateNumbers();
-
-      // 4. re-generate question title
-      this.collection.resetTitle();
-
-      // 5. triggers
-      this.collection.triggers
-        .filter((v) => v.name === this.json.name && !v.isOnNextPage)
-        .forEach((trigger) => trigger.check(value));
+      // Defer heavy survey-wide work so each keystroke on long text fields does not
+      // re-run visibleIf / titles / triggers for every question (Android jank & crashes).
+      this.collection.scheduleDeferredSideEffects(this.json.name);
 
       if (
         this.json.type === 'file' &&
@@ -237,6 +227,9 @@ export default class Model {
   questionNamesInOrder = [];
   questions: any = {};
   triggers: Array<SurveyTrigger> = [];
+  /** Question names that received setValue since last apply — used to run triggers after defer. */
+  private pendingTriggerQuestionNames = new Set<string>();
+  private deferredSideEffectsTimer: ReturnType<typeof setTimeout> | null = null;
 
   constructor({ json, apis, isPreview = false }) {
     makeObservable(this, {
@@ -253,6 +246,8 @@ export default class Model {
       resetVisible: action.bound,
       results: computed,
       setTriggerValue: action.bound,
+      applyQuestionSideEffects: action.bound,
+      flushDeferredSideEffects: action.bound,
     });
 
     if (isPreview) {
@@ -278,7 +273,50 @@ export default class Model {
     this.regenerateNumbers();
   }
 
+  /**
+   * Runs visibility, numbering, titles, and deferred triggers. Batched from setValue so
+   * fast typing (long text on Android) does not re-run the whole survey on every key.
+   */
+  applyQuestionSideEffects() {
+    this.resetVisible();
+    this.regenerateNumbers();
+    this.resetTitle();
+    this.pendingTriggerQuestionNames.forEach((name) => {
+      const q = this.questions[name];
+      if (!q) {
+        return;
+      }
+      const v = q.value;
+      this.triggers
+        .filter((t) => t.name === name && !t.isOnNextPage)
+        .forEach((trigger) => trigger.check(v));
+    });
+    this.pendingTriggerQuestionNames.clear();
+  }
+
+  scheduleDeferredSideEffects(questionName: string) {
+    this.pendingTriggerQuestionNames.add(questionName);
+    if (this.deferredSideEffectsTimer != null) {
+      clearTimeout(this.deferredSideEffectsTimer);
+    }
+    this.deferredSideEffectsTimer = setTimeout(() => {
+      this.deferredSideEffectsTimer = null;
+      this.applyQuestionSideEffects();
+    }, 200);
+  }
+
+  flushDeferredSideEffects() {
+    if (this.deferredSideEffectsTimer != null) {
+      clearTimeout(this.deferredSideEffectsTimer);
+      this.deferredSideEffectsTimer = null;
+    }
+    if (this.pendingTriggerQuestionNames.size > 0) {
+      this.applyQuestionSideEffects();
+    }
+  }
+
   nextPage() {
+    this.flushDeferredSideEffects();
     // validator
     const isValidatorFailed = this.currentPageProps.questions.some(
       (question) => !question.validate(),
@@ -307,6 +345,7 @@ export default class Model {
   }
 
   prevPage() {
+    this.flushDeferredSideEffects();
     if (this.prevPageIndex !== -1) {
       // this.curPageIndex = this.curPageIndex - 1;
       this.curPageIndex = this.prevPageIndex;
