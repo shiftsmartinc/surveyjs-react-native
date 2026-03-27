@@ -113,7 +113,27 @@ interface HtmlTextComponentProps {
   textStyle?: any;
 }
 
+/**
+ * Skip re-renders when only unrelated props change: parents often pass a new `textStyle` array
+ * each render, but `children` (HTML) is stable while the user types in another field — reloading
+ * WebViews every keystroke is a common Android crash/OOM trigger.
+ */
+const sameStyle = (leftStyle?: any, rightStyle?: any) => {
+  const left = StyleSheet.flatten(leftStyle) || {};
+  const right = StyleSheet.flatten(rightStyle) || {};
+  const keys = new Set([...Object.keys(left), ...Object.keys(right)]);
+  return Array.from(keys).every((key) => left[key] === right[key]);
+};
+
 export default class HtmlText extends React.Component<HtmlTextComponentProps> {
+  shouldComponentUpdate(nextProps: HtmlTextComponentProps) {
+    return (
+      nextProps.children !== this.props.children ||
+      !sameStyle(nextProps.style, this.props.style) ||
+      !sameStyle(nextProps.textStyle, this.props.textStyle)
+    );
+  }
+
   render() {
     const { children, style, textStyle } = this.props;
 

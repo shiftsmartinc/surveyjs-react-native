@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, TextInput, Text, View, Modal, Image, FlatList, } from 'react-native';
+import { StyleSheet, TextInput, Text, View, Modal, Image, FlatList, Platform, } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import TouchableWithFeedback from './TouchableWithFeedback';
 const styles = StyleSheet.create({
@@ -159,7 +159,7 @@ class QuestionText extends React.Component {
         </Modal>);
         }
         return (<>
-        <TextInput style={[styles.input, isMultiline && { height: 19 * rows }]} multiline={isMultiline} placeholder={placeholder} value={value} onChangeText={onChange} numberOfLines={Number(rows)} placeholderTextColor="#4471a0" underlineColorAndroid={'transparent'} keyboardType={this.getKeyboardType()} editable={!isPreview} onFocus={this.openAutocompleteModal}/>
+        <TextInput style={[styles.input, isMultiline && { height: 19 * rows }]} multiline={isMultiline} placeholder={placeholder} value={value} onChangeText={onChange} numberOfLines={Number(rows)} placeholderTextColor="#4471a0" underlineColorAndroid={'transparent'} keyboardType={this.getKeyboardType()} editable={!isPreview} onFocus={this.openAutocompleteModal} textAlignVertical={isMultiline && Platform.OS === 'android' ? 'top' : undefined}/>
         {autoCompleteContent}
       </>);
     }

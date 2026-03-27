@@ -9,12 +9,17 @@ export default class Model {
     questionNamesInOrder: any[];
     questions: any;
     triggers: Array<SurveyTrigger>;
+    private pendingTriggerQuestionNames;
+    private deferredSideEffectsTimer;
     constructor({ json, apis, isPreview }: {
         json: any;
         apis: any;
         isPreview?: boolean;
     });
     initStoreFromJson(json: any): void;
+    applyQuestionSideEffects(): void;
+    scheduleDeferredSideEffects(questionName: string): void;
+    flushDeferredSideEffects(): void;
     nextPage(): void;
     prevPage(): void;
     resetVisible(): void;

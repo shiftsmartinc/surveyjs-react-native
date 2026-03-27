@@ -73,7 +73,18 @@ class HtmlWebView extends React.Component {
             ]} injectedJavaScript={injectedScript} javaScriptEnabled={true} onMessage={this._onMessage} onNavigationStateChange={this._onNavigationStateChange} scrollEnabled={false} automaticallyAdjustContentInsets={true} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}/>);
     }
 }
+const sameStyle = (leftStyle, rightStyle) => {
+    const left = StyleSheet.flatten(leftStyle) || {};
+    const right = StyleSheet.flatten(rightStyle) || {};
+    const keys = new Set([...Object.keys(left), ...Object.keys(right)]);
+    return Array.from(keys).every((key) => left[key] === right[key]);
+};
 export default class HtmlText extends React.Component {
+    shouldComponentUpdate(nextProps) {
+        return (nextProps.children !== this.props.children ||
+            !sameStyle(nextProps.style, this.props.style) ||
+            !sameStyle(nextProps.textStyle, this.props.textStyle));
+    }
     render() {
         const { children, style, textStyle } = this.props;
         if (!children) {
