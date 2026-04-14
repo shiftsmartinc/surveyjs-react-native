@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Linking, Platform } from 'react-native';
 import WebView from 'react-native-webview';
+import { WEBVIEW_POST_HEIGHT_SCRIPT } from './webViewHeightScript';
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -29,7 +30,6 @@ const createInjectedStyles = (textStyle) => {
   `;
 };
 const injectedMeta = `<meta name="viewport" content="width=device-width, initial-scale=1" />`;
-const injectedScript = `window.ReactNativeWebView.postMessage(document.body.scrollHeight)`;
 const containsHtml = (text) => {
     if (!text)
         return false;
@@ -37,6 +37,7 @@ const containsHtml = (text) => {
     return htmlRegex.test(text);
 };
 class HtmlWebView extends React.Component {
+    webViewRef = React.createRef();
     constructor(props) {
         super(props);
         this.state = {
@@ -44,11 +45,16 @@ class HtmlWebView extends React.Component {
         };
         this._onMessage = this._onMessage.bind(this);
         this._onNavigationStateChange = this._onNavigationStateChange.bind(this);
+        this._onLoadEnd = this._onLoadEnd.bind(this);
     }
     _onMessage(e) {
-        this.setState({
-            webViewHeight: parseInt(e.nativeEvent.data, 10) || this.props.defaultHeight || 1,
-        });
+        const raw = e?.nativeEvent?.data;
+        const parsed = parseInt(String(raw), 10);
+        const next = Math.max(1, Number.isFinite(parsed) ? parsed : this.props.defaultHeight || 1);
+        this.setState((prev) => (prev.webViewHeight === next ? null : { webViewHeight: next }));
+    }
+    _onLoadEnd() {
+        this.webViewRef.current?.injectJavaScript(WEBVIEW_POST_HEIGHT_SCRIPT);
     }
     _onNavigationStateChange(e) {
         if (this.props.onNavigationStateChange) {
@@ -64,13 +70,13 @@ class HtmlWebView extends React.Component {
         const { html, style, textStyle, defaultHeight = 1 } = this.props;
         const { webViewHeight } = this.state;
         const injectedStyles = createInjectedStyles(textStyle);
-        return (<WebView source={{
+        return (<WebView ref={this.webViewRef} source={{
                 html: `${injectedMeta}${injectedStyles}${html}`,
             }} style={[
                 styles.webView,
                 style,
                 { height: webViewHeight, opacity: Platform.OS === 'android' ? 0.99 : 1 },
-            ]} injectedJavaScript={injectedScript} javaScriptEnabled={true} onMessage={this._onMessage} onNavigationStateChange={this._onNavigationStateChange} scrollEnabled={false} automaticallyAdjustContentInsets={true} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}/>);
+            ]} injectedJavaScript={WEBVIEW_POST_HEIGHT_SCRIPT} javaScriptEnabled={true} onMessage={this._onMessage} onLoadEnd={this._onLoadEnd} onNavigationStateChange={this._onNavigationStateChange} scrollEnabled={false} automaticallyAdjustContentInsets={true} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}/>);
     }
 }
 const sameStyle = (leftStyle, rightStyle) => {
