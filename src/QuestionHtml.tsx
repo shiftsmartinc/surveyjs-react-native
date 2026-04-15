@@ -16,8 +16,8 @@ const injectedStyles = `
       background-color: #FAFAFA;
       color: #4471a0;
       font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu;
-      font-size: 16px;
-      padding-right: 15px;
+      font-size: 16;
+      padding-right: 15;
     }
   </style>
 `;
