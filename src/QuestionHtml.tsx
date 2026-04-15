@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Linking, Platform } from 'react-native';
 import WebView from 'react-native-webview';
+import { WEBVIEW_POST_HEIGHT_SCRIPT } from './webViewHeightScript';
 
 const styles = StyleSheet.create({
   container: {
@@ -11,6 +12,7 @@ const styles = StyleSheet.create({
 const injectedStyles = `
   <style>
     body {
+      margin: 0;
       background-color: #FAFAFA;
       color: #4471a0;
       font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu;
@@ -21,9 +23,6 @@ const injectedStyles = `
 `;
 
 const injectedMeta = `<meta name="viewport" content="width=device-width, initial-scale=1" />`;
-
-/* Use an updated injectedScript to handle new react-native-webview [Pavan 2019-08-15] */
-const injectedScript = `window.ReactNativeWebView.postMessage(document.body.scrollHeight)`;
 
 // const injectedScript = `(function () {
 //   function getAndSendHeight() {
@@ -49,9 +48,7 @@ const injectedScript = `window.ReactNativeWebView.postMessage(document.body.scro
 // })();`;
 
 class MyWebView extends React.Component<any, any> {
-  state = {
-    webViewHeight: Number,
-  };
+  private webViewRef = React.createRef<WebView>();
 
   static defaultProps = {
     autoHeight: true,
@@ -65,12 +62,21 @@ class MyWebView extends React.Component<any, any> {
 
     this._onMessage = this._onMessage.bind(this);
     this._onNavigationStateChange = this._onNavigationStateChange.bind(this);
+    this._onLoadEnd = this._onLoadEnd.bind(this);
   }
 
   _onMessage(e) {
-    this.setState({
-      webViewHeight: parseInt(e.nativeEvent.data),
-    });
+    const raw = e?.nativeEvent?.data;
+    const parsed = parseInt(String(raw), 10);
+    const fallback = this.props.defaultHeight != null ? this.props.defaultHeight : 1;
+    const next = Math.max(1, Number.isFinite(parsed) ? parsed : fallback);
+    this.setState((prev) =>
+      prev.webViewHeight === next ? null : { webViewHeight: next },
+    );
+  }
+
+  _onLoadEnd() {
+    this.webViewRef.current?.injectJavaScript(WEBVIEW_POST_HEIGHT_SCRIPT);
   }
 
   _onNavigationStateChange(e) {
@@ -85,7 +91,7 @@ class MyWebView extends React.Component<any, any> {
   }
 
   render() {
-    // const width = this.props.width || Dimensions.get('window').width;
+    const { onLoadEnd } = this.props;
     const height = this.props.autoHeight
       ? this.state.webViewHeight
       : this.props.defaultHeight;
@@ -93,10 +99,15 @@ class MyWebView extends React.Component<any, any> {
     return (
       <WebView
         {...this.props}
+        ref={this.webViewRef}
         automaticallyAdjustContentInsets={true}
-        injectedJavaScript={injectedScript}
+        injectedJavaScript={WEBVIEW_POST_HEIGHT_SCRIPT}
         javaScriptEnabled={true}
         onMessage={this._onMessage}
+        onLoadEnd={(e) => {
+          onLoadEnd?.(e);
+          this._onLoadEnd();
+        }}
         onNavigationStateChange={this._onNavigationStateChange}
         scrollEnabled={this.props.scrollEnabled || false}
         style={[

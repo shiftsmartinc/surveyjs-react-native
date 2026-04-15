@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Linking, Platform } from 'react-native';
 import WebView from 'react-native-webview';
+import { WEBVIEW_POST_HEIGHT_SCRIPT } from './webViewHeightScript';
 
 const styles = StyleSheet.create({
   container: {
@@ -34,8 +35,6 @@ const createInjectedStyles = (textStyle?: any): string => {
 
 const injectedMeta = `<meta name="viewport" content="width=device-width, initial-scale=1" />`;
 
-const injectedScript = `window.ReactNativeWebView.postMessage(document.body.scrollHeight)`;
-
 // Simple check to see if string contains HTML tags
 const containsHtml = (text: string): boolean => {
   if (!text) return false;
@@ -52,6 +51,8 @@ interface HtmlTextProps {
 }
 
 class HtmlWebView extends React.Component<HtmlTextProps, { webViewHeight: number }> {
+  private webViewRef = React.createRef<WebView>();
+
   constructor(props: HtmlTextProps) {
     super(props);
     this.state = {
@@ -59,12 +60,18 @@ class HtmlWebView extends React.Component<HtmlTextProps, { webViewHeight: number
     };
     this._onMessage = this._onMessage.bind(this);
     this._onNavigationStateChange = this._onNavigationStateChange.bind(this);
+    this._onLoadEnd = this._onLoadEnd.bind(this);
   }
 
   _onMessage(e: any) {
-    this.setState({
-      webViewHeight: parseInt(e.nativeEvent.data, 10) || this.props.defaultHeight || 1,
-    });
+    const raw = e?.nativeEvent?.data;
+    const parsed = parseInt(String(raw), 10);
+    const next = Math.max(1, Number.isFinite(parsed) ? parsed : this.props.defaultHeight || 1);
+    this.setState((prev) => (prev.webViewHeight === next ? null : { webViewHeight: next }));
+  }
+
+  _onLoadEnd() {
+    this.webViewRef.current?.injectJavaScript(WEBVIEW_POST_HEIGHT_SCRIPT);
   }
 
   _onNavigationStateChange(e: any) {
@@ -86,6 +93,7 @@ class HtmlWebView extends React.Component<HtmlTextProps, { webViewHeight: number
 
     return (
       <WebView
+        ref={this.webViewRef}
         source={{
           html: `${injectedMeta}${injectedStyles}${html}`,
         }}
@@ -94,9 +102,10 @@ class HtmlWebView extends React.Component<HtmlTextProps, { webViewHeight: number
           style,
           { height: webViewHeight, opacity: Platform.OS === 'android' ? 0.99 : 1 },
         ]}
-        injectedJavaScript={injectedScript}
+        injectedJavaScript={WEBVIEW_POST_HEIGHT_SCRIPT}
         javaScriptEnabled={true}
         onMessage={this._onMessage}
+        onLoadEnd={this._onLoadEnd}
         onNavigationStateChange={this._onNavigationStateChange}
         scrollEnabled={false}
         automaticallyAdjustContentInsets={true}
