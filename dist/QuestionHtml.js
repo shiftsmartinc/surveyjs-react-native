@@ -1,7 +1,8 @@
 import React from 'react';
-import { StyleSheet, Linking, Platform } from 'react-native';
+import { StyleSheet, Linking, Platform, View } from 'react-native';
 import WebView from 'react-native-webview';
 import { WEBVIEW_POST_HEIGHT_SCRIPT } from './webViewHeightScript';
+import { buildInlineHtmlDocument, computeWebViewLayout, getAndroidInitialWebViewHeight, webViewSourceForInlineHtml, } from './surveyWebViewHelpers';
 const styles = StyleSheet.create({
     container: {
         marginHorizontal: 24,
@@ -14,8 +15,8 @@ const injectedStyles = `
       background-color: #FAFAFA;
       color: #4471a0;
       font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu;
-      font-size: 16;
-      padding-right: 15;
+      font-size: 16px;
+      padding-right: 15px;
     }
   </style>
 `;
@@ -27,9 +28,17 @@ class MyWebView extends React.Component {
     };
     constructor(props) {
         super(props);
-        this.state = {
-            webViewHeight: this.props.defaultHeight,
-        };
+        const def = this.props.defaultHeight != null ? this.props.defaultHeight : 1;
+        this.state =
+            Platform.OS === 'android'
+                ? {
+                    webViewHeight: getAndroidInitialWebViewHeight(),
+                    scrollInsideWebView: true,
+                }
+                : {
+                    webViewHeight: def,
+                    scrollInsideWebView: false,
+                };
         this._onMessage = this._onMessage.bind(this);
         this._onNavigationStateChange = this._onNavigationStateChange.bind(this);
         this._onLoadEnd = this._onLoadEnd.bind(this);
@@ -37,9 +46,16 @@ class MyWebView extends React.Component {
     _onMessage(e) {
         const raw = e?.nativeEvent?.data;
         const parsed = parseInt(String(raw), 10);
+        const measured = Number.isFinite(parsed) ? parsed : 0;
         const fallback = this.props.defaultHeight != null ? this.props.defaultHeight : 1;
-        const next = Math.max(1, Number.isFinite(parsed) ? parsed : fallback);
-        this.setState((prev) => prev.webViewHeight === next ? null : { webViewHeight: next });
+        const layout = computeWebViewLayout(measured, { defaultHeight: fallback });
+        this.setState((prev) => prev.webViewHeight === layout.displayHeight &&
+            prev.scrollInsideWebView === layout.scrollInsideWebView
+            ? null
+            : {
+                webViewHeight: layout.displayHeight,
+                scrollInsideWebView: layout.scrollInsideWebView,
+            });
     }
     _onLoadEnd() {
         this.webViewRef.current?.injectJavaScript(WEBVIEW_POST_HEIGHT_SCRIPT);
@@ -57,16 +73,17 @@ class MyWebView extends React.Component {
     }
     render() {
         const { onLoadEnd } = this.props;
+        const { webViewHeight, scrollInsideWebView } = this.state;
         const height = this.props.autoHeight
-            ? this.state.webViewHeight
+            ? webViewHeight
             : this.props.defaultHeight;
-        return (<WebView {...this.props} ref={this.webViewRef} automaticallyAdjustContentInsets={true} injectedJavaScript={WEBVIEW_POST_HEIGHT_SCRIPT} javaScriptEnabled={true} onMessage={this._onMessage} onLoadEnd={(e) => {
+        return (<WebView {...this.props} ref={this.webViewRef} originWhitelist={['*']} automaticallyAdjustContentInsets={true} injectedJavaScript={WEBVIEW_POST_HEIGHT_SCRIPT} javaScriptEnabled={true} domStorageEnabled={Platform.OS === 'android'} onMessage={this._onMessage} onLoadEnd={(e) => {
                 onLoadEnd?.(e);
                 this._onLoadEnd();
-            }} onNavigationStateChange={this._onNavigationStateChange} scrollEnabled={this.props.scrollEnabled || false} style={[
+            }} onNavigationStateChange={this._onNavigationStateChange} scrollEnabled={scrollInsideWebView} showsVerticalScrollIndicator={scrollInsideWebView} style={[
                 styles.container,
                 this.props.style,
-                { height, opacity: Platform.OS === 'android' ? 0.99 : 1 },
+                { height },
             ]}/>);
     }
 }
@@ -75,8 +92,9 @@ export default class QuestionHtml extends React.Component {
         if (this.props.isPreview) {
             return null;
         }
-        return (<MyWebView source={{
-                html: `${injectedMeta}${injectedStyles}${this.props.html}`,
-            }} defaultHeight={1} startInLoadingState={true} scrollEnabled={false}/>);
+        const documentHtml = buildInlineHtmlDocument(`${injectedMeta}${injectedStyles}`, this.props.html);
+        return (<View collapsable={false}>
+        <MyWebView source={webViewSourceForInlineHtml(documentHtml)} defaultHeight={1} startInLoadingState={true} scrollEnabled={false}/>
+      </View>);
     }
 }

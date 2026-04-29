@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, Linking, Platform } from 'react-native';
 import WebView from 'react-native-webview';
 import { WEBVIEW_POST_HEIGHT_SCRIPT } from './webViewHeightScript';
+import { buildInlineHtmlDocument, computeWebViewLayout, getAndroidInitialWebViewHeight, webViewSourceForInlineHtml, } from './surveyWebViewHelpers';
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -40,9 +41,16 @@ class HtmlWebView extends React.Component {
     webViewRef = React.createRef();
     constructor(props) {
         super(props);
-        this.state = {
-            webViewHeight: props.defaultHeight || 1,
-        };
+        this.state =
+            Platform.OS === 'android'
+                ? {
+                    webViewHeight: getAndroidInitialWebViewHeight(),
+                    scrollInsideWebView: true,
+                }
+                : {
+                    webViewHeight: props.defaultHeight || 1,
+                    scrollInsideWebView: false,
+                };
         this._onMessage = this._onMessage.bind(this);
         this._onNavigationStateChange = this._onNavigationStateChange.bind(this);
         this._onLoadEnd = this._onLoadEnd.bind(this);
@@ -50,8 +58,17 @@ class HtmlWebView extends React.Component {
     _onMessage(e) {
         const raw = e?.nativeEvent?.data;
         const parsed = parseInt(String(raw), 10);
-        const next = Math.max(1, Number.isFinite(parsed) ? parsed : this.props.defaultHeight || 1);
-        this.setState((prev) => (prev.webViewHeight === next ? null : { webViewHeight: next }));
+        const measured = Number.isFinite(parsed) ? parsed : 0;
+        const layout = computeWebViewLayout(measured, {
+            defaultHeight: this.props.defaultHeight || 1,
+        });
+        this.setState((prev) => prev.webViewHeight === layout.displayHeight &&
+            prev.scrollInsideWebView === layout.scrollInsideWebView
+            ? null
+            : {
+                webViewHeight: layout.displayHeight,
+                scrollInsideWebView: layout.scrollInsideWebView,
+            });
     }
     _onLoadEnd() {
         this.webViewRef.current?.injectJavaScript(WEBVIEW_POST_HEIGHT_SCRIPT);
@@ -67,16 +84,16 @@ class HtmlWebView extends React.Component {
         return false;
     }
     render() {
-        const { html, style, textStyle, defaultHeight = 1 } = this.props;
-        const { webViewHeight } = this.state;
+        const { html, style, textStyle } = this.props;
+        const { webViewHeight, scrollInsideWebView } = this.state;
         const injectedStyles = createInjectedStyles(textStyle);
-        return (<WebView ref={this.webViewRef} source={{
-                html: `${injectedMeta}${injectedStyles}${html}`,
-            }} style={[
+        const documentHtml = buildInlineHtmlDocument(`${injectedMeta}${injectedStyles}`, html);
+        const source = webViewSourceForInlineHtml(documentHtml);
+        return (<WebView ref={this.webViewRef} originWhitelist={['*']} source={source} style={[
                 styles.webView,
                 style,
-                { height: webViewHeight, opacity: Platform.OS === 'android' ? 0.99 : 1 },
-            ]} injectedJavaScript={WEBVIEW_POST_HEIGHT_SCRIPT} javaScriptEnabled={true} onMessage={this._onMessage} onLoadEnd={this._onLoadEnd} onNavigationStateChange={this._onNavigationStateChange} scrollEnabled={false} automaticallyAdjustContentInsets={true} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}/>);
+                { height: webViewHeight },
+            ]} injectedJavaScript={WEBVIEW_POST_HEIGHT_SCRIPT} javaScriptEnabled={true} domStorageEnabled={Platform.OS === 'android'} onMessage={this._onMessage} onLoadEnd={this._onLoadEnd} onNavigationStateChange={this._onNavigationStateChange} scrollEnabled={scrollInsideWebView} automaticallyAdjustContentInsets={true} showsVerticalScrollIndicator={scrollInsideWebView} showsHorizontalScrollIndicator={false}/>);
     }
 }
 const sameStyle = (leftStyle, rightStyle) => {
@@ -101,7 +118,7 @@ export default class HtmlText extends React.Component {
           <Text style={textStyle}>{children}</Text>
         </View>);
         }
-        return (<View style={style}>
+        return (<View style={style} collapsable={false}>
         <HtmlWebView html={children} textStyle={textStyle} defaultHeight={1}/>
       </View>);
     }
