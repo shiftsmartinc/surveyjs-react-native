@@ -3,8 +3,8 @@ import { Dimensions, Platform } from 'react-native';
 /** Root wrapper id — must match `WEBVIEW_POST_HEIGHT_SCRIPT` measurement. */
 export const SURVEY_HTML_ROOT_ID = 'survey-html-root';
 
-/** Android `loadDataWithBaseURL` often paints incorrectly with default base; use a stable https origin. */
-export const ANDROID_HTML_BASE_URL = 'https://surveyjs.invalid/';
+/** Android `loadDataWithBaseURL` base for inline HTML; the `.invalid` TLD triggers a failing DNS lookup (NXDOMAIN error page) on newer Chromium WebViews, so use the canonical local asset origin which never hits the network. */
+export const ANDROID_HTML_BASE_URL = 'file:///android_asset/';
 
 export function getMaxWebViewHeight(): number {
   return Math.round(Dimensions.get('window').height * 0.78);

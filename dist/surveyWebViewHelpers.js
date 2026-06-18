@@ -1,6 +1,6 @@
 import { Dimensions, Platform } from 'react-native';
 export const SURVEY_HTML_ROOT_ID = 'survey-html-root';
-export const ANDROID_HTML_BASE_URL = 'https://surveyjs.invalid/';
+export const ANDROID_HTML_BASE_URL = 'file:///android_asset/';
 export function getMaxWebViewHeight() {
     return Math.round(Dimensions.get('window').height * 0.78);
 }
