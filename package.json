@@ -14,7 +14,7 @@
     "@types/react-native": "^0.63.35",
     "mobx": "^6.7.0",
     "mobx-react": "^7.6.0",
-    "moment": "^2.24.0",
+    "moment": "^2.30.1",
     "react": "^16.13.1",
     "react-native": "^0.64.1",
     "react-native-image-crop-picker": "^0.37.3",
