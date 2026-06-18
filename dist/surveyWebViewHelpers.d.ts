@@ -1,5 +1,5 @@
 export declare const SURVEY_HTML_ROOT_ID = "survey-html-root";
-export declare const ANDROID_HTML_BASE_URL = "https://surveyjs.invalid/";
+export declare const ANDROID_HTML_BASE_URL = "file:///android_asset/";
 export declare function getMaxWebViewHeight(): number;
 export declare function buildInlineHtmlDocument(headTags: string, bodyHtml: string): string;
 export declare function webViewSourceForInlineHtml(html: string): {
